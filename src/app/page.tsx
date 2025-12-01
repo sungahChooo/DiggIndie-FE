@@ -1,6 +1,7 @@
 import HomeHeader from "../components/home/HomeHeader";
 import TodayArtistRec from "../components/home/TodayArtistRec";
 import LoginBanner from "../components/home/LoginBanner";
+import PersonalArtistRec from "../components/home/PersonalArtistRec";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         <main className="overflow-y-auto scrollbar flex flex-col justify-center items-center">
           <TodayArtistRec />
           <LoginBanner />
+          <PersonalArtistRec />
         </main>
       </div>
     </div>

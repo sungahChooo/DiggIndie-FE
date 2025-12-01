@@ -12,6 +12,7 @@ export default function TodayArtistRecCard({ artist }: Props) {
         src={artist.imageUrl}
         alt={artist.name}
         variant="square"
+        className={"rounded-[4px]"}
       />
       <div className="flex justify-center h-[30px] mt-[8px]">
         <span>{artist.name}</span>

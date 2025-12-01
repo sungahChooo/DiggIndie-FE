@@ -7,7 +7,9 @@ export const mockArtists: Artist[] = [
     memberCount: 5,
     imageUrl: "/mocks/mockArtistPhoto.png",
     genre: "인디 록",
+    popularSong: "Shining Road",
     description: "앨범 진짜 너무 안 냄",
+    keyWords: ["key1", "key2", "key3"]
   },
 
   {
@@ -16,7 +18,9 @@ export const mockArtists: Artist[] = [
     memberCount: 5,
     imageUrl: "/mocks/mockArtistPhoto.png",
     genre: "인디 록",
+    popularSong: "Shining Road",
     description: "앨범 진짜 너무 안 냄",
+    keyWords: ["key1", "key2", "key3"]
   },
 
   {
@@ -25,7 +29,9 @@ export const mockArtists: Artist[] = [
     memberCount: 5,
     imageUrl: "/mocks/mockArtistPhoto.png",
     genre: "인디 록",
+    popularSong: "Shining Road",
     description: "앨범 진짜 너무 안 냄",
+    keyWords: ["key1", "key2", "key3"]
   },
 
   {
@@ -34,7 +40,9 @@ export const mockArtists: Artist[] = [
     memberCount: 5,
     imageUrl: "/mocks/mockArtistPhoto.png",
     genre: "인디 록",
+    popularSong: "Shining Road",
     description: "앨범 진짜 너무 안 냄",
+    keyWords: ["key1", "key2", "key3"]
   },
 
   {
@@ -43,7 +51,9 @@ export const mockArtists: Artist[] = [
     memberCount: 5,
     imageUrl: "/mocks/mockArtistPhoto.png",
     genre: "인디 록",
+    popularSong: "Shining Road",
     description: "앨범 진짜 너무 안 냄",
+    keyWords: ["key1", "key2", "key3"]
   },
 
   {
@@ -52,6 +62,8 @@ export const mockArtists: Artist[] = [
     memberCount: 5,
     imageUrl: "/mocks/mockArtistPhoto.png",
     genre: "인디 록",
+    popularSong: "Shining Road",
     description: "앨범 진짜 너무 안 냄",
+    keyWords: ["key1", "key2", "key3"]
   },
 ];

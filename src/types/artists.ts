@@ -4,5 +4,7 @@ export type Artist = {
   memberCount: number;
   imageUrl: string;
   genre?: string;
+  popularSong?: string;
   description?: string;
+  keyWords?: string[];
 };

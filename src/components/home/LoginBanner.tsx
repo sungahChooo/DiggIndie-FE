@@ -1,19 +1,22 @@
+"use client";
+
 import Image from "next/image";
 import logo from "../../assets/icons/logo.svg"
-import search from "../../assets/icons/search.svg"
-import hamburger from "../../assets/icons/hamburger.svg"
 import close from "../../assets/icons/close.svg"
-
+import { useState } from "react";
 import Link from "next/link";
 
 export default function LoginBanner() {
-
+  const [visible, setVisible] = useState(true);
+  if (!visible) return;
 
   return (
-    <div className="w-[335px] h-[166px] flex flex-col bg-gray-700 rounded-[4px]">
-      <div className="w-[311px] h-[18px] mx-[12px] flex mt-[12px] mb-[20px] bg-red-200">
+    <div className="w-[335px] h-[166px] flex flex-col bg-gray-700 rounded-[4px] border-4px border-[413D3D] mt-[40px]">
+      <div className="w-[311px] h-[18px] mx-[12px] flex mt-[12px] mb-[20px]">
         <Image src={logo} alt="logo" width={67.94} height={14} className={"mr-auto"}/>
-        <Image src={close} alt="logo" width={18} height={18}/>
+        <button onClick={() => setVisible(false)} className={"cursor-pointer"}>
+          <Image src={close} alt="logo" width={18} height={18}/>
+        </button>
       </div>
       <div className="h-[104px] flex flex-col mx-[12px]">
         <span className={"text-[18px] font-semibold mb-[4px]"}>
@@ -26,9 +29,11 @@ export default function LoginBanner() {
           <Link href="/auth" className={"w-[121px] bg-[#ff3637] rounded-[4px] flex items-center justify-center"}>
             로그인 하러 가기
           </Link>
-          <div className={"w-[121px] border-[1px] border-gray-300 rounded-[4px] flex items-center justify-center"}>
+          <button onClick={() => setVisible(false)} className={"w-[121px] border-[1px] " +
+            "border-gray-300 rounded-[4px] flex items-center justify-center cursor-pointer"}
+          >
             이 상태로 보기
-          </div>
+          </button>
         </div>
       </div>
     </div>
