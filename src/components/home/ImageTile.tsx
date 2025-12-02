@@ -13,7 +13,7 @@ type ImageTileProps = {
 const variantClasses = {
   square: "w-[184px] h-[184px]",
   smallSquare: "w-[160px] h-[160px]",
-  rect: "w-[162px] h-[202px]",
+  rect: "w-[160px] h-[226px]",
 };
 
 export function ImageTile({ src, alt, variant = "square", className, gradient}: ImageTileProps) {

@@ -3,6 +3,7 @@ import TodayArtistRec from "../components/home/TodayArtistRec";
 import LoginBanner from "../components/home/LoginBanner";
 import PersonalArtistRec from "../components/home/PersonalArtistRec";
 import Calendar from "../components/home/Calendar";
+import PersonalConcertRec from "../components/home/PersonalConcertRec";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
           <LoginBanner />
           <PersonalArtistRec />
           <Calendar />
+          <PersonalConcertRec />
         </main>
       </div>
     </div>

@@ -26,13 +26,18 @@ export default function Calendar() {
     (concert) => concert.date === selectedDate
   );
 
+  function getRidOfZero(date: string) {
+    const cleanedDate = date.startsWith("0") ? date.slice(1) : date;
+    return cleanedDate
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center mt-[40px]">
-      <div className={"ml-[20px] mr-auto mb-[12px] font-semibold"}>
+    <div className="flex flex-col w-full justify-center mt-[40px]">
+      <div className={"mx-[20px] mb-[12px] text-[20px] font-semibold"}>
         공연 위클리 캘린더
       </div>
 
-      <div className={"flex w-[340px] justify-center"}>
+      <div className={"flex justify-between w-[340px] mx-[17.5px]"}>
         <button onClick={() => setWeekOffset((prev) => prev - 1)}>
           <Image src={prevBtn} alt="prevBtn" />
         </button>
@@ -48,7 +53,7 @@ export default function Calendar() {
               >
                 <span className="text-[14px]">{day}</span>
                 <span className="text-[13px]">
-              {dates[i].split("-")[2]}
+              {getRidOfZero(dates[i].split("-")[2])}
             </span>
               </div>
             );
