@@ -1,4 +1,5 @@
 import Button from '@/components/onBoard/Button';
+import GenreList from '@/components/onBoard/GenreList';
 import Header from '@/components/onBoard/Header';
 import ProgressBar from '@/components/onBoard/ProgressBar';
 import TitleSection from '@/components/onBoard/TitleSection';
@@ -18,6 +19,7 @@ export default function onBoardGenrePage() {
           }
           min="최소 2개"
         />
+        <GenreList />
       </div>
       <div className="mx-5 mb-5">
         <Button href="/onboard/end" bgColor="bg-red">

@@ -20,7 +20,7 @@ export default function ArtistList() {
       {artists.map((artist) => (
         <div
           key={artist.id}
-          className="relative w-full aspect-[102/104] border border-gray-700 rounded-sm overflow-hidden"
+          className="relative w-full aspect-[102/104] border border-gray-700 rounded-sm"
         >
           {artist.image ? (
             <Image
