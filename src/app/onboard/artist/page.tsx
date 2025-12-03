@@ -15,6 +15,8 @@ interface Artist {
 export default function OnboardArtistPage() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
     fetch('/data/artists.json')
       .then((res) => res.json())
@@ -26,6 +28,10 @@ export default function OnboardArtistPage() {
       prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
     );
   };
+  //검색어 필터링
+  const filteredArtists = artists.filter((artist) =>
+    artist.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <div className="bg-black text-white flex flex-col h-screen">
       <Header />
@@ -41,9 +47,9 @@ export default function OnboardArtistPage() {
           }
           min="최소 2개"
         />
-        <SearchSection />
+        <SearchSection searchTerm={searchTerm} onChange={setSearchTerm} />
         <div className="overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4">
-          {artists.map((artist) => {
+          {filteredArtists.map((artist) => {
             return (
               <ArtistList
                 key={artist.id}
