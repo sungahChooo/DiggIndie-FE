@@ -12,7 +12,7 @@ export default function SearchSection({ searchTerm, onChange }: SearchSectionPro
         value={searchTerm}
         onChange={(e) => onChange(e.target.value)}
         placeholder="검색어를 입력하세요"
-        className="w-full"
+        className="w-full outline-none"
       />
     </section>
   );

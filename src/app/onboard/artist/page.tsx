@@ -5,6 +5,7 @@ import TitleSection from '@/components/onBoard/TitleSection';
 import SearchSection from '@/components/onBoard/SearchSection';
 import ProgressBar from '@/components/onBoard/ProgressBar';
 import ArtistList from '@/components/onBoard/ArtistList';
+import NoResult from '@/components/onBoard/NoResult';
 import { useEffect, useState } from 'react';
 
 interface Artist {
@@ -49,16 +50,18 @@ export default function OnboardArtistPage() {
         />
         <SearchSection searchTerm={searchTerm} onChange={setSearchTerm} />
         <div className="overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4">
-          {filteredArtists.map((artist) => {
-            return (
+          {filteredArtists.length > 0 ? (
+            filteredArtists.map((artist) => (
               <ArtistList
                 key={artist.id}
                 artist={artist}
                 isSelected={selectedIds.includes(artist.id)}
                 toggleSelect={toggleSelect}
               />
-            );
-          })}
+            ))
+          ) : (
+            <NoResult />
+          )}
         </div>
       </div>
       <div className="p-5 bg-transparent">
