@@ -31,7 +31,7 @@ export default function LoginBanner({ isLoggedIn }: Props) {
           리스너님을 위한 아티스트와 공연 추천이 시작됩니다.
         </span>
         <div className={"flex w-[248px] h-[36px] text-[12px] gap-[8px]"}>
-          <button onClick={isLoggedIn} className={"w-[121px] bg-[#ff3637] rounded-[4px] flex items-center justify-center"}>
+          <button onClick={() => {isLoggedIn(); setVisible(false)}} className={"w-[121px] bg-[#ff3637] rounded-[4px] flex items-center justify-center"}>
             로그인 하러 가기
           </button>
           <button onClick={() => setVisible(false)} className={"w-[121px] border-[1px] " +

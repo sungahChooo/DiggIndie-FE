@@ -7,6 +7,7 @@ import PersonalArtistRec from "@/components/home/PersonalArtistRec";
 import Calendar from "@/components/home/Calendar";
 import PersonalConcertRec from "@/components/home/PersonalConcertRec";
 import IndieStoryRec from "@/components/home/IndieStoryRec";
+import ResetPreference from '@/components/home/ResetPreference';
 
 import { useState } from 'react';
 
@@ -23,6 +24,7 @@ export default function Home() {
           <TodayArtistRec />
           <LoginBanner isLoggedIn={() => setLoggedIn(false)} />
           <PersonalArtistRec isLoggedIn={isLoggedIn} />
+          <ResetPreference isLoggedIn={isLoggedIn}/>
           <Calendar />
           <PersonalConcertRec isLoggedIn={isLoggedIn}/>
           <IndieStoryRec />
