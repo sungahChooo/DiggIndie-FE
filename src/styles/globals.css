@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+@import './theme.css';
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Font */
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/Pretendard-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: bold;
+  font-weight: 700; /* bold */
+  font-display: swap;
+  src: url('/fonts/Pretendard-Bold.woff2') format('woff2');
+}
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Pretendard', sans-serif;
+}
+::-webkit-scrollbar {
+  display: none;
+}

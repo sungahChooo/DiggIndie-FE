@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "Midnight Alley",
+    "image": "https://picsum.photos/seed/indieband1/400/400"
+  },
+  {
+    "id": 2,
+    "name": "The Vinyl Street",
+    "image": null
+  },
+  {
+    "id": 3,
+    "name": "Blue Canvas",
+    "image": "https://picsum.photos/seed/indieband3/400/400"
+  },
+  {
+    "id": 4,
+    "name": "Paper Rockets",
+    "image": null
+  },
+  {
+    "id": 5,
+    "name": "Hollow Notes",
+    "image": "https://picsum.photos/seed/indieband5/400/400"
+  },
+  {
+    "id": 6,
+    "name": "Little Lanterns",
+    "image": "https://picsum.photos/seed/indieband6/400/400"
+  },
+  {
+    "id": 7,
+    "name": "Foggy Window",
+    "image": null
+  },
+  {
+    "id": 8,
+    "name": "Autumn Parade",
+    "image": "https://picsum.photos/seed/indieband8/400/400"
+  },
+  {
+    "id": 9,
+    "name": "Quiet Rhythm",
+    "image": null
+  },
+  {
+    "id": 10,
+    "name": "Neon Backyard",
+    "image": "https://picsum.photos/seed/indieband10/400/400"
+  }
+]
