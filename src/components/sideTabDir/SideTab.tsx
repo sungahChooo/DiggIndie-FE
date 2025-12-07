@@ -9,6 +9,7 @@ import loginIcon from '@/assets/sidTab/Login.svg';
 import logoutIcon from '@/assets/sidTab/Logout.svg';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface SideTabProps {
   onClose: () => void;
@@ -20,6 +21,7 @@ export default function SideTab({ onClose }: SideTabProps) {
     // 임시로 로그인/로그아웃 토글
     setIsLoggedIn((prev) => !prev);
   };
+  const router = useRouter();
   return (
     <section className="bg-black flex flex-col h-screen w-[307px] gap-5">
       <div className="px-8 py-3 cursor-pointer mt-7" onClick={onClose}>
@@ -46,7 +48,12 @@ export default function SideTab({ onClose }: SideTabProps) {
           <Image src={indieIcon} alt="인디스토리" />
           <span className="text-white">인디스토리</span>
         </div>
-        <div className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800">
+        <div
+          className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800"
+          onClick={() => {
+            router.push('/my');
+          }}
+        >
           <Image src={myIcon} alt="마이페이지" />
           <span className="text-white">마이페이지</span>
         </div>
