@@ -1,4 +1,4 @@
-import Button from '@/components/onBoard/Button';
+import Button from '@/components/Button';
 import TitleSection from '@/components/onBoard/TitleSection';
 import Header from '@/components/onBoard/Header';
 import ProgressBar from '@/components/onBoard/ProgressBar';
