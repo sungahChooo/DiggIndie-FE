@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import diggindie from '@/assets/myPage/diggindie.svg';
+import diggindie from '@/assets/common/diggindie.svg';
 import Button from '@/components/Button';
 import InputSection from '@/components/auth/InputSection';
 import { useRouter } from 'next/navigation';
