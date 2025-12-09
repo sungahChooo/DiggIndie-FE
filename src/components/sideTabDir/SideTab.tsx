@@ -18,6 +18,7 @@ export default function SideTab({ onClose }: SideTabProps) {
   // 임시 로그인 상태 (초기값: 로그아웃 상태)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const handleClick = () => {
+    router.push(isLoggedIn ? '/' : '/auth/login');
     // 임시로 로그인/로그아웃 토글
     setIsLoggedIn((prev) => !prev);
   };
