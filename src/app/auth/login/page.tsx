@@ -18,19 +18,25 @@ export default function LoginPage() {
       </section>
       <div className="mt-5">
         <span
-          className="text-gray-300 text-xs px-3 border-r"
+          className="text-gray-300 text-xs px-3 border-r cursor-pointer"
           onClick={() => router.push('find/id')}
         >
           아이디 찾기
         </span>
-        <span className="text-gray-300 text-xs px-3" onClick={() => router.push('find/pw')}>
+        <span
+          className="text-gray-300 text-xs px-3 cursor-pointer"
+          onClick={() => router.push('find/pw')}
+        >
           비밀번호 재설정
         </span>
-        <span className="text-gray-300 text-xs px-3 border-l" onClick={() => router.push('join')}>
+        <span
+          className="text-gray-300 text-xs px-3 border-l cursor-pointer"
+          onClick={() => router.push('join')}
+        >
           회원가입
         </span>
       </div>
-      <section className="mt-19 flex flex-col w-full ">
+      <section className="mt-19 flex flex-col w-full">
         <div className="flex gap-1 w-full items-center">
           <div className="flex-1 border-t border-gray-300"></div>
           <span className="text-gray-300 text-xs">SNS 계정으로 로그인</span>
