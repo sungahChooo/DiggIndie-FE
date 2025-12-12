@@ -11,7 +11,7 @@ export default function TitleSection({
   title,
   min,
   titleClassName = 'w-full flex items-end gap-2',
-  minClassName = 'text-gray-700 text-xs font-medium leading-[var(--line-height-text)] tracking-[var(--letter-spacing-text)]',
+  minClassName = 'text-gray-600 text-xs font-medium leading-[var(--line-height-text)] tracking-[var(--letter-spacing-text)]',
 }: TitleSectionProps) {
   return (
     <div className={titleClassName}>

@@ -60,6 +60,13 @@ export default function LoginPage() {
             width={58}
             height={58}
             className="mt-5 cursor-pointer"
+          />{' '}
+          <Image
+            src={loginIcon}
+            alt="naver login"
+            width={58}
+            height={58}
+            className="mt-5 cursor-pointer"
           />
         </div>
       </section>

@@ -13,27 +13,29 @@ export default function JoinPage() {
         </Link>
         <span className="text-base font-semibold text-white pr-35">회원가입</span>
       </section>
-      <section className="flex flex-col gap-4">
-        <span className="text-xs font-medium text-gray-300">아이디</span>
+      <section className="flex flex-col gap-2">
+        <span className="text-xs font-medium text-gray-300 px-1 mb-2">아이디</span>
         <div className="flex gap-2">
           <InputSection placeholder="아이디" width="w-[228px] h-[46px]" />
-          <button className="bg-main-red-2 px-4 py-3 rounded-sm text-white text-base font-semibold">
+          <button className="bg-main-red-4 px-4 py-3 rounded-sm text-white text-base font-semibold border-main-red-1 border">
             중복확인
           </button>
         </div>
         <span className="text-xs font-medium text-gray-300 px-3">4~12이내</span>
       </section>
-      <section className="flex flex-col gap-3 mt-3 gap-4">
-        <span className="text-xs font-medium text-gray-300">비밀번호</span>
-        <InputSection placeholder="비밀번호" type="password" width="w-[335px] h-[46px]" />
-        <InputSection placeholder="비밀번호 확인" type="password" width="w-[335px] h-[46px]" />
-        <span className="text-xs font-medium text-gray-300 px-3">
+      <section className="flex flex-col gap-2">
+        <span className="text-xs font-medium text-gray-300 mb-2">비밀번호</span>
+        <div className="flex flex-col gap-3">
+          <InputSection placeholder="비밀번호" type="password" width="w-[335px] h-[46px]" />
+          <InputSection placeholder="비밀번호 확인" type="password" width="w-[335px] h-[46px]" />
+        </div>
+        <span className="text-xs font-medium text-gray-500 px-3">
           6~20자/ 영문, 숫자, 특수문자 중 2가지 이상 조합
         </span>
       </section>
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-4">
         <span className="text-xs font-medium  text-gray-300">이메일</span>
-        <div className="flex gap-3">
+        <div className="flex gap-3 justify-center items-center">
           <InputSection placeholder="이메일" type="email" width="w-[150px] h-[46px]" />
           <span className="font-semibold text-xl text-gray-600">@</span>
           <select
