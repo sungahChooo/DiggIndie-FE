@@ -13,12 +13,12 @@ export default function JoinSuccessPage() {
           height={50}
           className="mt-60 mb-5"
         />
-        <span className="block text-2xl font-semibold mb-2 text-white text-left">
+        <span className="block text-2xl font-bold mb-2 text-white text-left leading-[var(--line-height-title)]">
           가입 완료
           <br /> 리스너님 환영합니다.
         </span>
 
-        <span className="block text-base text-gray-300 text-left">
+        <span className="block text-base text-gray-300 text-left font-medium leading-[var(--line-height-text)]">
           더 깊고 끝없는 음악 여정이 시작됩니다.
         </span>
       </div>
