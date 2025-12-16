@@ -1,6 +1,6 @@
 'use client';
 import Header from '@/components/onBoard/Header';
-import Button from '@/components/Button';
+import Button from '@/components/common/LinkButton';
 import TitleSection from '@/components/onBoard/TitleSection';
 import SearchSection from '@/components/onBoard/SearchSection';
 import ProgressBar from '@/components/onBoard/ProgressBar';

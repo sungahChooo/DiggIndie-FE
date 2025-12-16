@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Diggindie from '@/assets/common/diggindie.svg';
-import Button from '@/components/Button';
+import Button from '@/components/common/LinkButton';
 
 export default function JoinSuccessPage() {
   return (

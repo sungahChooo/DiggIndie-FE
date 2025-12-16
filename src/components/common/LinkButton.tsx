@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
-interface ButtonProps {
+interface LinkButtonProps {
   disabled?: boolean;
   href: string;
   children: React.ReactNode; // 버튼 텍스트
 }
 
-export default function Button({ disabled, href, children }: ButtonProps) {
+export default function LinkButton({ disabled, href, children }: LinkButtonProps) {
   return (
     <Link
       href={disabled ? '#' : href}

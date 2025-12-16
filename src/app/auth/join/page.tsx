@@ -1,10 +1,48 @@
+'use client';
 import InputSection from '@/components/auth/InputSection';
-import Button from '@/components/Button';
+import Button from '@/components/common/Button';
 import xButton from '@/assets/auth/xButton.svg';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { z } from 'zod';
 
 export default function JoinPage() {
+  const router = useRouter();
+  const [form, setForm] = useState({
+    id: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [errors, setErrors] = useState<{
+    id?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
+
+  const joinSchema = z.object({
+    id: z.string().min(4, '아이디는 4자 이상이어야 합니다'),
+    password: z.string().min(8, '비밀번호는 8자 이상이어야 합니다'),
+    confirmPassword: z.string().min(8, '비밀번호는 8자 이상이어야 합니다'),
+  });
+  const handleJoin = () => {
+    const result = joinSchema.safeParse(form);
+
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      setErrors({
+        id: fieldErrors.id?.[0],
+        password: fieldErrors.password?.[0],
+        confirmPassword: fieldErrors.confirmPassword?.[0],
+      });
+      alert('입력한 id와 password 내용을 다시 확인해주세요.');
+      return;
+    }
+    router.push('/auth/join/success');
+    // 여기서 API 요청 보내기
+    console.log('회원가입 성공', result.data);
+  };
   return (
     <form className="text-white flex flex-col h-screen items-center gap-6">
       <section className="flex px-5 py-3 w-full justify-between">
@@ -50,7 +88,7 @@ export default function JoinPage() {
         </div>
       </section>
       <div className="w-[375px] px-5 absolute bottom-5">
-        <Button href="/auth/join/success">가입하기</Button>
+        <Button onclick={handleJoin}>가입하기</Button>
       </div>
     </form>
   );

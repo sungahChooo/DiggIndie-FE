@@ -1,5 +1,5 @@
 'use client';
-import Button from '@/components/Button';
+import Button from '@/components/common/LinkButton';
 import GenreItem from '@/components/onBoard/GenreItem';
 import Header from '@/components/onBoard/Header';
 import ProgressBar from '@/components/onBoard/ProgressBar';
