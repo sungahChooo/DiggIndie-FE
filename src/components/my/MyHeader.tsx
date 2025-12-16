@@ -11,11 +11,11 @@ export default function MyHeader({ title }: props) {
   const router = useRouter();
 
   return (
-    <div className="w-[375px] h-[100px] flex flex-col items-center font-bold bg-black px-[20px]">
+    <div className="w-[375px] h-[100px] flex flex-col items-center font-semibold bg-black px-[20px]">
       <div className="h-[48px] flex flex-col items-center font-bold">
-        임시
+
       </div>
-      <div className="w-[335px] h-[52px] flex justify-between items-center font-bold">
+      <div className="w-[335px] h-[52px] flex justify-between items-center font-semibold">
         <Image src={back} alt="logo" width={24} height={24} onClick={() => router.back()}/>
         <span>
           { title }

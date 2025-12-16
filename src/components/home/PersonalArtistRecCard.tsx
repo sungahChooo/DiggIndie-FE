@@ -26,12 +26,12 @@ export default function PersonalArtistRecCard({ artist }: Props) {
         </div>
       </div>
 
-      <div className="flex flex-col w-[144px] h-[57px] mx-[8px] mt-[8px]">
-        <div className="flex items-center w-[144px] h-[20px]">
+      <div className="flex flex-col w-[160px] h-[57px] mx-[8px] ">
+        <div className="flex items-center w-[144px] h-[20px] mt-[8px]">
           <Image src={playBtn} alt={'Play'} />
-          <span className={"ml-[3px] text-[14px]"}>{artist.popularSong}</span>
+          <span className={"ml-[3px] text-[14px] font-normal"}>{artist.popularSong}</span>
         </div>
-        <div className={"text-[#736F6F] text-[13px]"}>
+        <div className={"h-[21px] text-[#736F6F] font-medium text-[12px]"}>
           #{ keyOne } #{ keyTwo }
         </div>
       </div>
