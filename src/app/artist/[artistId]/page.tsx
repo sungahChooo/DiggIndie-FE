@@ -101,11 +101,13 @@ export default function ArtistDetailPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/80 to-black/80"></div>
                 <div className="absolute bottom-2 left-2 right-2 text-white flex flex-col">
-                  <span className="inline-block bg-main-red-2 px-2 font-medium text-white text-sm rounded-xs mb-1">
+                  <span className="inline-block self-start bg-main-red-2 px-2 font-medium text-white text-sm rounded-xs mb-1">
                     {concert.dDay}
                   </span>
                   <span className="font-medium text-base text-white">{concert.concertName}</span>
-                  <span className="font-normal text-sm text-white">{concert.lineUp[0]}</span>
+                  <span className="font-normal text-sm text-white truncate block w-full">
+                    {concert.lineUp.join(', ')}
+                  </span>
                   <span className="font-normal text-sm text-gray-500">{concert.concertDate}</span>
                 </div>
               </div>
