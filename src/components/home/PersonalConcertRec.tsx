@@ -8,7 +8,7 @@ type Props = {
   isLoggedIn: boolean;
 };
 
-export default function TodayArtistRec({ isLoggedIn }: Props) {
+export default function PersonalConcertRec({ isLoggedIn }: Props) {
   return (
     <div className="w-[375px] h-[266px] flex flex-col mt-[40px]">
       <div className={"flex mx-[20px] mb-[12px]"}>
