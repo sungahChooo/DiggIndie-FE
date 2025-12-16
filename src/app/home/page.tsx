@@ -20,7 +20,7 @@ export default function HomePage() {
         <div className={"sticky top-0 z-5"}>
           <HomeHeader />
         </div>
-        <main className="overflow-y-auto scrollbar flex flex-col justify-center items-center">
+        <main className="overflow-y-auto scrollbar flex flex-col justify-center items-center bg-black">
           <TodayArtistRec />
           <LoginBanner isLoggedIn={() => setLoggedIn(false)} />
           <PersonalArtistRec isLoggedIn={isLoggedIn} />

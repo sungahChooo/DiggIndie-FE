@@ -1,10 +1,9 @@
 export default function FindIdResult() {
   return (
-    <div className="w-[375px] flex flex-col items-center gap-3 px-[20px] mt-[28px]">
+    <div className="w-[375px] flex flex-col items-center gap-4 px-[20px] mt-[28px]">
       {/* 아이디 박스 */}
-      <div className="w-[337px] min-h-[117px] bg-[#1F1D1D] rounded-[8px]
-                      border border-[#3A3A3A] shadow-sm
-                      px-4 py-4 flex flex-col justify-center">
+      <div className="w-[337px] h-[84px] bg-[#1F1D1D] rounded-[4px] border-[1px] border-[#413D3D] shadow-sm
+                      px-4 flex flex-col justify-center">
 
         <p className="text-white text-base text-[14px] font-medium">
           아이디 : 텍스트텍스트텍스트텍스트텍스트

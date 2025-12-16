@@ -32,7 +32,7 @@ export default function Calendar() {
   }
 
   return (
-    <div className="flex flex-col w-full justify-center mt-[40px]">
+    <div className="flex flex-col w-full justify-center mt-[40px] bg-black">
       <div className={"mx-[20px] mb-[12px] text-[20px] font-semibold"}>
         공연 위클리 캘린더
       </div>
