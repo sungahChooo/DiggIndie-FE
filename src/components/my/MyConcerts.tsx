@@ -1,64 +1,47 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import PersonalConcertRecCard, {
-  daysUntilConcert,
-} from "@/components/home/PersonalConcertRecCard";
-import { mockConcerts } from "@/mocks/mockConcerts";
 import Image from "next/image";
 import downBtn from "@/assets/icons/down.svg";
 
+import { mockConcerts } from "@/mocks/mockConcerts";
+import { daysUntilConcert } from "@/components/home/PersonalConcertRecCard";
+import MyConcertGrid from "@/components/my/MyConcertsGrid";
+
 type SortKey = "updated" | "korean";
 
-export default function ScrappedConcert() {
+export default function MyConcerts() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("updated");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // 바깥 클릭 시 드롭다운 닫기
+  // 바깥 클릭 시 닫기
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       if (!dropdownRef.current) return;
-      if (!dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
+      if (!dropdownRef.current.contains(e.target as Node)) setIsOpen(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, []);
 
+  const label = sortKey === "updated" ? "업데이트순" : "가나다순";
+
   const sortedConcerts = useMemo(() => {
     const arr = [...mockConcerts];
 
     if (sortKey === "korean") {
-      // 공연 제목 가나다순
-      arr.sort((a, b) =>
-        (a.title ?? "").localeCompare(b.title ?? "", "ko")
-      );
+      arr.sort((a, b) => (a.title ?? "").localeCompare(b.title ?? "", "ko"));
       return arr;
     }
 
-    // 업데이트순 (다가오는 공연 우선)
-    arr.sort(
-      (a, b) => daysUntilConcert(b.date) - daysUntilConcert(a.date)
-    );
+    arr.sort((a, b) => daysUntilConcert(b.date) - daysUntilConcert(a.date));
     return arr;
   }, [sortKey]);
 
-  const leftColumn = useMemo(
-    () => sortedConcerts.filter((_, idx) => idx % 2 === 0),
-    [sortedConcerts]
-  );
-  const rightColumn = useMemo(
-    () => sortedConcerts.filter((_, idx) => idx % 2 === 1),
-    [sortedConcerts]
-  );
-
-  const label = sortKey === "updated" ? "업데이트순" : "가나다순";
-
   return (
-    <section className="w-full flex flex-col overflow-y-auto px-[20px] mt-[20px]">
-      {/* 드롭다운 */}
+    <section className="w-full flex flex-col px-[20px] mt-[20px]">
+      {/* 드롭다운*/}
       <div className="relative w-fit" ref={dropdownRef}>
         <button
           type="button"
@@ -109,36 +92,15 @@ export default function ScrappedConcert() {
               <span className="ml-[8px] mt-[3px]">가나다순</span>
             </button>
 
-            {/* 추후 확장*/}
             <div className="flex w-[84px] h-[28px] rounded-[4px] text-[14px]">
-              <span className="ml-[8px] mt-[3px] text-[#8C8888]">
-                스크랩순
-              </span>
+              <span className="ml-[8px] mt-[3px] text-[#8C8888]">스크랩순</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* 2열 카드 영역 */}
-      <div className="flex justify-center gap-[16px] mt-[16px]">
-        <div className="flex flex-col gap-[20px]">
-          {leftColumn.map((concert) => (
-            <PersonalConcertRecCard
-              key={concert.id}
-              concert={concert}
-            />
-          ))}
-        </div>
 
-        <div className="flex flex-col gap-[20px]">
-          {rightColumn.map((concert) => (
-            <PersonalConcertRecCard
-              key={concert.id}
-              concert={concert}
-            />
-          ))}
-        </div>
-      </div>
+      <MyConcertGrid concerts={sortedConcerts} />
     </section>
   );
 }
