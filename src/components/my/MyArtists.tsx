@@ -8,7 +8,7 @@ import downBtn from "@/assets/icons/down.svg";
 
 type SortKey = "updated" | "korean";
 
-export default function PersonalConcertRec() {
+export default function ScrappedArtist() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("updated");
 
@@ -71,13 +71,15 @@ export default function PersonalConcertRec() {
                 setSortKey("updated");
                 setIsOpen(false);
               }}
-              className={`w-[84px] h-[28px] rounded-[4px] text-[14px] ${
+              className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
                 sortKey === "updated"
                   ? "bg-[#332F2F] text-white"
                   : "text-[#8C8888]"
               }`}
             >
-              업데이트순
+              <span className={"ml-[8px] mt-[3px]"}>
+                업데이트순
+              </span>
             </button>
 
             <button
@@ -86,14 +88,21 @@ export default function PersonalConcertRec() {
                 setSortKey("korean");
                 setIsOpen(false);
               }}
-              className={`w-[84px] h-[28px] rounded-[4px] text-[14px] ${
+              className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
                 sortKey === "korean"
                   ? "bg-[#332F2F] text-white"
                   : "text-[#8C8888]"
               }`}
             >
-              가나다순
+              <span className={"ml-[8px] mt-[3px]"}>
+                가나다순
+              </span>
             </button>
+            <div className={"flex w-[84px] h-[28px] rounded-[4px] text-[14px]"}>
+              <span className={"ml-[8px] mt-[3px] text-[#8C8888]"}>
+                스크랩순
+              </span>
+            </div>
           </div>
         )}
       </div>
