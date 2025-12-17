@@ -6,16 +6,22 @@ import downBtn from "@/assets/icons/down.svg";
 
 import { mockConcerts } from "@/mocks/mockConcerts";
 import { daysUntilConcert } from "@/components/home/PersonalConcertRecCard";
-import MyConcertGrid from "@/components/my/ConcertGrid";
+import ConcertGrid from "@/components/my/ConcertGrid";
+import searchBtn from '@/assets/icons/artistSearch.svg';
 
 type SortKey = "updated" | "korean";
 
-export default function MyConcerts() {
+function normalizeText(input: string) {
+  return (input ?? "").trim().toLowerCase().normalize("NFC").replace(/\s+/g, "");
+}
+
+export default function SearchConcert() {
+  const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("updated");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // 바깥 클릭 시 닫기
+  // 바깥 클릭 시 드롭다운 닫기
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       if (!dropdownRef.current) return;
@@ -27,9 +33,16 @@ export default function MyConcerts() {
 
   const label = sortKey === "updated" ? "업데이트순" : "가나다순";
 
-  const sortedConcerts = useMemo(() => {
-    const arr = [...mockConcerts];
+  const filteredSortedConcerts = useMemo(() => {
+    const q = normalizeText(query);
+    let arr = [...mockConcerts];
 
+    //검색
+    if (q) {
+      arr = arr.filter((c) => normalizeText(c.title ?? "").includes(q));
+    }
+
+    //정렬
     if (sortKey === "korean") {
       arr.sort((a, b) => (a.title ?? "").localeCompare(b.title ?? "", "ko"));
       return arr;
@@ -37,11 +50,22 @@ export default function MyConcerts() {
 
     arr.sort((a, b) => daysUntilConcert(b.date) - daysUntilConcert(a.date));
     return arr;
-  }, [sortKey]);
+  }, [query, sortKey]);
 
   return (
     <section className="w-full flex flex-col px-[20px] mt-[20px]">
-      {/* 드롭다운*/}
+      {/* 검색*/}
+      <div className={"flex w-[335px] h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white"}>
+        <Image src={searchBtn} alt="Search" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="검색어를 입력하세요"
+          className="ml-[12px] placeholder:text-[#A6A6A6] font-regular outline-none"
+        />
+      </div>
+
+      {/* 드롭다운 */}
       <div className="relative w-fit" ref={dropdownRef}>
         <button
           type="button"
@@ -93,14 +117,15 @@ export default function MyConcerts() {
             </button>
 
             <div className="flex w-[84px] h-[28px] rounded-[4px] text-[14px]">
-              <span className="ml-[8px] mt-[3px] text-[#8C8888]">스크랩순</span>
+              <span className="ml-[8px] mt-[3px] text-[#8C8888]">
+                스크랩순
+              </span>
             </div>
           </div>
         )}
       </div>
 
-
-      <MyConcertGrid concerts={sortedConcerts} />
+      <ConcertGrid concerts={filteredSortedConcerts} />
     </section>
   );
 }

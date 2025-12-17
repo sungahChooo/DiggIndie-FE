@@ -8,7 +8,7 @@ type Props = {
   artists: Artist[];
 };
 
-export default function MyArtistGrid({ artists }: Props) {
+export default function ArtistGrid({ artists }: Props) {
   const leftColumn = useMemo(
     () => artists.filter((_, idx) => idx % 2 === 0),
     [artists]
@@ -19,14 +19,16 @@ export default function MyArtistGrid({ artists }: Props) {
   );
 
   return (
-    <div className="flex justify-center gap-[15px] mt-[16px]">
-      <div className="flex flex-col gap-[16px]">
+    <div className="flex justify-start gap-[15px] mt-[16px]">
+      {/* 왼쪽 컬럼 */}
+      <div className="flex flex-col gap-[16px] w-[160px]">
         {leftColumn.map((artist) => (
           <PersonalArtistRecCard key={artist.id} artist={artist} />
         ))}
       </div>
 
-      <div className="flex flex-col gap-[16px]">
+      {/* 오른쪽 컬럼  */}
+      <div className="flex flex-col gap-[16px] w-[160px]">
         {rightColumn.map((artist) => (
           <PersonalArtistRecCard key={artist.id} artist={artist} />
         ))}
