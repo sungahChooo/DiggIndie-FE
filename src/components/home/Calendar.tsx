@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { getThisWeekDates } from '@/hooks/getDay';
 import { mockConcerts } from '@/mocks/mockConcerts';
 import Image from 'next/image';
-import ticket from '@/assets/icons/ticket.svg';
+import ticket from '@/assets/common/ticket.svg';
 import nextBtn from '@/assets/common/more.svg';
 import prevBtn from '@/assets/icons/prev.svg';
 
@@ -29,9 +29,7 @@ export default function Calendar() {
 
   return (
     <div className="flex flex-col w-full justify-center mt-[40px] bg-black">
-      <div className={"mx-[20px] mb-[12px] text-[20px] font-semibold"}>
-        공연 위클리 캘린더
-      </div>
+      <div className={'mx-[20px] mb-[12px] text-[20px] font-semibold'}>공연 위클리 캘린더</div>
 
       <div className={'flex justify-between w-[340px] mx-[17.5px]'}>
         <button onClick={() => setWeekOffset((prev) => prev - 1)}>
