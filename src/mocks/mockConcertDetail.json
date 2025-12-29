@@ -1,0 +1,88 @@
+{
+  "concerts": [
+    {
+      "concertId": 101,
+      "mainImage": "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+      "concertName": "MIDNIGHT WAVE",
+      "startDate": "2025-03-22",
+      "concertHallName": "서울 올림픽홀",
+      "address": "서울특별시 송파구 올림픽로 424 올림픽홀",
+      "preorderPrice": 85000,
+      "onSite": 88000,
+      "lineUp": [
+        {
+          "artistId": 1,
+          "artistName": "쏜애플",
+          "artistImage": "https://s3.amazonaws.com/example/thornapple-profile.jpg"
+        },
+        {
+          "artistId": 2,
+          "artistName": "실리카겔",
+          "artistImage": "https://s3.amazonaws.com/example/silicagel-profile.jpg"
+        },
+        {
+          "artistId": 3,
+          "artistName": "검정치마",
+          "artistImage": "https://s3.amazonaws.com/example/theblackskirts-profile.jpg"
+        }
+      ],
+      "description": "도시의 밤과 감정을 파도처럼 풀어내는 미드나잇 컨셉의 합동 공연. 각 아티스트의 대표곡과 협업 무대가 포함된다."
+    },
+    {
+      "concertId": 102,
+      "mainImage": "https://cdn.pixabay.com/photo/2025/11/18/15/41/15-41-22-232_1280.jpg",
+      "concertName": "ECHO IN THE FOREST",
+      "startDate": "2025-04-12",
+      "concertHallName": "난지 한강공원",
+      "address": "서울특별시 송파구 올림픽로 424 올림픽홀",
+      "preorderPrice": 89000,
+      "onSite": 99000,
+      "lineUp": [
+        {
+          "artistId": 4,
+          "artistName": "혁오",
+          "artistImage": "https://s3.amazonaws.com/example/thornapple-profile.jpg"
+        },
+        {
+          "artistId": 5,
+          "artistName": "ADOY",
+          "artistImage": "https://s3.amazonaws.com/example/silicagel-profile.jpg"
+        },
+        {
+          "artistId": 3,
+          "artistName": "검정치마",
+          "artistImage": "https://s3.amazonaws.com/example/theblackskirts-profile.jpg"
+        }
+      ],
+      "description": "자연과 어우러진 야외 무대에서 펼쳐지는 인디 록 페스티벌. 숲과 강을 배경으로 한 감성적인 라이브가 특징이다."
+    },
+    {
+      "concertId": 103,
+      "mainImage": "https://cdn.pixabay.com/photo/2016/11/18/15/44/audience-1835431_1280.jpg",
+      "concertName": "NEON CITY LIVE",
+      "startDate": "2025-05-03",
+      "concertHallName": "부산 벡스코",
+      "address": "부산광역시 부산진구 벡스코로 1",
+      "preorderPrice": 95000,
+      "onSite": 110000,
+      "lineUp": [
+        {
+          "artistId": 6,
+          "artistName": "오존",
+          "artistImage": "https://s3.amazonaws.com/example/ozone-profile.jpg"
+        },
+        {
+          "artistId": 7,
+          "artistName": "새소년",
+          "artistImage": "https://s3.amazonaws.com/example/saesonyun-profile.jpg"
+        },
+        {
+          "artistId": 8,
+          "artistName": "카더가든",
+          "artistImage": "https://s3.amazonaws.com/example/cardergarden-profile.jpg"
+        }
+      ],
+      "description": "네온빛 도시를 테마로 한 R&B/얼터너티브 라이브 공연. 영상 연출과 사운드 디자인이 결합된 무대가 포인트다."
+    }
+  ]
+}

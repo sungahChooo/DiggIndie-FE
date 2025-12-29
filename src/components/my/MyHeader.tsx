@@ -1,27 +1,26 @@
-import Image from "next/image";
-import back from "../../assets/icons/back.svg"
-import close from "../../assets/icons/close.svg"
-import { useRouter } from 'next/navigation'
-
-type props = {
-  title: string;
-};
-
-export default function MyHeader({ title }: props) {
-  const router = useRouter();
+import Image from 'next/image';
+import logo from '@/assets/common/diggindie.svg';
+import sidTab from '@/assets/common/hamburger.svg';
+import search from '@/assets/common/search.svg';
+import { useState } from 'react';
+import SideTab from '../sideTabDir/SideTab';
+export default function MyHeader() {
+  const [isSideTabOpen, setIsSideTabOpen] = useState(false);
 
   return (
-    <div className="w-[375px] h-[100px] flex flex-col items-center font-semibold bg-black px-[20px]">
-      <div className="h-[48px] flex flex-col items-center font-bold">
-
+    <header className="flex px-5 py-3 items-center justify-between">
+      <Image src={logo} alt="Logo" width={100} height={50} />
+      <div className="flex gap-2">
+        <Image src={search} alt="Search" width={20} height={20} />
+        <Image
+          src={sidTab}
+          alt="SidTab"
+          width={20}
+          height={20}
+          onClick={() => setIsSideTabOpen(true)}
+        />
       </div>
-      <div className="w-[335px] h-[52px] flex justify-between items-center font-semibold">
-        <Image src={back} alt="logo" width={24} height={24} onClick={() => router.back()}/>
-        <span>
-          { title }
-        </span>
-        <Image src={close} alt="close" width={24} height={24} className={'cursor-pointer'}/>
-      </div>
-    </div>
+      {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}
+    </header>
   );
 }

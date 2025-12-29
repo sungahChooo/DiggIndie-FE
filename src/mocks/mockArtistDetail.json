@@ -1,0 +1,64 @@
+{
+  "artists": [
+    {
+      "artistId": 202,
+      "artistImage": "https://cdn.pixabay.com/photo/2019/10/25/18/09/music-4577592_1280.jpg",
+      "artistName": "SE SO NEON",
+      "keywords": ["얼터너티브", "사이키델릭", "빈티지"],
+      "mainMusic": {
+        "title": "난춘",
+        "description": "자유로운 청춘의 감정을 빈티지한 사운드로 표현한 곡으로, 밴드의 정체성을 잘 보여준다."
+      },
+      "description": "SE SO NEON은 레트로한 사운드와 현대적인 감성을 결합한 얼터너티브 밴드이다.",
+      "members": ["황소윤(보컬/기타)", "유수(베이스)", "박현진(드럼)"],
+      "scheduledConcert": [
+        {
+          "concertId": 101,
+          "concertImage": "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+          "concertName": "MIDNIGHT WAVE",
+          "dDay": "D-30",
+          "lineUp": ["SE SO NEON", "The Black Skirts", "Car, the Garden"],
+          "concertDate": "2025-03-22"
+        }
+      ],
+      "endedConcert": [
+        {
+          "concertId": 101,
+          "concertImage": "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+          "concertName": "SUMMER PSYCHE",
+          "concertDate": "2024-08-14"
+        }
+      ]
+    },
+    {
+      "artistId": 203,
+      "artistImage": "https://cdn.pixabay.com/photo/2021/10/05/20/37/band-6683663_1280.jpg",
+      "artistName": "혁오",
+      "keywords": ["인디", "청춘", "자유"],
+      "mainMusic": {
+        "title": "TOMBOY",
+        "description": "자유로운 영혼과 방황을 노래한 곡으로, 대중성과 개성을 모두 잡은 대표곡이다."
+      },
+      "description": "혁오는 솔직한 가사와 독특한 음색으로 세대의 감정을 대변하는 밴드로 자리 잡았다.",
+      "members": ["오혁(보컬)", "임동건(기타)", "임현제(베이스)", "이인우(드럼)"],
+      "scheduledConcert": [
+        {
+          "concertId": 102,
+          "concertImage": "https://cdn.pixabay.com/photo/2017/08/06/00/23/concert-2582795_1280.jpg",
+          "concertName": "ECHO IN THE FOREST",
+          "dDay": "D-12",
+          "lineUp": ["혁오", "10cm", "검정치마"],
+          "concertDate": "2024-07-15"
+        }
+      ],
+      "endedConcert": [
+        {
+          "concertId": 44,
+          "concertImage": "https://cdn.pixabay.com/photo/2015/09/05/21/51/concert-925924_1280.jpg",
+          "concertName": "23 TOUR",
+          "concertDate": "2023-11-02"
+        }
+      ]
+    }
+  ]
+}
