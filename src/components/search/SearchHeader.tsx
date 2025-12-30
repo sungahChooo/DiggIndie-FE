@@ -8,10 +8,7 @@ type props = {
 export default function SearchHeader({ title }: props) {
 
   return (
-    <div className="w-full h-[100px] flex flex-col items-center font-semibold bg-black px-[20px]">
-      <div className="h-[48px] flex flex-col items-center font-bold">
-
-      </div>
+    <div className="w-full h-[52px] flex flex-col items-center font-semibold bg-black px-[20px]">
       <div className="w-[335px] h-[52px] flex items-center font-semibold text-[20px]">
         <span className={"mr-auto"}>
           {title}

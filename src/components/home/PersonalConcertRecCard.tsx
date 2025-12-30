@@ -15,6 +15,10 @@ export function daysUntilConcert(targetDate: string): number {
   return Math.ceil(diff / oneDay);
 }
 
+function getDay(dateStr: string): string {
+  return dateStr.split("-")[2];
+}
+
 export default function PersonalConcertRecCard({ concert }: Props) {
   const dDay = daysUntilConcert(concert.date);
 
@@ -41,7 +45,7 @@ export default function PersonalConcertRecCard({ concert }: Props) {
               {concert.artists}
             </span>
             <span className="text-[12px] text-[#8C8888]">
-              {concert.date}
+              {concert.date} ~ {getDay(concert.endDate)}
             </span>
           </div>
         )}
