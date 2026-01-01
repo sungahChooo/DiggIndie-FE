@@ -5,6 +5,7 @@ import Image from "next/image";
 import downBtn from "@/assets/icons/down.svg";
 import searchBtn from "@/assets/icons/artistSearch.svg";
 import searchBack from "@/assets/icons/searchBack.svg";
+import searchGrayBtn from "@/assets/icons/searchGray.svg"
 
 import { mockArtists } from "@/mocks/mockArtists";
 import MyArtistGrid from "@/components/my/ArtistGrid";
