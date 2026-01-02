@@ -16,7 +16,7 @@ export default function ConcertDetailPage() {
   }
   return (
     <div className="text-white flex flex-col min-h-screen bg-black">
-      <DetailImgSection content={concert} />
+      <DetailImgSection imageSrc={concert.mainImage} variant="concert" />
       <ConcertContentSection concert={concert} />
       <LineupSection concert={concert} />
       <ConcertStorySection concert={concert} />

@@ -15,7 +15,7 @@ export default function ArtistDetailPage() {
   }
   return (
     <div className="text-white flex flex-col min-h-screen">
-      <DetailImgSection imageSrc={artist.artistImage} alt={artist.artistName} />
+      <DetailImgSection imageSrc={artist.artistImage} alt={artist.artistName} variant="artist" />
       <ArtistContentSection artist={artist} />
       <ScheduledConcertSection artist={artist} />
       <EndedConcertSection artist={artist} />
