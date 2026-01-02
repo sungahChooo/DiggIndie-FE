@@ -69,19 +69,21 @@ export default function ArtistContentSection({ artist }: ArtistContentSectionPro
             <Image src={albumIcon} alt="album" width={24} height={24} />
             <span>앨범</span>
           </p>
-          {artist.albums.map((album) => (
-            <section key={album.albumId} className="flex flex-col">
-              <Image
-                src={album.albumImage}
-                alt="앨범이미지"
-                width={92}
-                height={92}
-                className="mb-1"
-              />
-              <span className="font-medium text-sm text-gray-500">{album.title}</span>
-              <span className="font-medium text-sm text-gray-500">{album.year}</span>
-            </section>
-          ))}
+          <section className="flex gap-3">
+            {artist.albums.map((album) => (
+              <div key={album.albumId} className="flex flex-col">
+                <Image
+                  src={album.albumImage}
+                  alt="앨범이미지"
+                  width={92}
+                  height={92}
+                  className="mb-1 object-cover"
+                />
+                <span className="font-medium text-sm text-gray-500 truncate">{album.title}</span>
+                <span className="font-medium text-sm text-gray-500">{album.year}</span>
+              </div>
+            ))}
+          </section>
         </div>
       </div>
     </section>
