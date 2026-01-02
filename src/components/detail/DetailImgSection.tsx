@@ -1,16 +1,21 @@
 import Image from 'next/image';
-import concertData from '@/mocks/mockConcertDetail.json';
 import share from '@/assets/common/share.svg';
 
 interface DetailImgSectionProps {
-  content: (typeof concertData.concerts)[number];
+  imageSrc: string;
+  alt?: string;
+  onShare?: () => void;
 }
-export default function DetailImgSection({ content }: DetailImgSectionProps) {
+export default function DetailImgSection({
+  imageSrc,
+  alt = 'detail image',
+  onShare,
+}: DetailImgSectionProps) {
   return (
     <section className="relative">
       <Image
-        src={content.mainImage}
-        alt="Artist Image"
+        src={imageSrc}
+        alt={alt}
         width={376}
         height={531}
         className="relative py-[18px] px-[19px]"
@@ -22,6 +27,7 @@ export default function DetailImgSection({ content }: DetailImgSectionProps) {
         width={24}
         height={24}
         className="absolute bottom-[18px] right-[18px] cursor-pointer"
+        onClick={onShare}
       />
     </section>
   );

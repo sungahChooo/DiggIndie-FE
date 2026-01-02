@@ -4,6 +4,7 @@
       "artistId": 202,
       "artistImage": "https://cdn.pixabay.com/photo/2019/10/25/18/09/music-4577592_1280.jpg",
       "artistName": "SE SO NEON",
+      "isScrapped": false,
       "keywords": ["얼터너티브", "사이키델릭", "빈티지"],
       "mainMusic": {
         "title": "난춘",
@@ -34,6 +35,7 @@
       "artistId": 203,
       "artistImage": "https://cdn.pixabay.com/photo/2021/10/05/20/37/band-6683663_1280.jpg",
       "artistName": "혁오",
+      "isScrapped": true,
       "keywords": ["인디", "청춘", "자유"],
       "mainMusic": {
         "title": "TOMBOY",
