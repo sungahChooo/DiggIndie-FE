@@ -5,8 +5,14 @@ interface SearchSectionProps {
   searchTerm: string;
   onChange: (value: string) => void;
   onClear: () => void;
+  onSubmit: () => void;
 }
-export default function SearchSection({ searchTerm, onChange, onClear }: SearchSectionProps) {
+export default function SearchSection({
+  searchTerm,
+  onChange,
+  onClear,
+  onSubmit,
+}: SearchSectionProps) {
   return (
     <section className="w-full flex bg-gray-700 rounded-sm justify-between px-2 py-3">
       <input
@@ -14,6 +20,11 @@ export default function SearchSection({ searchTerm, onChange, onClear }: SearchS
         onChange={(e) => onChange(e.target.value)}
         placeholder="검색어를 입력하세요"
         className="outline-none text-[#A6A6A6]"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+            onSubmit();
+          }
+        }}
       />
       {searchTerm && (
         <Image src={clearIcon} alt="검색어 삭제" onClick={onClear} className="cursor-pointer" />

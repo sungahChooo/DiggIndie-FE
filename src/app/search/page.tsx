@@ -12,7 +12,7 @@ import calendarIcon from '@/assets/common/Calendar.svg';
 import documentIcon from '@/assets/sidTab/Document.svg';
 import { mockIndieStory } from '@/mocks/mockIndieStory';
 import IndieStoryRecard from '@/components/home/IndieStoryRecCard';
-import { SearchCardSkeleton } from '@/components/search/SearchCardSkeleton';
+import SearchCardSkeleton from '@/components/search/SearchCardSkeleton';
 
 export default function HomeSearch() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,10 +35,13 @@ export default function HomeSearch() {
   useEffect(() => {
     if (!debouncedTerm) return;
 
-    fetch(`/concerts?sort=recent&query=${encodeURIComponent(debouncedTerm)}&size=20`)
+    fetch(`/concerts?sort=recent&query=${encodeURIComponent(debouncedTerm)}`)
       .then((res) => res.json())
       .then((data) => {
         console.log('검색 결과', data);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [debouncedTerm]);
 
@@ -50,6 +53,7 @@ export default function HomeSearch() {
           searchTerm={searchTerm}
           onChange={setSearchTerm}
           onClear={() => setSearchTerm('')}
+          onSubmit={handleSubmit}
         />
       </div>
       <span className="block font-medium text-sm text-gray-400 px-5 py-5">검색결과 00개</span>
