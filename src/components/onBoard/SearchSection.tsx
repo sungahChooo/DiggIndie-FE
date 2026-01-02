@@ -4,7 +4,7 @@ import clearIcon from '@/assets/search/clearSearch.svg';
 interface SearchSectionProps {
   searchTerm: string;
   onChange: (value: string) => void;
-  onClear: () => void;
+  onClear?: () => void;
   onSubmit: () => void;
 }
 export default function SearchSection({

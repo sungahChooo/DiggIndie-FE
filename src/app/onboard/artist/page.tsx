@@ -1,12 +1,12 @@
 'use client';
 import Header from '@/components/onBoard/Header';
-import Button from '@/components/common/LinkButton';
 import TitleSection from '@/components/onBoard/TitleSection';
 import SearchSection from '@/components/onBoard/SearchSection';
 import ProgressBar from '@/components/onBoard/ProgressBar';
 import ArtisItem from '@/components/onBoard/ArtistItem';
 import NoResult from '@/components/onBoard/NoResult';
 import { useEffect, useState } from 'react';
+import LinkButton from '@/components/common/LinkButton';
 
 interface Artist {
   id: number;
@@ -37,9 +37,10 @@ export default function OnboardArtistPage() {
   return (
     <div className="text-white flex flex-col h-screen">
       <Header />
-      <div className="flex-1 overflow-y-auto m-5 gap-5 flex flex-col">
-        <ProgressBar current={1} total={3} />
-
+      <div className="flex-1 overflow-auto gap-5 flex flex-col">
+        <div className="px-5">
+          <ProgressBar current={1} total={3} />
+        </div>
         <TitleSection
           title={
             <>
@@ -49,8 +50,10 @@ export default function OnboardArtistPage() {
           }
           min="최소 2개"
         />
-        <SearchSection searchTerm={searchTerm} onChange={setSearchTerm} />
-        <div className="overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4">
+        <div className="px-5">
+          <SearchSection searchTerm={searchTerm} onChange={setSearchTerm} onSubmit={() => {}} />
+        </div>
+        <div className="overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4 px-5">
           {filteredArtists.length > 0 ? (
             filteredArtists.map((artist) => (
               <ArtisItem
@@ -65,10 +68,10 @@ export default function OnboardArtistPage() {
           )}
         </div>
       </div>
-      <div className="p-5 bg-transparent">
-        <Button href="/onboard/genre" disabled={selectedIds.length < 2}>
+      <div className="px-5 pb-5">
+        <LinkButton href="/onboard/genre" disabled={selectedIds.length < 2}>
           선택완료
-        </Button>
+        </LinkButton>
       </div>
     </div>
   );

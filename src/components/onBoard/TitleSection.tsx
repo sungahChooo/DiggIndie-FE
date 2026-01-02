@@ -10,7 +10,7 @@ interface TitleSectionProps {
 export default function TitleSection({
   title,
   min,
-  titleClassName = 'w-full flex items-end gap-2',
+  titleClassName = 'w-full flex items-end gap-2 px-5',
   minClassName = 'text-gray-600 text-xs font-medium leading-[var(--line-height-text)] tracking-[var(--letter-spacing-text)]',
 }: TitleSectionProps) {
   return (

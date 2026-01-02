@@ -1,5 +1,5 @@
 'use client';
-import Button from '@/components/common/LinkButton';
+import LinkButton from '@/components/common/LinkButton';
 import GenreItem from '@/components/onBoard/GenreItem';
 import Header from '@/components/onBoard/Header';
 import ProgressBar from '@/components/onBoard/ProgressBar';
@@ -30,8 +30,10 @@ export default function OnBoardGenrePage() {
   return (
     <div className="bg-black text-white flex flex-col h-screen">
       <Header href="/onboard/artist" />
-      <div className="flex-1 overflow-auto p-5 gap-5 flex flex-col">
-        <ProgressBar current={2} total={3} />
+      <div className="flex-1 overflow-auto gap-5 flex flex-col">
+        <div className="px-5">
+          <ProgressBar current={2} total={3} />
+        </div>
         <TitleSection
           title={
             <>
@@ -41,7 +43,7 @@ export default function OnBoardGenrePage() {
           }
           min="최소 2개"
         />
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 px-5">
           {genres.map((item) => (
             <GenreItem
               key={item.id}
@@ -52,10 +54,10 @@ export default function OnBoardGenrePage() {
           ))}
         </div>
       </div>
-      <div className="p-5 bg-transparent">
-        <Button href="/onboard/end" disabled={selectedIds.length < 2}>
+      <div className="px-5 pb-5">
+        <LinkButton href="/onboard/end" disabled={selectedIds.length < 2}>
           선택완료
-        </Button>
+        </LinkButton>
       </div>
     </div>
   );
