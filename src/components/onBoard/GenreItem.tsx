@@ -13,7 +13,7 @@ export default function GenreItem({ genre, isSelected, toggleSelect }: GenreItem
       key={genre.id}
       className={`border rounded-sm px-3 py-2 cursor-pointer ${
         isSelected
-          ? 'border-red bg-main-red text-white custom-box-shadow'
+          ? 'border-main-red-2 bg-main-red-4 text-white custom-box-shadow'
           : 'border-gray-700 bg-gray-900 text-gray-300'
       }`}
       onClick={() => {

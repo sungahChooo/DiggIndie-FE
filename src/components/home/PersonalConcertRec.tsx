@@ -17,7 +17,7 @@ export default function PersonalConcertRec({ isLoggedIn }: Props) {
         </span>
         <Image src={more} alt="more" width={24} height={24} />
       </div>
-      <div className={`flex overflow-x-auto ${isLoggedIn ? 'blur-sm' : 'blur-none'}`}>
+      <div className={`flex overflow-x-auto ${isLoggedIn ? 'blur-none' : 'blur-sm'}`}>
         <div className="flex gap-[16px] w-max">
           {mockConcerts
             .filter((concert) => daysUntilConcert(concert.date) >= 1)

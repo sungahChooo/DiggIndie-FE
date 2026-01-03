@@ -39,7 +39,7 @@ export default function JoinPage() {
       });
       return;
     }
-    router.push('/auth/join/success');
+    router.push('/auth/agree');
     // 여기서 API 요청 보내기
     console.log('회원가입 성공', result.data);
   };

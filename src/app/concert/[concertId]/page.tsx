@@ -6,6 +6,7 @@ import ConcertContentSection from '@/components/detail/ConcertContentSection';
 import ConcertStorySection from '@/components/detail/ConcertStorySection';
 import concertData from '@/mocks/mockConcertDetail.json';
 import { useParams } from 'next/navigation';
+import MyHeader from '@/components/my/MyHeader';
 export default function ConcertDetailPage() {
   const params = useParams();
   const concertId = Number(params.concertId);
@@ -15,8 +16,11 @@ export default function ConcertDetailPage() {
     return <p className="text-white">콘서트를 찾을 수 없습니다.</p>;
   }
   return (
-    <div className="text-white flex flex-col min-h-screen bg-black">
-      <DetailImgSection content={concert} />
+    <div className="text-white flex flex-col min-h-screen bg-black relative">
+      <div className="relative">
+        <MyHeader title="" />
+        <DetailImgSection imageSrc={concert.mainImage} variant="concert" />
+      </div>
       <ConcertContentSection concert={concert} />
       <LineupSection concert={concert} />
       <ConcertStorySection concert={concert} />

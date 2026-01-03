@@ -7,7 +7,7 @@ export default function OnBoardProgress({ current, total }: OnBoardProgressProps
   const progress = (current / total) * 100;
 
   return (
-    <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+    <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden mt-5">
       <div
         className="h-full bg-gray-100 transition-all duration-300"
         style={{ width: `${progress}%` }}

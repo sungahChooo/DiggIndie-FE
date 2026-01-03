@@ -16,7 +16,7 @@ export default function ArtistItem({ artist, isSelected, toggleSelect }: ArtistI
     <div
       key={artist.id}
       className={`cursor-pointer relative w-full aspect-[102/104] border rounded-sm ${
-        isSelected ? 'border-red custom-box-shadow' : 'border-gray-700'
+        isSelected ? 'border-main-red-2 custom-box-shadow' : 'border-gray-700'
       }`}
       onClick={() => {
         toggleSelect(artist.id);

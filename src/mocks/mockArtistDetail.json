@@ -1,9 +1,9 @@
 {
   "artists": [
     {
-      "artistId": 202,
-      "artistImage": "https://cdn.pixabay.com/photo/2019/10/25/18/09/music-4577592_1280.jpg",
+      "artistId": 201,
       "artistName": "SE SO NEON",
+      "isScrapped": false,
       "keywords": ["얼터너티브", "사이키델릭", "빈티지"],
       "mainMusic": {
         "title": "난춘",
@@ -11,6 +11,59 @@
       },
       "description": "SE SO NEON은 레트로한 사운드와 현대적인 감성을 결합한 얼터너티브 밴드이다.",
       "members": ["황소윤(보컬/기타)", "유수(베이스)", "박현진(드럼)"],
+      "albums": [
+        {
+          "albumId": 301,
+          "albumImage": "https://cdn.pixabay.com/photo/2020/04/25/07/34/vinyl-5086366_1280.jpg",
+          "title": "NONADAPTATION",
+          "year": 2017
+        },
+        {
+          "albumId": 302,
+          "albumImage": "https://cdn.pixabay.com/photo/2016/11/29/09/32/vinyl-1869170_1280.jpg",
+          "title": "LET'S GO",
+          "year": 2019
+        }
+      ],
+      "scheduledConcert": [
+        {
+          "concertId": 101,
+          "concertImage": "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+          "concertName": "MIDNIGHT WAVE",
+          "dDay": "D-30",
+          "lineUp": ["SE SO NEON", "The Black Skirts", "Car, the Garden"],
+          "concertDate": "2025-03-22"
+        }
+      ],
+      "endedConcert": [
+        {
+          "concertId": 101,
+          "concertImage": "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+          "concertName": "SUMMER PSYCHE",
+          "concertDate": "2024-08-14"
+        }
+      ]
+    },
+    {
+      "artistId": 202,
+      "artistImage": "https://cdn.pixabay.com/photo/2019/10/25/18/09/music-4577592_1280.jpg",
+      "artistName": "SE SO NEON",
+      "isScrapped": false,
+      "keywords": ["얼터너티브", "사이키델릭", "빈티지"],
+      "mainMusic": {
+        "title": "난춘",
+        "description": "자유로운 청춘의 감정을 빈티지한 사운드로 표현한 곡으로, 밴드의 정체성을 잘 보여준다."
+      },
+      "description": "SE SO NEON은 레트로한 사운드와 현대적인 감성을 결합한 얼터너티브 밴드이다.",
+      "members": ["황소윤(보컬/기타)", "유수(베이스)", "박현진(드럼)"],
+      "albums": [
+        {
+          "albumId": 303,
+          "albumImage": "https://cdn.pixabay.com/photo/2015/03/26/09/54/vinyl-690039_1280.jpg",
+          "title": "SUMMER PLUMAGE",
+          "year": 2021
+        }
+      ],
       "scheduledConcert": [
         {
           "concertId": 101,
@@ -34,6 +87,7 @@
       "artistId": 203,
       "artistImage": "https://cdn.pixabay.com/photo/2021/10/05/20/37/band-6683663_1280.jpg",
       "artistName": "혁오",
+      "isScrapped": true,
       "keywords": ["인디", "청춘", "자유"],
       "mainMusic": {
         "title": "TOMBOY",
@@ -41,6 +95,20 @@
       },
       "description": "혁오는 솔직한 가사와 독특한 음색으로 세대의 감정을 대변하는 밴드로 자리 잡았다.",
       "members": ["오혁(보컬)", "임동건(기타)", "임현제(베이스)", "이인우(드럼)"],
+      "albums": [
+        {
+          "albumId": 304,
+          "albumImage": "https://cdn.pixabay.com/photo/2016/11/18/15/07/vinyl-1835797_1280.jpg",
+          "title": "23",
+          "year": 2017
+        },
+        {
+          "albumId": 305,
+          "albumImage": "https://cdn.pixabay.com/photo/2017/01/16/19/40/vinyl-1982528_1280.jpg",
+          "title": "LOVELOVELOVE",
+          "year": 2018
+        }
+      ],
       "scheduledConcert": [
         {
           "concertId": 102,

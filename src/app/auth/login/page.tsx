@@ -9,6 +9,7 @@ import naverIcon from '@/assets/auth/naver.svg';
 import kakaoIcon from '@/assets/auth/kakao.svg';
 import { useState } from 'react';
 import { loginSchema } from '@/lib/auth';
+import MyHeader from '@/components/my/MyHeader';
 export default function LoginPage() {
   const router = useRouter();
 
@@ -37,7 +38,8 @@ export default function LoginPage() {
     console.log('로그인 성공', result.data);
   };
   return (
-    <div className="text-white flex flex-col h-screen items-center px-5">
+    <div className="text-white flex flex-col h-screen items-center relative">
+      <MyHeader title="로그인" />
       <Image src={diggindie} alt="diggindie icon" width={235} className="mt-40" />
       <section className="flex flex-col gap-3 mt-10">
         <InputSection

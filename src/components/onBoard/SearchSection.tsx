@@ -1,19 +1,35 @@
-import searchIcon from '@/assets/onBoard/search.svg';
+import GraySearchIcon from '@/components/iconComponents/SearchIcon';
 import Image from 'next/image';
+import clearIcon from '@/assets/search/clearSearch.svg';
 interface SearchSectionProps {
   searchTerm: string;
   onChange: (value: string) => void;
+  onClear?: () => void;
+  onSubmit: () => void;
 }
-export default function SearchSection({ searchTerm, onChange }: SearchSectionProps) {
+export default function SearchSection({
+  searchTerm,
+  onChange,
+  onClear,
+  onSubmit,
+}: SearchSectionProps) {
   return (
-    <section className="w-full flex p-2 bg-gray-700 rounded- flex gap-3">
-      <Image src={searchIcon} alt="돋보기 아이콘" />
+    <section className="w-full flex bg-gray-700 rounded-sm justify-between px-2 py-3">
       <input
         value={searchTerm}
         onChange={(e) => onChange(e.target.value)}
         placeholder="검색어를 입력하세요"
-        className="w-full outline-none"
+        className="outline-none text-[#A6A6A6]"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+            onSubmit();
+          }
+        }}
       />
+      {searchTerm && (
+        <Image src={clearIcon} alt="검색어 삭제" onClick={onClear} className="cursor-pointer" />
+      )}
+      <GraySearchIcon className="text-gray-300" />
     </section>
   );
 }

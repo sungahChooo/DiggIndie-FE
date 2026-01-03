@@ -1,26 +1,25 @@
 import Image from 'next/image';
-import logo from '@/assets/common/diggindie.svg';
-import sidTab from '@/assets/common/hamburger.svg';
-import search from '@/assets/common/search.svg';
-import { useState } from 'react';
-import SideTab from '../sideTabDir/SideTab';
-export default function MyHeader() {
-  const [isSideTabOpen, setIsSideTabOpen] = useState(false);
+import backIcon from '@/assets/onBoard/arrow.svg';
+import { useRouter } from 'next/navigation';
+
+type props = {
+  title: string;
+};
+
+export default function MyHeader({ title }: props) {
+  const router = useRouter();
 
   return (
-    <header className="flex px-5 py-3 items-center justify-between">
-      <Image src={logo} alt="Logo" width={100} height={50} />
-      <div className="flex gap-2">
-        <Image src={search} alt="Search" width={20} height={20} />
-        <Image
-          src={sidTab}
-          alt="SidTab"
-          width={20}
-          height={20}
-          onClick={() => setIsSideTabOpen(true)}
-        />
-      </div>
-      {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}
-    </header>
+    <div className="w-full flex items-center px-5 py-3 justify-between bg-transparent absolute top-0 z-50">
+      <Image
+        src={backIcon}
+        alt="이전"
+        width={24}
+        height={24}
+        onClick={() => router.back()}
+        className="cursor-pointer aboslute left-5"
+      />
+      <span className="mx-auto text-base font-semibold">{title}</span>
+    </div>
   );
 }

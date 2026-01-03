@@ -7,7 +7,7 @@ interface MenuSectionProps {
 export default function MenuSection({ title, hasBorder = false }: MenuSectionProps) {
   return (
     <div
-      className={`flex py-2 mx-5 justify-between items-center ${
+      className={`flex py-2 mx-5 justify-between items-center cursor-pointer ${
         hasBorder ? 'border-b border-gray-600' : ''
       }`}
     >
