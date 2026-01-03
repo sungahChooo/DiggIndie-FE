@@ -1,6 +1,5 @@
 import Image from 'next/image';
-import back from '../../assets/common/back.svg';
-import close from '../../assets/icons/close.svg';
+import backIcon from '@/assets/onBoard/arrow.svg';
 import { useRouter } from 'next/navigation';
 
 type props = {
@@ -11,20 +10,16 @@ export default function MyHeader({ title }: props) {
   const router = useRouter();
 
   return (
-    <div className="w-[375px] h-[100px] flex flex-col items-center font-semibold bg-black px-[20px]">
-      <div className="h-[48px] flex flex-col items-center font-bold"></div>
-      <div className="w-[335px] h-[52px] flex justify-between items-center font-semibold">
-        <Image
-          src={back}
-          alt="logo"
-          width={24}
-          height={24}
-          onClick={() => router.back()}
-          className="cursor-pointer"
-        />
-        <span>{title}</span>
-        <Image src={close} alt="close" width={24} height={24} className={'cursor-pointer'} />
-      </div>
+    <div className="w-full flex items-center px-5 py-3 justify-between">
+      <Image
+        src={backIcon}
+        alt="이전"
+        width={24}
+        height={24}
+        onClick={() => router.back()}
+        className="cursor-pointer"
+      />
+      <span className="mx-auto text-base font-semibold">{title}</span>
     </div>
   );
 }

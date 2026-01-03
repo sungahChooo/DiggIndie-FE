@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { joinSchema } from '@/lib/auth';
-import MyHeader from '@/components/my/MyPageHeader';
 
 export default function JoinPage() {
   const router = useRouter();
@@ -46,7 +45,6 @@ export default function JoinPage() {
   };
   return (
     <div className="text-white flex flex-col h-screen items-center gap-6">
-      <MyHeader />
       <section className="flex px-5 py-3 w-full justify-between">
         <Link href="/auth/login">
           <Image src={xButton} alt="xButton" width={20} />
