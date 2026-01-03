@@ -1,3 +1,4 @@
+
 import type { Concert } from "@/types/concerts";
 
 export const mockConcerts: Concert[] = [
@@ -6,6 +7,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트1",
     artists: "밴드명밴드명",
     date: "2025-12-04",
+    endDate: "2025-12-11",
     time: "오후 2:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage.png",
@@ -16,6 +18,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트2",
     artists: "밴드명밴드명",
     date: "2025-12-02",
+    endDate: "2025-12-11",
     time: "오후 2:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage.png",
@@ -26,6 +29,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트3",
     artists: "밴드명밴드명",
     date: "2025-12-02",
+    endDate: "2025-12-11",
     time: "오후 2:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage.png",
@@ -36,6 +40,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트4",
     artists: "밴드명밴드명",
     date: "2025-12-11",
+    endDate: "2025-12-11",
     time: "오후 2:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage.png",
@@ -46,6 +51,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트5",
     artists: "밴드명밴드명",
     date: "2025-11-30",
+    endDate: "2025-12-11",
     time: "오후 2:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage.png",
@@ -56,6 +62,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트6",
     artists: "밴드명밴드명",
     date: "2025-12-14",
+    endDate: "2025-12-11",
     time: "오후 2:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage2.png",
@@ -66,6 +73,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트7",
     artists: "밴드명밴드명",
     date: "2026-01-01",
+    endDate: "2025-12-11",
     time: "오후 4:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage.png",
@@ -76,6 +84,7 @@ export const mockConcerts: Concert[] = [
     title: "콘서트8",
     artists: "밴드명밴드명",
     date: "2025-12-04",
+    endDate: "2025-12-11",
     time: "오후 8:00",
     location: "홍대 무브홀",
     imageUrl: "/mocks/mockConcertImage2.png",

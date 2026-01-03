@@ -19,16 +19,24 @@ export default function ConcertGrid({ concerts }: Props) {
   );
 
   return (
-    <div className="flex justify-center gap-[16px] mt-[16px]">
-      <div className="flex flex-col gap-[20px]">
+    <div className="flex justify-start gap-[16px] mt-[16px]">
+      {/* 왼쪽 컬럼 */}
+      <div className="flex flex-col gap-[20px] w-[160px]">
         {leftColumn.map((concert) => (
-          <PersonalConcertRecCard key={concert.id} concert={concert} />
+          <PersonalConcertRecCard
+            key={concert.id}
+            concert={concert}
+          />
         ))}
       </div>
 
-      <div className="flex flex-col gap-[20px]">
+      {/* 오른쪽 컬럼  */}
+      <div className="flex flex-col gap-[20px] w-[160px]">
         {rightColumn.map((concert) => (
-          <PersonalConcertRecCard key={concert.id} concert={concert} />
+          <PersonalConcertRecCard
+            key={concert.id}
+            concert={concert}
+          />
         ))}
       </div>
     </div>

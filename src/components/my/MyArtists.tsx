@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
-import downBtn from '@/assets/icons/down.svg';
+import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import downBtn from "@/assets/icons/down.svg";
 
-import { mockArtists } from '@/mocks/mockArtists';
-import MyArtistGrid from '@/components/my/ArtistGrid';
+import { mockArtists } from "@/mocks/mockArtists";
+import MyArtistGrid from "@/components/my/ArtistGrid";
 
-type SortKey = 'updated' | 'korean';
+type SortKey = "updated" | "korean";
 
 export default function MyArtists() {
   const [isOpen, setIsOpen] = useState(false);
-  const [sortKey, setSortKey] = useState<SortKey>('updated');
+  const [sortKey, setSortKey] = useState<SortKey>("updated");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // 바깥 클릭 시 드롭다운 닫기
@@ -22,25 +22,26 @@ export default function MyArtists() {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', onDown);
-    return () => document.removeEventListener('mousedown', onDown);
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
   }, []);
 
   const sortedArtists = useMemo(() => {
     const arr = [...mockArtists];
 
-    if (sortKey === 'korean') {
-      arr.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '', 'ko'));
+    if (sortKey === "korean") {
+      arr.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "ko"));
       return arr;
     }
+
 
     return arr;
   }, [sortKey]);
 
-  const label = sortKey === 'updated' ? '업데이트순' : '가나다순';
+  const label = sortKey === "updated" ? "업데이트순" : "가나다순";
 
   return (
-    <section className="w-full flex flex-col px-[20px] mt-[20px] overflow-auto">
+    <section className="w-full flex flex-col px-[20px] mt-[20px]">
       {/* 드롭다운 */}
       <div className="relative w-fit" ref={dropdownRef}>
         <button
@@ -65,11 +66,13 @@ export default function MyArtists() {
             <button
               type="button"
               onClick={() => {
-                setSortKey('updated');
+                setSortKey("updated");
                 setIsOpen(false);
               }}
               className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === 'updated' ? 'bg-[#332F2F] text-white' : 'text-[#8C8888]'
+                sortKey === "updated"
+                  ? "bg-[#332F2F] text-white"
+                  : "text-[#8C8888]"
               }`}
             >
               <span className="ml-[8px] mt-[3px]">업데이트순</span>
@@ -78,18 +81,22 @@ export default function MyArtists() {
             <button
               type="button"
               onClick={() => {
-                setSortKey('korean');
+                setSortKey("korean");
                 setIsOpen(false);
               }}
               className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === 'korean' ? 'bg-[#332F2F] text-white' : 'text-[#8C8888]'
+                sortKey === "korean"
+                  ? "bg-[#332F2F] text-white"
+                  : "text-[#8C8888]"
               }`}
             >
               <span className="ml-[8px] mt-[3px]">가나다순</span>
             </button>
 
             <div className="flex w-[84px] h-[28px] rounded-[4px] text-[14px]">
-              <span className="ml-[8px] mt-[3px] text-[#8C8888]">스크랩순</span>
+              <span className="ml-[8px] mt-[3px] text-[#8C8888]">
+                스크랩순
+              </span>
             </div>
           </div>
         )}

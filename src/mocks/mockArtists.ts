@@ -14,7 +14,7 @@ export const mockArtists: Artist[] = [
 
   {
     id: "band-2",
-    name: "다 밴드명2",
+    name: "나 밴드명2",
     memberCount: 5,
     imageUrl: "/mocks/mockArtistImage.png",
     genre: "인디 록",
@@ -25,7 +25,7 @@ export const mockArtists: Artist[] = [
 
   {
     id: "band-3",
-    name: "밴드명3",
+    name: "다 밴드명3",
     memberCount: 5,
     imageUrl: "/mocks/mockArtistImage.png",
     genre: "인디 록",
@@ -36,7 +36,7 @@ export const mockArtists: Artist[] = [
 
   {
     id: "band-4",
-    name: "나 밴드명4",
+    name: "가 밴드명4",
     memberCount: 5,
     imageUrl: "/mocks/mockArtistImage.png",
     genre: "인디 록",
@@ -47,7 +47,7 @@ export const mockArtists: Artist[] = [
 
   {
     id: "band-5",
-    name: "가 밴드명5",
+    name: "다 밴드명5",
     memberCount: 5,
     imageUrl: "/mocks/mockArtistImage.png",
     genre: "인디 록",
@@ -58,7 +58,7 @@ export const mockArtists: Artist[] = [
 
   {
     id: "band-6",
-    name: "밴드명6",
+    name: "다 밴드명6",
     memberCount: 5,
     imageUrl: "/mocks/mockArtistImage.png",
     genre: "인디 록",
