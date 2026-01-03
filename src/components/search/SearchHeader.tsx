@@ -1,5 +1,5 @@
 import Image from "next/image";
-import hamburger from "@/assets/icons/hamburger.svg"
+import hamburger from "@/assets/common/hamburger.svg"
 
 type props = {
   title: string;
