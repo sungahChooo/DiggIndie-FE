@@ -56,6 +56,7 @@ export default function HomeCalendar() {
         <button
           disabled={isThisWeek}
           onClick={() => setWeekOffset((prev) => Math.max(0, prev - 1))}
+          className={`${!isThisWeek ? "cursor-pointer" : ""}`}
         >
           <Image src={!isThisWeek ? prevBtn : prevDisabledBtn} alt="prevBtn"/>
         </button>
@@ -79,7 +80,7 @@ export default function HomeCalendar() {
         </div>
         <button disabled={isNextWeek}
           onClick={() => setWeekOffset((prev) => Math.min(1, prev + 1))}
-          className={"cursor-pointer"}
+          className={`${!isNextWeek ? "cursor-pointer" : ""}`}
         >
           <Image src={!isNextWeek ? nextBtn : nextDisabledBtn} alt="nextBtn" />
         </button>

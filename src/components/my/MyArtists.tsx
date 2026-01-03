@@ -53,7 +53,6 @@ export default function MyArtists() {
             {label}
           </span>
           <div className="w-[16px] h-[16px]">
-            {/* alt에는 문자열 추천 */}
             <Image src={downBtn} alt="open dropdown" />
           </div>
         </button>
