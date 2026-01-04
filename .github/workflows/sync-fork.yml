@@ -3,7 +3,7 @@ name: Sync fork to personal repo
 on:
   push:
     branches:
-      - dev   # 배포 기준 브랜치
+      - main   # 배포 기준 브랜치
 
 jobs:
   sync:
