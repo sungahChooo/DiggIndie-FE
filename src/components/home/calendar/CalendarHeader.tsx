@@ -1,5 +1,5 @@
 import Image from "next/image";
-import backBtn from "@/assets/icons/back.svg";
+import backBtn from "@/assets/common/back.svg";
 import calendarIcon from "@/assets/icons/calendarIcon.svg";
 import redCalendarIcon from "@/assets/icons/redCalendarIcon.svg";
 

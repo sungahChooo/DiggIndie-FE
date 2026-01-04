@@ -5,7 +5,7 @@ import Image from "next/image";
 import downBtn from "@/assets/icons/down.svg";
 
 import { mockConcerts } from "@/mocks/mockConcerts";
-import { daysUntilConcert } from "@/components/home/PersonalConcertRecCard";
+import { daysUntilConcert } from "@/components/home/ConcertCard";
 import ConcertGrid from "@/components/my/ConcertGrid";
 import searchBtn from '@/assets/icons/artistSearch.svg';
 import searchBack from '@/assets/icons/searchBack.svg';

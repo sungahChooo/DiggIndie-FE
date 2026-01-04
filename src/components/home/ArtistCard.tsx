@@ -1,7 +1,7 @@
 import { Artist } from "@/types/artists";
 import { ImageTile } from "@/components/home/ImageTile";
 import Image from "next/image";
-import playBtn from "../../assets/icons/play.svg"
+import playBtn from "@/assets/common/play.svg"
 
 
 type Props = {

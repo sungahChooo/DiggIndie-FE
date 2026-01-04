@@ -1,7 +1,7 @@
 import ArtistCard from '@/components/home/ArtistCard';
 import { mockArtists } from '@/mocks/mockArtists';
 import Image from "next/image";
-import more from "../../assets/icons/more.svg"
+import more from "../../assets/common/more.svg"
 
 type Props = {
   isLoggedIn: boolean;

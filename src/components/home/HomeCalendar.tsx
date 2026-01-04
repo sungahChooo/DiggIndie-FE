@@ -4,8 +4,8 @@ import { useState } from "react";
 import { getThisWeekDates } from "@/hooks/getDay";
 import { mockConcerts } from "@/mocks/mockConcerts";
 import Image from "next/image";
-import ticket from "@/assets/icons/ticket.svg"
-import nextBtn from "@/assets/icons/next.svg"
+import ticket from "@/assets/common/ticket.svg"
+import nextBtn from "@/assets/common/next.svg"
 import prevBtn from "@/assets/icons/prev.svg"
 import prevDisabledBtn from "@/assets/icons/prevDisabled.svg"
 import nextDisabledBtn from "@/assets/icons/nextDisabled.svg"
@@ -91,7 +91,7 @@ export default function HomeCalendar() {
 
       {/*캘린더 더보기버튼*/}
       <div className={"flex text-[14px] font-medium text-gray-500 mt-[12px]"}>
-        <Link href={"/home/calendar"} className={"ml-auto"}>
+        <Link href={"/calendar"} className={"ml-auto"}>
         더보기
         </Link>
         <Image src={nextGrayBtn} alt={"more"} className={"mr-[20px]"}/>

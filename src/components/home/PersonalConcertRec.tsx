@@ -1,6 +1,6 @@
 import ConcertCard from '@/components/home/ConcertCard';;
 import Image from "next/image";
-import more from "../../assets/icons/more.svg"
+import more from "@/assets/common/more.svg"
 import { mockConcerts } from '@/mocks/mockConcerts';
 import { daysUntilConcert } from '@/components/home/ConcertCard';
 

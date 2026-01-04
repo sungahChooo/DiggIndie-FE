@@ -1,7 +1,7 @@
 "use client";
 
 import prevBtn from "@/assets/icons/prev.svg";
-import nextBtn from "@/assets/icons/next.svg";
+import nextBtn from "@/assets/common/next.svg";
 import { useState } from "react";
 import Image from "next/image";
 
