@@ -1,10 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '../../assets/common/logo.svg';
-import close from '../../assets/icons/close.svg';
+import logo from '@/assets/icons/logo.svg';
+import close from '@/assets/icons/close.svg';
 import { useState } from 'react';
-import Link from 'next/link';
 
 type Props = {
   isLoggedIn: () => void;

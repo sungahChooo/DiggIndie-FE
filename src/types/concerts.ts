@@ -3,7 +3,7 @@ export type Concert = {
   title: string;
   artists: string;
   date: string;
-  endDate: string;
+  dDay: string;
   time: string;
   location: string;
   imageUrl: string;

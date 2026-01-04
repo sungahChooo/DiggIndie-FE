@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import logo from '../../assets/common/logo.svg';
-import search from '../../assets/common/search.svg';
-import hamburger from '../../assets/common/hamburger.svg';
+import logo from '../../assets/icons/logo.svg';
+import search from '../../assets/icons/search.svg';
+import hamburger from '../../assets/icons/hamburger.svg';
 import Link from 'next/link';
 type Props = {
   onHamburgerClick: () => void;
@@ -9,7 +9,7 @@ type Props = {
 export default function HomeHeader({ onHamburgerClick }: Props) {
   return (
     <>
-      <div className="w-[375px] h-[100px] flex flex-col items-center font-bold bg-black">
+      <div className="w-[375px] h-[52px] flex flex-col items-center font-bold bg-[#332F2F]">
         <div className="h-[52px] flex items-center font-bold mx-[20px]">
           <Image src={logo} alt="logo" width={93.51} height={28} />
           <Link href="/search" className="w-full flex justify-center">

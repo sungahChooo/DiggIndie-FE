@@ -1,6 +1,6 @@
-
 import { Concert } from "@/types/concerts";
 import { ImageTile } from "@/components/home/ImageTile";
+
 type Props = {
   concert: Concert;
 };
@@ -15,16 +15,12 @@ export function daysUntilConcert(targetDate: string): number {
   return Math.ceil(diff / oneDay);
 }
 
-function getDay(dateStr: string): string {
-  return dateStr.split("-")[2];
-}
-
-export default function PersonalConcertRecCard({ concert }: Props) {
-  const dDay = daysUntilConcert(concert.date);
+export default function ConcertCard({ concert }: Props) {
+  const dDay = concert.dDay
 
   return (
     <div className="flex flex-col flex-none w-[160px] bg-[#1F1D1D] rounded-b-[4px]">
-      <div className={`relative flex flex-col overflow-x-auto ${dDay < 0 ? "brightness-[0.4]" : ""}`}>
+      <div className={`relative flex flex-col overflow-x-auto ${dDay === "공연 종료" ? "brightness-[0.4]" : ""}`}>
         <ImageTile
           src={concert.imageUrl}
           alt={concert.title}
@@ -33,10 +29,10 @@ export default function PersonalConcertRecCard({ concert }: Props) {
           gradient="bg-gradient-to-t from-black/80 via-black/30 to-transparent"
         />
 
-        {dDay >= 0 && (
+        {dDay !== "공연 종료" && (
           <div className="flex flex-col absolute z-5 mt-[134px] text-[12px] mx-[8px]">
             <span className="flex w-[41px] h-[17px] bg-[#FF3637] items-center justify-center rounded-[2px]">
-              D-{dDay}
+              {dDay}
             </span>
             <span className="text-[16px] mt-[4px]">
               {concert.description}
@@ -45,12 +41,12 @@ export default function PersonalConcertRecCard({ concert }: Props) {
               {concert.artists}
             </span>
             <span className="text-[12px] text-[#8C8888]">
-              {concert.date} ~ {getDay(concert.endDate)}
+              {concert.date}
             </span>
           </div>
         )}
 
-        {dDay < 0 && (
+        {dDay === "공연 종료" && (
           <div className="flex flex-col absolute z-5 justify-center items-center">
             <span className="text-[16px] mt-[102px] mx-[22px] font-medium text-white brightness-[1.0]" >
               종료된 공연입니다

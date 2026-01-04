@@ -14,7 +14,7 @@ const variantClasses = {
   todayArtistRec: "w-[184px] h-[184px]",
   artistRec: "w-[160px] h-[160px]",
   concertRec: "w-[160px] h-[226px]",
-  indieStory: "w-[162px] h-[202px]"
+  indieStory: "w-[162 px] h-[202px]"
 };
 
 export function ImageTile({ src, alt, variant = "todayArtistRec", className, gradient}: ImageTileProps) {
