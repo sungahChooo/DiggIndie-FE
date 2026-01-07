@@ -1,7 +1,8 @@
 import type { NextConfig } from 'next';
+import withPWA from 'next-pwa';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  turbopack: {},
   images: {
     remotePatterns: [
       {
@@ -9,9 +10,23 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.pixabay.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.amazonaws.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
+        hostname: 'i.scdn.co',
+        pathname: '/image/**',
+      },
     ],
-    domains: ['picsum.photos'],
   },
 };
 
-export default nextConfig;
+export default withPWA({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+})(nextConfig);

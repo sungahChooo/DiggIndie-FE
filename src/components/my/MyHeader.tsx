@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import backIcon from '@/assets/onBoard/arrow.svg';
 import { useRouter } from 'next/navigation';

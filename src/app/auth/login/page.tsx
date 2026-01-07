@@ -10,6 +10,7 @@ import kakaoIcon from '@/assets/auth/kakao.svg';
 import { useState } from 'react';
 import { loginSchema } from '@/lib/auth';
 import MyHeader from '@/components/my/MyHeader';
+import { authService } from '@/services/authService';
 export default function LoginPage() {
   const router = useRouter();
 
@@ -22,7 +23,7 @@ export default function LoginPage() {
     password?: string;
   }>({});
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const result = loginSchema.safeParse(form);
 
     if (!result.success) {
@@ -33,8 +34,9 @@ export default function LoginPage() {
       });
       return;
     }
+    // API 요청 보내기
+    await authService.login(form.id, form.password);
     router.push('/');
-    // 여기서 API 요청 보내기
     console.log('로그인 성공', result.data);
   };
   return (

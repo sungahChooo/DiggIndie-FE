@@ -24,7 +24,7 @@ export default function SplashPage() {
 
     // 전체 스플래시 끝 → 메인페이지 이동
     const timer3 = setTimeout(() => {
-      router.push('/');
+      router.push('/onboard/artist');
     }, 3000);
 
     return () => {

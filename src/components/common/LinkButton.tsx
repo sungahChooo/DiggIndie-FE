@@ -4,9 +4,10 @@ interface LinkButtonProps {
   disabled?: boolean;
   href: string;
   children: React.ReactNode; // 버튼 텍스트
+  onClick?: () => void;
 }
 
-export default function LinkButton({ disabled, href, children }: LinkButtonProps) {
+export default function LinkButton({ disabled, href, children, onClick }: LinkButtonProps) {
   return (
     <Link
       href={disabled ? '#' : href}
@@ -14,6 +15,7 @@ export default function LinkButton({ disabled, href, children }: LinkButtonProps
         disabled ? 'bg-gray-600 cursor-not-allowed' : 'bg-red cursor-pointer'
       }`}
       aria-disabled={disabled}
+      onClick={onClick}
     >
       {children}
     </Link>

@@ -9,7 +9,7 @@ export default function EndedConcertSection({ artist }: EndedConcertSectionProps
     <section className="px-5">
       <span className="font-semibold text-xl mb-3">종료된 공연</span>
       {artist.endedConcert.map((concert) => (
-        <div key={concert.concertId} className="my-4 relative w-[160px] h-[226px]">
+        <div key={concert.concertId} className="my-4 relative w-40 h-[226px]">
           <Image
             src={concert.concertImage}
             alt={concert.concertName}

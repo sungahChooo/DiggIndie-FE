@@ -15,7 +15,7 @@ export default function ArtistDetailPage() {
     return <p className="text-white">아티스트를 찾을 수 없습니다.</p>;
   }
   return (
-    <div className="text-white flex flex-col min-h-screen ">
+    <div className="text-white flex flex-col min-h-screen">
       <div className="relative">
         <MyHeader title="" />
         <DetailImgSection imageSrc={artist.artistImage} alt={artist.artistName} variant="artist" />

@@ -4,14 +4,16 @@ import Image from 'next/image';
 import logo from '@/assets/common/logo.svg';
 import close from '@/assets/icons/close.svg';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Props = {
-  isLoggedIn: () => void;
+  isLoggedIn: boolean;
 };
 
 export default function LoginBanner({ isLoggedIn }: Props) {
   const [visible, setVisible] = useState(true);
-  if (!visible) return;
+  const router = useRouter();
+  if (!visible || isLoggedIn) return;
 
   return (
     <div className="w-[335px] h-[166px] flex flex-col bg-[#1F1D1D] rounded-[4px] border-4px border-[#413D3D] mt-[40px]">
@@ -31,8 +33,8 @@ export default function LoginBanner({ isLoggedIn }: Props) {
         <div className={'flex w-[248px] h-[36px] text-[12px] gap-[8px]'}>
           <button
             onClick={() => {
-              isLoggedIn();
               setVisible(false);
+              router.push('/auth/login');
             }}
             className={'w-[121px] bg-[#ff3637] rounded-[4px] flex items-center justify-center'}
           >

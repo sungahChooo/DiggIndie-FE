@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import concertData from '@/mocks/mockConcertDetail.json';
 import Calendar from '@/assets/common/Calendar.svg';

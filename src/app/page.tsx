@@ -10,9 +10,11 @@ import ResetPreference from '@/components/home/ResetPreference';
 
 import { useEffect, useState } from 'react';
 import SideTab from '@/components/sideTabDir/SideTab';
+import { useAuthStore } from '@/stores/authStore';
 
 export default function HomePage() {
-  const [isLoggedIn, setLoggedIn] = useState(true);
+  const { isAuthed } = useAuthStore();
+
   const [isSideTabOpen, setIsSideTabOpen] = useState(false);
   useEffect(() => {
     document.body.style.overflow = isSideTabOpen ? 'hidden' : 'auto';
@@ -20,17 +22,17 @@ export default function HomePage() {
 
   return (
     <div className="text-white flex flex-col h-screen bg-black relative">
-      <div className="flex flex-col">
+      <div className="flex flex-col ">
         <div className={'sticky top-0 z-5'}>
           <HomeHeader onHamburgerClick={() => setIsSideTabOpen(true)} />
         </div>
         <main className="overflow-y-auto scrollbar flex flex-col justify-center items-center bg-black">
           <IndieStoryRec />
-          <LoginBanner isLoggedIn={() => setLoggedIn(false)} />
-          <ResetPreference isLoggedIn={isLoggedIn} />
+          <LoginBanner isLoggedIn={isAuthed} />
+          <ResetPreference isLoggedIn={isAuthed} />
           <HomeCalendar />
-          <PersonalArtistRec isLoggedIn={isLoggedIn} />
-          <PersonalConcertRec isLoggedIn={isLoggedIn} />
+          <PersonalArtistRec isLoggedIn={isAuthed} />
+          <PersonalConcertRec isLoggedIn={isAuthed} />
         </main>
       </div>
       {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}

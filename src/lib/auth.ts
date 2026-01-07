@@ -1,13 +1,15 @@
 import { z } from 'zod';
+/*
+로그인은 최소 검증만
+id: 4~12자, 영문과 숫자만
+pw: 6~20자, 영문,숫자, 특수문자 중 2가지 이상 조합
+e-mail local: @입력 x
+e-mail domain: 선택 필요
+
+*/
 export const loginSchema = z.object({
-  id: z
-    .string()
-    .min(1, '아이디를 입력해주세요')
-    .regex(/^[a-zA-Z0-9]+$/, '아이디는 영문과 숫자만 사용할 수 있습니다'),
-  password: z
-    .string()
-    .min(1, '비밀번호를 입력해주세요')
-    .regex(/^[a-zA-Z0-9]+$/, '비밀번호는 영문과 숫자만 사용할 수 있습니다'),
+  id: z.string().min(1, '아이디를 입력해주세요'),
+  password: z.string().min(1, '비밀번호를 입력해주세요'),
 });
 
 const idSchema = z

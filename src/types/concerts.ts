@@ -9,3 +9,15 @@ export type Concert = {
   imageUrl: string;
   description: string;
 };
+export type ConcertListItem = {
+  concertId: number;
+  concertName: string;
+  dDay: string;
+  lineUp: string[];
+  mainImage: string;
+  period: string;
+};
+
+export type ConcertListResponse = {
+  concerts: ConcertListItem[];
+};

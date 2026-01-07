@@ -5,20 +5,21 @@ import { useEffect, useState } from 'react';
 import { mockConcerts } from '@/mocks/mockConcerts';
 import { mockArtists } from '@/mocks/mockArtists';
 import back from '@/assets/icons/Arrow-Left.svg';
-import PersonalArtistRecCard from '@/components/home/ArtistCard';
-import PersonalConcertRecCard from '@/components/home/ConcertCard';
+import ArtistCard from '@/components/home/ArtistCard';
+import HomeConcertCard from '@/components/home/HomeConcertCard';
 import mikeIcon from '@/assets/common/Voice 3.svg';
 import calendarIcon from '@/assets/common/Calendar.svg';
 import documentIcon from '@/assets/sidTab/Document.svg';
 import { mockIndieStory } from '@/mocks/mockIndieStory';
 import IndieStoryRecard from '@/components/home/IndieStoryRecCard';
 import SearchCardSkeleton from '@/components/search/SearchCardSkeleton';
+import { useRouter } from 'next/navigation';
 
 export default function HomeSearch() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [debouncedTerm, setDebouncedTerm] = useState('');
-
+  const router = useRouter();
   //디바운스 처리
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,7 +49,12 @@ export default function HomeSearch() {
   return (
     <div className="min-h-screen w-full bg-black">
       <div className="px-5 py-3 w-full flex gap-1">
-        <Image src={back} alt="이전으로" />
+        <Image
+          src={back}
+          alt="이전으로"
+          onClick={() => router.push('/')}
+          className="cursor-pointer"
+        />
         <SearchSection
           searchTerm={searchTerm}
           onChange={setSearchTerm}
@@ -68,7 +74,7 @@ export default function HomeSearch() {
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
             {mockArtists.map((artist) => (
-              <PersonalArtistRecCard key={artist.id} artist={artist} />
+              <ArtistCard key={artist.id} artist={artist} />
             ))}
           </div>
         </section>
@@ -84,7 +90,7 @@ export default function HomeSearch() {
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
             {mockConcerts.map((concert) => (
-              <PersonalConcertRecCard key={concert.id} concert={concert} />
+              <HomeConcertCard key={concert.id} concert={concert} />
             ))}
           </div>
         </section>

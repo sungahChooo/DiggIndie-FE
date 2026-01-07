@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
-import downBtn from "@/assets/icons/down.svg";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
+import downBtn from '@/assets/icons/down.svg';
 
-import { mockConcerts } from "@/mocks/mockConcerts";
-import { daysUntilConcert } from "@/components/home/ConcertCard";
-import MyConcertGrid from "@/components/my/ConcertGrid";
+import { mockConcerts } from '@/mocks/mockConcerts';
+import { daysUntilConcert } from '@/components/home/ConcertCard';
+import MyConcertGrid from '@/components/my/MyConcertGrid';
 
-type SortKey = "updated" | "korean";
+type SortKey = 'updated' | 'korean';
 
 export default function MyConcerts() {
   const [isOpen, setIsOpen] = useState(false);
-  const [sortKey, setSortKey] = useState<SortKey>("updated");
+  const [sortKey, setSortKey] = useState<SortKey>('updated');
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // 바깥 클릭 시 닫기
@@ -21,17 +21,17 @@ export default function MyConcerts() {
       if (!dropdownRef.current) return;
       if (!dropdownRef.current.contains(e.target as Node)) setIsOpen(false);
     };
-    document.addEventListener("mousedown", onDown);
-    return () => document.removeEventListener("mousedown", onDown);
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
   }, []);
 
-  const label = sortKey === "updated" ? "업데이트순" : "가나다순";
+  const label = sortKey === 'updated' ? '업데이트순' : '가나다순';
 
   const sortedConcerts = useMemo(() => {
     const arr = [...mockConcerts];
 
-    if (sortKey === "korean") {
-      arr.sort((a, b) => (a.title ?? "").localeCompare(b.title ?? "", "ko"));
+    if (sortKey === 'korean') {
+      arr.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? '', 'ko'));
       return arr;
     }
 
@@ -65,13 +65,11 @@ export default function MyConcerts() {
             <button
               type="button"
               onClick={() => {
-                setSortKey("updated");
+                setSortKey('updated');
                 setIsOpen(false);
               }}
               className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === "updated"
-                  ? "bg-[#332F2F] text-white"
-                  : "text-[#8C8888]"
+                sortKey === 'updated' ? 'bg-[#332F2F] text-white' : 'text-[#8C8888]'
               }`}
             >
               <span className="ml-[8px] mt-[3px]">업데이트순</span>
@@ -80,13 +78,11 @@ export default function MyConcerts() {
             <button
               type="button"
               onClick={() => {
-                setSortKey("korean");
+                setSortKey('korean');
                 setIsOpen(false);
               }}
               className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === "korean"
-                  ? "bg-[#332F2F] text-white"
-                  : "text-[#8C8888]"
+                sortKey === 'korean' ? 'bg-[#332F2F] text-white' : 'text-[#8C8888]'
               }`}
             >
               <span className="ml-[8px] mt-[3px]">가나다순</span>
@@ -98,7 +94,6 @@ export default function MyConcerts() {
           </div>
         )}
       </div>
-
 
       <MyConcertGrid concerts={sortedConcerts} />
     </section>
