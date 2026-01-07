@@ -7,7 +7,7 @@ type AuthState = {
   login: (token: string, userId: string) => void;
   logout: () => void;
 };
-
+//persist 방식 지움
 export const useAuthStore = create<AuthState>()((set) => ({
   accessToken: null,
   userId: null,
