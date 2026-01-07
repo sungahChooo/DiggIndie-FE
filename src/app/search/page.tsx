@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import { mockConcerts } from '@/mocks/mockConcerts';
 import { mockArtists } from '@/mocks/mockArtists';
 import back from '@/assets/icons/Arrow-Left.svg';
-import ArtistCard from '@/components/home/ArtistCard';
+import MockArtistCard from '@/components/home/MockArtistCard';
 import HomeConcertCard from '@/components/home/HomeConcertCard';
+        
 import mikeIcon from '@/assets/common/Voice 3.svg';
 import calendarIcon from '@/assets/common/Calendar.svg';
 import documentIcon from '@/assets/sidTab/Document.svg';
@@ -74,7 +75,7 @@ export default function HomeSearch() {
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
             {mockArtists.map((artist) => (
-              <ArtistCard key={artist.id} artist={artist} />
+              <MockArtistCard key={artist.id} artist={artist} />
             ))}
           </div>
         </section>

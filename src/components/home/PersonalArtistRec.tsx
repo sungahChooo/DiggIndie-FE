@@ -1,7 +1,7 @@
-import ArtistCard from '@/components/home/ArtistCard';
+import MockArtistCard from '@/components/home/MockArtistCard';
 import { mockArtists } from '@/mocks/mockArtists';
-import Image from 'next/image';
-import more from '../../assets/common/more.svg';
+import Image from "next/image";
+import more from "@/assets/common/more.svg"
 
 type Props = {
   isLoggedIn: boolean;
@@ -17,7 +17,7 @@ export default function PersonalArtistRec({ isLoggedIn }: Props) {
       <div className={`flex overflow-x-auto ml-[20px] ${!isLoggedIn ? 'blur-sm' : 'blur-none'}`}>
         <div className="flex gap-[16px] w-max">
           {mockArtists.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} />
+            <MockArtistCard key={artist.name} artist={artist} />
           ))}
         </div>
       </div>

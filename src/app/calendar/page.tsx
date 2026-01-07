@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import CalendarHeader from '@/components/home/calendar/CalendarHeader';
 import Calendar from '@/components/home/calendar/Calendar';
-import ConcertGrid from '@/components/my/MyConcertGrid';
+import ConcertGrid from '@/components/my/ConcertGrid';
 import { mockConcerts } from '@/mocks/mockConcerts';
 
 export default function CalendarPage() {

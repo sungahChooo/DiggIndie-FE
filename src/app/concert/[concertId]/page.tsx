@@ -20,7 +20,7 @@ export default function ConcertDetailPage() {
   }
 
   return (
-    <div className="text-white flex flex-col min-h-screen bg-black relative">
+    <div className="text-white flex flex-col min-h-screen bg-black relative pb-20">
       <div className="relative">
         <MyHeader title="" />
         <DetailImgSection imageSrc={concert.mainImage} variant="concert" />

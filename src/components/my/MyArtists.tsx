@@ -5,7 +5,7 @@ import Image from "next/image";
 import downBtn from "@/assets/icons/down.svg";
 
 import { mockArtists } from "@/mocks/mockArtists";
-import MyArtistGrid from "@/components/my/ArtistGrid";
+import MyArtistGrid from "@/components/my/MockArtistGrid";
 
 type SortKey = "updated" | "korean";
 

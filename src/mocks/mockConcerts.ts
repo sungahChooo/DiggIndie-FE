@@ -1,4 +1,4 @@
-import type { Concert } from '@/types/concerts';
+import type { Concert } from "@/types/mocks/mockConcerts";
 
 export const mockConcerts: Concert[] = [
   {
@@ -11,6 +11,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-2',
@@ -22,6 +23,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-3',
@@ -33,6 +35,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-4',
@@ -44,6 +47,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-5',
@@ -55,6 +59,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-6',
@@ -66,6 +71,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage2.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-7',
@@ -77,6 +83,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-8',
@@ -88,6 +95,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage2.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-9',
@@ -99,6 +107,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage2.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-10',
@@ -110,6 +119,7 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage2.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
   {
     id: 'concert-11',
@@ -121,5 +131,6 @@ export const mockConcerts: Concert[] = [
     location: '홍대 무브홀',
     imageUrl: '/mocks/mockConcertImage2.png',
     description: '이러이러한 공연이다',
+    period: "2024.08.09 ~ 2024.08.11"
   },
 ];

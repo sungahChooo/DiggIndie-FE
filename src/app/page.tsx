@@ -22,11 +22,9 @@ export default function HomePage() {
 
   return (
     <div className="text-white flex flex-col h-screen bg-black relative">
-      <div className="flex flex-col ">
-        <div className={'sticky top-0 z-5'}>
+      <div className="flex flex-col">
+        <main className="overflow-y-auto scrollbar flex flex-col items-center bg-black pb-20">
           <HomeHeader onHamburgerClick={() => setIsSideTabOpen(true)} />
-        </div>
-        <main className="overflow-y-auto scrollbar flex flex-col justify-center items-center bg-black">
           <IndieStoryRec />
           <LoginBanner isLoggedIn={isAuthed} />
           <ResetPreference isLoggedIn={isAuthed} />

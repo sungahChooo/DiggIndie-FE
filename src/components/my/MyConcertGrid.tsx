@@ -1,11 +1,11 @@
 'use client';
 
 import { useMemo } from 'react';
-import PersonalConcertRecCard from '@/components/home/HomeConcertCard';
-import type { Concert } from '@/types/concerts';
+import PersonalConcertRecCard from '@/components/home/ConcertCard';
+import type { ConcertListItem } from '@/types/mocks/mockConcerts';
 
 type Props = {
-  concerts: Concert[];
+  concerts: ConcertListItem[];
 };
 
 export default function ConcertGrid({ concerts }: Props) {
@@ -16,13 +16,13 @@ export default function ConcertGrid({ concerts }: Props) {
     <div className="flex justify-start gap-[16px] mt-[16px]">
       <div className="flex flex-col gap-[20px]">
         {leftColumn.map((concert) => (
-          <PersonalConcertRecCard key={concert.id} concert={concert} />
+          <PersonalConcertRecCard key={concert.concertId} concert={concert} />
         ))}
       </div>
 
       <div className="flex flex-col gap-[20px]">
         {rightColumn.map((concert) => (
-          <PersonalConcertRecCard key={concert.id} concert={concert} />
+          <PersonalConcertRecCard key={concert.concertId} concert={concert} />
         ))}
       </div>
     </div>

@@ -41,7 +41,7 @@ export default function LoginPage() {
   };
   return (
     <div className="text-white flex flex-col h-screen items-center relative">
-      <MyHeader title="로그인" />
+      <MyHeader title="로그인" backUrl="/" />
       <Image src={diggindie} alt="diggindie icon" width={235} className="mt-40" />
       <section className="flex flex-col gap-3 mt-10">
         <InputSection

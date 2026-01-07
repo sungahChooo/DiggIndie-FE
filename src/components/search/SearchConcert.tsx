@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import downBtn from '@/assets/icons/down.svg';
-import ConcertGrid from '@/components/my/ConcertGrid';
+import MyConcertGrid from '@/components/my/MyConcertGrid';
 import searchBtn from '@/assets/icons/artistSearch.svg';
 import searchBack from '@/assets/icons/searchBack.svg';
 import searchGrayBtn from '@/assets/icons/searchGray.svg';
-import type { ConcertListItem } from '@/types/concerts';
+import type { ConcertListItem } from '@/types/mocks/mockConcerts';
 import concertData from '@/mocks/concertDummy.json';
 
 type SortKey = 'updated' | 'korean' | 'scrap';
@@ -100,7 +100,7 @@ export default function SearchConcert() {
         )}
       </div>
 
-      <ConcertGrid concerts={concerts} />
+      <MyConcertGrid concerts={concerts} />
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { Artist } from "@/types/artists";
+import { Artist } from "@/types/mocks/mockArtists";
 import { ImageTile } from "@/components/home/ImageTile";
 
 type Props = {

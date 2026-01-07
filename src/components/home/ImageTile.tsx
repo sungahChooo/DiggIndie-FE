@@ -1,31 +1,39 @@
-
 import Image from "next/image";
 import clsx from "clsx";
+
+type Variant = "todayArtistRec" | "artistRec" | "concertRec" | "indieStory";
 
 type ImageTileProps = {
   src: string;
   alt: string;
-  variant?: "todayArtistRec" | "artistRec" | "concertRec" | "indieStory";
+  variant?: Variant;
   className?: string;
   gradient?: string;
 };
 
-const variantClasses = {
-  todayArtistRec: "w-[184px] h-[184px]",
-  artistRec: "w-[160px] h-[160px]",
-  concertRec: "w-[160px] h-[226px]",
-  indieStory: "w-[162 px] h-[202px]"
+
+const variantSize: Record<Variant, { w: number; h: number; wrap: string }> = {
+  todayArtistRec: { w: 184, h: 184, wrap: "w-[184px] h-[184px]" },
+  artistRec: { w: 160, h: 160, wrap: "w-[160px] h-[160px]" },
+  concertRec: { w: 160, h: 226, wrap: "w-[160px] h-[226px]" },
+  indieStory: { w: 162, h: 202, wrap: "w-[162px] h-[202px]" },
 };
 
-export function ImageTile({ src, alt, variant = "todayArtistRec", className, gradient}: ImageTileProps) {
+export function ImageTile({ src, alt, variant = "todayArtistRec", className, gradient, }: ImageTileProps) {
+  const { w, h, wrap } = variantSize[variant];
+
   return (
-    <div className={clsx("flex flex-col relative")}>
-      <div className={clsx("", variantClasses[variant])}>
-        <Image src={src} alt={alt} fill className={clsx("object-cover", className)}/>
-        {gradient && (
-          <div className={clsx("pointer-events-none absolute inset-0", gradient)} />
-        )}
-      </div>
+    <div className={clsx("relative overflow-hidden", wrap)}>
+      <Image
+        src={src}
+        alt={alt}
+        width={w}
+        height={h}
+        className={clsx("h-full w-full object-cover", className)}
+      />
+      {gradient && (
+        <div className={clsx("pointer-events-none absolute inset-0", gradient)} />
+      )}
     </div>
   );
 }

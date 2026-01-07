@@ -6,7 +6,7 @@ import downBtn from '@/assets/icons/down.svg';
 
 import { mockConcerts } from '@/mocks/mockConcerts';
 import { daysUntilConcert } from '@/components/home/ConcertCard';
-import MyConcertGrid from '@/components/my/MyConcertGrid';
+import MyConcertGrid from '@/components/my/ConcertGrid';
 
 type SortKey = 'updated' | 'korean';
 

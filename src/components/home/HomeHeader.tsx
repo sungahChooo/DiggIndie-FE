@@ -10,36 +10,34 @@ type Props = {
 export default function HomeHeader({ onHamburgerClick }: Props) {
   const router = useRouter();
   return (
-    <>
-      <div className="w-[375px] h-[52px] flex flex-col items-center font-bold bg-[#332F2F]">
-        <div className="h-[52px] flex items-center font-bold mx-[20px]">
+    <div className="w-full max-w-[375px] h-13 flex flex-col items-center font-bold bg-gray-850">
+      <div className="h-13 flex items-center font-bold mx-5">
+        <Image
+          src={logo}
+          alt="logo"
+          width={93.51}
+          height={28}
+          onClick={() => router.push('/')}
+          className="cursor-pointer"
+        />
+        <Link href="/search" className="w-full flex justify-center">
           <Image
-            src={logo}
-            alt="logo"
-            width={93.51}
-            height={28}
-            onClick={() => router.push('/')}
-            className="cursor-pointer"
-          />
-          <Link href="/search" className="w-full flex justify-center">
-            <Image
-              src={search}
-              alt="search"
-              width={24}
-              height={24}
-              className="ml-[185.49px] mr-[8px]"
-            />
-          </Link>
-          <Image
-            src={hamburger}
-            alt="hamburger"
+            src={search}
+            alt="search"
             width={24}
             height={24}
-            className={'cursor-pointer'}
-            onClick={onHamburgerClick}
+            className="ml-[185.49px] mr-[8px]"
           />
-        </div>
+        </Link>
+        <Image
+          src={hamburger}
+          alt="hamburger"
+          width={24}
+          height={24}
+          className={'cursor-pointer'}
+          onClick={onHamburgerClick}
+        />
       </div>
-    </>
+    </div>
   );
 }

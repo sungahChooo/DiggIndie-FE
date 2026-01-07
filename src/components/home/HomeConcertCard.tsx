@@ -1,4 +1,4 @@
-import { Concert } from '@/types/concerts';
+import { Concert } from '@/types/mocks/mockConcerts';
 import { ImageTile } from '@/components/home/ImageTile';
 
 type Props = {

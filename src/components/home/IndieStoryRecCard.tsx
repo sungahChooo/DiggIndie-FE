@@ -18,10 +18,10 @@ export default function PersonalConcertRecCard({ indieStory }: Props) {
           gradient={"bg-gradient-to-t from-black/80 via-black/30 to-transparent"}
         />
         <div className={"flex flex-col absolute z-5 mt-[152px] mx-[8px] "}>
-          <span className={"w-[138px] h-[22px] text-[16px] font-semibold"}>
+          <span className={"w-[138px] h-[22px] text-[16px] text-white font-semibold"}>
             {indieStory.title}
           </span>
-          <span className={"w-[138px] h-[20px] text-[14px]"}>
+          <span className={"w-[138px] h-[20px] text-[14px] text-white"}>
             {indieStory.description}
           </span>
         </div>

@@ -1,4 +1,4 @@
-import type { Artist } from "@/types/artists";
+import type { Artist } from "@/types/mocks/mockArtists";
 
 export const mockArtists: Artist[] = [
   {
