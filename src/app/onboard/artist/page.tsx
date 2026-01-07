@@ -58,7 +58,7 @@ export default function OnboardArtistPage() {
 
     try {
       await saveSelectedArtists(selectedIds);
-      router.push('/onboard/end');
+      router.push('/onboard/genre');
     } catch (err) {
       console.log('키워드 저장에 실패했습니다. 다시 시도해주세요.', err);
     }

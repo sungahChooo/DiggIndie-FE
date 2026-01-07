@@ -1,5 +1,5 @@
 'use client';
-import LinkButton from '@/components/common/Button';
+import LinkButton from '@/components/common/LinkButton';
 import GenreItem from '@/components/onBoard/GenreItem';
 import Header from '@/components/onBoard/Header';
 import ProgressBar from '@/components/onBoard/ProgressBar';
@@ -73,7 +73,7 @@ export default function OnBoardGenrePage() {
         </div>
       </div>
       <div className="px-5 pb-5">
-        <LinkButton disabled={selectedIds.length < 2} onClick={handleComplete}>
+        <LinkButton href={'/onboard/end'} disabled={selectedIds.length < 2} onClick={handleComplete}>
           선택완료
         </LinkButton>
       </div>
