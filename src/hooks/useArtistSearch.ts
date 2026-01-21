@@ -1,173 +1,182 @@
+// src/hooks/useArtistSearch.ts
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import type { Artist, PageInfo } from "@/types/artists";
-import { getArtistsPage } from "@/services/artistsService";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { getArtists } from "@/api/artists";
+import type { ArtistItem, ArtistOrder, ArtistPayload } from "@/types/artists";
 
-export type SortKey = "updated" | "korean";
+type SortKey = "updated" | "korean" | "scrap";
 
-//페이지당 12개의 아티스트 로드
-export function useArtistSearch(pageSize: number = 12) {
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
-  const [page, setPage] = useState(0);
+function mapSortKeyToOrder(sortKey: SortKey): ArtistOrder {
+  if (sortKey === "korean") return "alphabet";
+  if (sortKey === "scrap") return "scrap";
+  return "recent";
+}
 
+function mergeUniqueById(prev: ArtistItem[], next: ArtistItem[]) {
+  const map = new Map<number, ArtistItem>();
+  prev.forEach((a) => map.set(a.artistId, a));
+  next.forEach((a) => map.set(a.artistId, a));
+  return Array.from(map.values());
+}
+
+export function useArtistSearch(defaultSize = 20) {
+  const size = defaultSize;
+
+  const [artists, setArtists] = useState<ArtistItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [appliedQuery, setAppliedQuery] = useState("");
-
-  // 정렬옵션
   const [sortKey, setSortKey] = useState<SortKey>("updated");
 
-  // fetch 중복방지
-  const isFetchingRef = useRef(false);
+  const [pageInfo, setPageInfo] = useState({
+    page: 0,
+    size,
+    hasNext: false,
+    totalElements: 0,
+    totalPages: 0,
+  });
 
-  // submit 연타 방지
-  const requestSeqRef = useRef(0);
+  const [isFetching, setIsFetching] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  //자동검색 debounce 타이머
-  const debounceTimerRef = useRef<number | null>(null);
-  const debounceMs = 250;
+  const order = useMemo(() => mapSortKeyToOrder(sortKey), [sortKey]);
 
-  const sortArtistsIfNeeded = (list: Artist[]) => {
-    if (sortKey !== "korean") return list;
-    return [...list].sort((a, b) => a.bandName.localeCompare(b.bandName, "ko"));
-  };
+  const lastQueryRef = useRef<string>("");
+  const lastOrderRef = useRef<ArtistOrder>(order);
 
-  const loadFirstPage = async (query?: string) => {
-    isFetchingRef.current = true;
-    const seq = ++requestSeqRef.current;
+  // 무한스크롤 트리거 ref
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-    try {
-      const { artists, pageInfo } = await getArtistsPage({
-        page: 0,
-        size: pageSize,
-        query,
-      });
+  const fetchPage = useCallback(
+    async (nextPage: number, mode: "replace" | "append") => {
+      const q = searchTerm.trim();
 
-      // 최신 요청만 반영
-      if (seq !== requestSeqRef.current) return;
+      if (mode === "append") setIsFetchingMore(true);
+      else setIsFetching(true);
 
-      setArtists(sortArtistsIfNeeded(artists));
-      setPageInfo(pageInfo);
-      setPage(0);
-    } catch (e) {
-      console.error(e);
-      if (seq !== requestSeqRef.current) return;
-      setArtists([]);
-      setPageInfo(null);
-      setPage(0);
-    } finally {
-      // 최신 요청만 fetch 끝났다고 처리
-      if (seq === requestSeqRef.current) isFetchingRef.current = false;
-    }
-  };
+      try {
+        const payload: ArtistPayload = await getArtists({
+          order,
+          query: q,
+          page: nextPage,
+          size,
+        });
 
-  //스크롤시 다음페이지
-  const loadNextPage = async () => {
-    if (isFetchingRef.current) return;
-    if (!pageInfo?.hasNext) return;
+        setPageInfo(payload.pageInfo);
 
-    isFetchingRef.current = true;
-    const seq = ++requestSeqRef.current;
-
-    const nextPage = page + 1;
-
-    try {
-      const { artists: nextArtists, pageInfo: nextPageInfo } = await getArtistsPage({
-        page: nextPage,
-        size: pageSize,
-        query: appliedQuery || undefined,
-      });
-
-      if (seq !== requestSeqRef.current) return;
-
-      setArtists((prev) => {
-        const seen = new Set(prev.map((a) => a.bandId));
-        const merged = [...prev];
-        for (const a of nextArtists) {
-          if (!seen.has(a.bandId)) {
-            seen.add(a.bandId);
-            merged.push(a);
-          }
+        if (mode === "replace") {
+          setArtists(payload.artists ?? []);
+        } else {
+          setArtists((prev) => mergeUniqueById(prev, payload.artists ?? []));
         }
-        // 가나다순이면 병합 후 정렬
-        return sortArtistsIfNeeded(merged);
-      });
 
-      setPageInfo(nextPageInfo);
-      setPage(nextPage);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      if (seq === requestSeqRef.current) isFetchingRef.current = false;
-    }
-  };
+        lastQueryRef.current = q;
+        lastOrderRef.current = order;
+      } finally {
+        if (mode === "append") setIsFetchingMore(false);
+        else setIsFetching(false);
+      }
+    },
+    [order, searchTerm, size]
+  );
 
-  const scheduleAutoSearch = (rawValue: string) => {
-    if (debounceTimerRef.current) {
-      window.clearTimeout(debounceTimerRef.current);
-    }
+  const loadFirstPage = useCallback(
+    async (override?: { query?: string; sortKey?: SortKey }) => {
+      if (override?.query !== undefined) setSearchTerm(override.query);
+      if (override?.sortKey !== undefined) setSortKey(override.sortKey);
 
-    debounceTimerRef.current = window.setTimeout(async () => {
-      const q = rawValue.trim();
+      const nextQuery = (override?.query ?? searchTerm).trim();
+      const nextOrder = mapSortKeyToOrder(override?.sortKey ?? sortKey);
 
-      if (q === "") return;
-      setAppliedQuery(q);
-      await loadFirstPage(q);
-    }, debounceMs);
-  };
+      setIsFetching(true);
+      try {
+        const payload = await getArtists({
+          order: nextOrder,
+          query: nextQuery,
+          page: 0,
+          size,
+        });
 
-  //검색창 input 없어질시 다시 원래 표기된 아티스트 로드
-  const onChangeSearch = async (value: string) => {
-    setSearchTerm(value);
+        setArtists(payload.artists ?? []);
+        setPageInfo(payload.pageInfo);
 
-    // input이 완전히 비면 초기 리스트로
-    if (value === "") {
-      // 대기 중인 자동검색 취소
-      if (debounceTimerRef.current) window.clearTimeout(debounceTimerRef.current);
+        lastQueryRef.current = nextQuery;
+        lastOrderRef.current = nextOrder;
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [searchTerm, sortKey, size]
+  );
 
-      setAppliedQuery("");
-      await loadFirstPage(undefined);
+  const loadNextPage = useCallback(async () => {
+    if (isFetching || isFetchingMore) return;
+    if (!pageInfo.hasNext) return;
+
+    const expectedQuery = searchTerm.trim();
+    const expectedOrder = order;
+
+    if (lastQueryRef.current !== expectedQuery || lastOrderRef.current !== expectedOrder) {
+      await loadFirstPage({ query: expectedQuery, sortKey });
       return;
     }
 
-    // 한 글자 쳐도 바로 검색 실행
-    scheduleAutoSearch(value);
-  };
+    await fetchPage(pageInfo.page + 1, "append");
+  }, [fetchPage, isFetching, isFetchingMore, pageInfo, searchTerm, order, loadFirstPage, sortKey]);
 
-  const onSubmitSearch = async () => {
-    // 엔터시 대기 중인 자동검색 취소
-    if (debounceTimerRef.current) window.clearTimeout(debounceTimerRef.current);
+  const onChangeSearch = useCallback(async (next: string) => {
+    setSearchTerm(next);
+  }, []);
 
-    const q = searchTerm.trim();
-    setAppliedQuery(q);
-    await loadFirstPage(q || undefined);
-  };
+  const onSubmitSearch = useCallback(async () => {
+    await loadFirstPage({ query: searchTerm.trim(), sortKey });
+  }, [loadFirstPage, searchTerm, sortKey]);
 
-  const onClearSearch = async () => {
-    if (debounceTimerRef.current) window.clearTimeout(debounceTimerRef.current);
+  const onClearSearch = useCallback(async () => {
     setSearchTerm("");
-    setAppliedQuery("");
-    await loadFirstPage(undefined);
-  };
+    await loadFirstPage({ query: "", sortKey });
+  }, [loadFirstPage, sortKey]);
 
-  // sortKey 바뀌면 현재 들고있는 artists만 즉시 정렬
-  const sortedArtists = useMemo(() => {
-    return sortArtistsIfNeeded(artists);
-  }, [artists, sortKey]);
+  // IntersectionObserver 기반 무한스크롤
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (!first?.isIntersecting) return;
+        loadNextPage();
+      },
+      {
+        root: null,
+        rootMargin: "240px",
+        threshold: 0,
+      }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [loadNextPage]);
+
+  // 정렬 변경 시 1페이지부터 다시 로드
+  useEffect(() => {
+    if (lastOrderRef.current === order) return;
+    loadFirstPage({ query: searchTerm.trim(), sortKey });
+  }, [order]);
 
   return {
-    artists: sortedArtists,
-    pageInfo,
+    artists,
     searchTerm,
     onChangeSearch,
     onSubmitSearch,
     onClearSearch,
+    sortKey,
+    setSortKey: (k: SortKey) => setSortKey(k),
     loadFirstPage,
     loadNextPage,
-
-    sortKey,
-    setSortKey,
-    isFetching: isFetchingRef.current,
+    isFetching,
+    isFetchingMore,
+    pageInfo,
+    sentinelRef,
   };
 }

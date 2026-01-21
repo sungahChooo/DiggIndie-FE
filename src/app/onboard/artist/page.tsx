@@ -4,16 +4,17 @@ import Header from '@/components/onBoard/Header';
 import TitleSection from '@/components/onBoard/TitleSection';
 import SearchSection from '@/components/onBoard/SearchSection';
 import ProgressBar from '@/components/onBoard/ProgressBar';
-import ArtisItem from '@/components/onBoard/ArtistItem';
+import OnboardArtistItem from '@/components/onBoard/OnboardArtistItem';
 import NoResult from '@/components/onBoard/NoResult';
 import LinkButton from '@/components/common/LinkButton';
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import type { Artist } from '@/types/artists';
+import type { OnboardArtist } from '@/types/artists';
 import { saveSelectedArtists } from '@/services/artistsService';
-import { useArtistSearch } from '@/hooks/useArtistSearch';
+import { useOnboardArtists } from '@/hooks/useOnboardArtists';
+import { onBoardKeywordService } from '@/services/onBoardKeyword.service';
 
 export default function OnboardArtistPage() {
   const router = useRouter();
@@ -28,11 +29,23 @@ export default function OnboardArtistPage() {
     onClearSearch,
     loadFirstPage,
     loadNextPage,
-  } = useArtistSearch(12);
+  } = useOnboardArtists(12);
 
   useEffect(() => {
-    void loadFirstPage(undefined);
-  }, []);
+    const initData = async () => {
+      // 기존에 선택했던 아티스트 정보 가져오기
+      const savedArtists = await onBoardKeywordService.getSelectedArtists();
+
+      if (savedArtists && savedArtists.length > 0) {
+        // 객체 배열에서 bandId 숫자 배열만 뽑아내기
+        const ids = savedArtists.map((artist: OnboardArtist) => artist.bandId);
+        setSelectedIds(ids);
+      }
+      void loadFirstPage(undefined);
+    };
+
+    initData();
+  }, []); // 의존성 배열을 비워 처음에 한 번만 실행
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -57,6 +70,7 @@ export default function OnboardArtistPage() {
     if (selectedIds.length < 2) return;
 
     try {
+      //키워드 저장
       await saveSelectedArtists(selectedIds);
       router.push('/onboard/genre');
     } catch (err) {
@@ -79,7 +93,7 @@ export default function OnboardArtistPage() {
               <br /> 아티스트를 알려주세요
             </>
           }
-          min="최소 2"
+          min="최소 2팀"
         />
 
         <div className="px-5 pt-5">
@@ -91,31 +105,25 @@ export default function OnboardArtistPage() {
           />
         </div>
 
-        <div className="overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4 px-5 pt-5">
-          {artists.length > 0 ? (
-            <>
-              {artists.map((artist: Artist) => (
-                <ArtisItem
-                  key={artist.bandId}
-                  artist={artist}
-                  isSelected={selectedIds.includes(artist.bandId)}
-                  toggleSelect={toggleSelect}
-                />
-              ))}
-              <div ref={sentinelRef} className="col-span-3 h-1" />
-            </>
-          ) : (
-            <NoResult />
-          )}
-        </div>
+        {artists.length > 0 ? (
+          <div className="overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4 px-5 pt-5">
+            {artists.map((artist: OnboardArtist) => (
+              <OnboardArtistItem
+                key={artist.bandId}
+                artist={artist}
+                isSelected={selectedIds.includes(artist.bandId)}
+                toggleSelect={toggleSelect}
+              />
+            ))}
+            <div ref={sentinelRef} className="col-span-3 h-1" />
+          </div>
+        ) : (
+          <NoResult />
+        )}
       </div>
 
-      <div className="px-5 pb-5">
-        <LinkButton
-          href="/onboard/genre"
-          disabled={selectedIds.length < 2}
-          onClick={handleComplete}
-        >
+      <div className="px-5 mb-5">
+        <LinkButton disabled={selectedIds.length < 2} onClick={handleComplete}>
           선택완료
         </LinkButton>
       </div>

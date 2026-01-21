@@ -1,0 +1,42 @@
+{
+  "member": {
+    "memberId": 1,
+    "nickname": "작성자 닉네임",
+    "imageUrl": "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg"
+  },
+  "boardId": 1,
+  "boardTitle": "게시글 제목",
+  "boardContent": "게시글 본문 내용입니다.게시글 본문 내용입니다.게시글 본문 내용입니다.게시글 본문 내용입니다.게시글 본문 내용입니다.게시글 본문 내용입니다.게시글 본문 내용입니다.게시글 본문 내용입니다.게시글 본문 내용입니다.",
+  "imageUrls": [
+    "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+    "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+    "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg"
+  ],
+  "createdAt": "2025-12-05 12:34",
+  "comment": 4,
+  "liked": 12,
+  "comments": [
+    {
+      "commentId": 1,
+      "member": {
+        "memberId": 2,
+        "nickname": "첫 댓글 작성자"
+      },
+      "content": "이 팀 음원만 듣다가...",
+      "isLiked": false,
+      "likeCount": 0,
+      "hasParent": false,
+      "parentId": null
+    },
+    {
+      "commentId": 2,
+      "member": {
+        "memberId": 3,
+        "nickname": "대댓글 작성자"
+      },
+      "content": "거리 공연에서도 이 정도면...",
+      "hasParent": true,
+      "parentId": 1
+    }
+  ]
+}

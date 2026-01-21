@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import diggindie from '@/assets/common/diggindie.svg';
-import Button from '@/components/common/Button';
+import LinkButton from '@/components/common/LinkButton';
 import InputSection from '@/components/auth/InputSection';
 import { useRouter } from 'next/navigation';
 import googleIcon from '@/assets/auth/google.svg';
@@ -37,12 +37,11 @@ export default function LoginPage() {
     // API 요청 보내기
     await authService.login(form.id, form.password);
     router.push('/');
-    console.log('로그인 성공', result.data);
   };
   return (
     <div className="text-white flex flex-col h-screen items-center relative">
       <MyHeader title="로그인" backUrl="/" />
-      <Image src={diggindie} alt="diggindie icon" width={235} className="mt-40" />
+      <Image src={diggindie} alt="diggindie icon" width={235} className="mt-30" />
       <section className="flex flex-col gap-3 mt-10">
         <InputSection
           placeholder="아이디를 입력해주세요."
@@ -59,7 +58,9 @@ export default function LoginPage() {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
         {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
-        <Button onClick={handleLogin}>로그인</Button>
+        <LinkButton onClick={handleLogin} disabled={false}>
+          로그인
+        </LinkButton>
       </section>
       <div className="mt-5">
         <span
@@ -81,7 +82,7 @@ export default function LoginPage() {
           회원가입
         </span>
       </div>
-      <section className="mt-19 flex flex-col w-full">
+      <section className="mt-15 flex flex-col w-full">
         <div className="flex gap-1 w-full items-center">
           <div className="flex-1 border-t border-gray-300"></div>
           <span className="text-gray-300 text-xs">SNS 계정으로 로그인</span>

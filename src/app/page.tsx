@@ -27,10 +27,10 @@ export default function HomePage() {
           <HomeHeader onHamburgerClick={() => setIsSideTabOpen(true)} />
           <IndieStoryRec />
           <LoginBanner isLoggedIn={isAuthed} />
-          <ResetPreference isLoggedIn={isAuthed} />
-          <HomeCalendar />
           <PersonalArtistRec isLoggedIn={isAuthed} />
           <PersonalConcertRec isLoggedIn={isAuthed} />
+          <ResetPreference isLoggedIn={isAuthed} />
+          <HomeCalendar />
         </main>
       </div>
       {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}

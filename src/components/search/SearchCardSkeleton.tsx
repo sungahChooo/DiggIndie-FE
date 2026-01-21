@@ -1,27 +1,45 @@
-export default function SearchCardSkeleton() {
+export default function ArtistGridSkeleton() {
+  const leftCount = 3;
+  const rightCount = 3;
+
   return (
-    <div className="w-[375px] h-[286px] flex flex-col bg-black animate-pulse">
-      {/* 제목 스켈레톤 */}
-      <div className="mx-5 mt-3 mb-5">
-        <div className="h-5 w-32 bg-gray-700 rounded" />
+    <div className="flex justify-start gap-[15px] mt-[16px] animate-pulse">
+      {/* 좌측 열 */}
+      <div className="flex flex-col gap-[16px] w-[160px]">
+        {Array.from({ length: leftCount }).map((_, idx) => (
+          <div
+            key={`left-${idx}`}
+            className="w-[160px] bg-[#1F1D1D] rounded-[4px] overflow-hidden"
+          >
+            {/* 이미지 */}
+            <div className="w-full h-[160px] bg-gray-800" />
+
+            {/* 텍스트 */}
+            <div className="px-[12px] py-[10px] flex flex-col gap-[8px]">
+              <div className="h-[14px] w-3/4 bg-gray-700 rounded" />
+              <div className="h-[12px] w-1/2 bg-gray-700 rounded" />
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* 카드 스켈레톤 영역 */}
-      <div className="flex overflow-x-auto px-[20px]">
-        <div className="flex gap-4 w-max">
-          {Array.from({ length: 4 }).map((_, idx) => (
-            <div key={idx} className="w-[140px] h-[190px] bg-gray-800 rounded-lg flex flex-col">
-              {/* 이미지 영역 */}
-              <div className="w-full h-[140px] bg-gray-700 rounded-t-lg" />
+      {/* 우측 열 */}
+      <div className="flex flex-col gap-[16px] w-[160px]">
+        {Array.from({ length: rightCount }).map((_, idx) => (
+          <div
+            key={`left-${idx}`}
+            className="w-[160px] bg-[#1F1D1D] rounded-[4px] overflow-hidden"
+          >
+            {/* 이미지 */}
+            <div className="w-full h-[160px] bg-gray-800" />
 
-              {/* 텍스트 영역 */}
-              <div className="p-2 flex flex-col gap-2">
-                <div className="h-4 w-3/4 bg-gray-700 rounded" />
-                <div className="h-3 w-1/2 bg-gray-700 rounded" />
-              </div>
+            {/* 텍스트 */}
+            <div className="px-[12px] py-[10px] flex flex-col gap-[8px]">
+              <div className="h-[14px] w-3/4 bg-gray-700 rounded" />
+              <div className="h-[12px] w-1/2 bg-gray-700 rounded" />
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

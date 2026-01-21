@@ -10,7 +10,7 @@ type Props = {
 
 export default function HorizontalSwipeList({ children, gap = 12, paddingX = 16 }: Props) {
   return (
-    <div className="mt-[16px] overflow-x-auto">
+    <div className="mt-4 overflow-x-auto bg-black">
       <div
         className="flex w-max"
         style={{

@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import concertData from '@/mocks/mockConcertDetail.json';
+// import concertData from '@/mocks/mockConcertDetail.json';
 import paper from '@/assets/detail/Paper.svg';
+import { ConcertDetail } from '@/types/concerts';
 
 interface ConcertStorySectionProps {
-  concert: (typeof concertData.concerts)[number];
+  concert: ConcertDetail;
 }
 export default function ConcertStorySection({ concert }: ConcertStorySectionProps) {
   return (

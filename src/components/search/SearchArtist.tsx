@@ -30,7 +30,8 @@ export default function MyArtistsWithSearch() {
     sortKey,
     setSortKey,
     loadFirstPage,
-  } = useArtistSearch(90);
+    sentinelRef, // 무한스크롤
+  } = useArtistSearch(20);
 
   /* 최초 1회 로드 */
   useEffect(() => {
@@ -45,7 +46,6 @@ export default function MyArtistsWithSearch() {
 
     init();
   }, []);
-
 
   /* 바깥 클릭 시 드롭다운 닫기 */
   useEffect(() => {
@@ -187,6 +187,9 @@ export default function MyArtistsWithSearch() {
       </div>
 
       {isLoading ? <SearchCardSkeleton /> : <ArtistGrid artists={artists} />}
+
+      {/* 무한스크롤 */}
+      <div ref={sentinelRef} className="h-[1px]" />
     </section>
   );
 }

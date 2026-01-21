@@ -10,8 +10,8 @@ type Props = {
 export default function HomeHeader({ onHamburgerClick }: Props) {
   const router = useRouter();
   return (
-    <div className="w-full max-w-[375px] h-13 flex flex-col items-center font-bold bg-gray-850">
-      <div className="h-13 flex items-center font-bold mx-5">
+    <div className="w-full justify-between px-5 py-3 flex h-13 flex-col items-center font-bold bg-gray-850">
+      <div className="flex w-full justify-between items-center font-bold">
         <Image
           src={logo}
           alt="logo"
@@ -20,23 +20,25 @@ export default function HomeHeader({ onHamburgerClick }: Props) {
           onClick={() => router.push('/')}
           className="cursor-pointer"
         />
-        <Link href="/search" className="w-full flex justify-center">
+
+        <div className={'flex max-w-14 gap-2'}>
+          <Link href="/search" className="flex justify-center">
+            <Image
+              src={search}
+              alt="search"
+              width={24}
+              height={24}
+            />
+          </Link>
           <Image
-            src={search}
-            alt="search"
+            src={hamburger}
+            alt="hamburger"
             width={24}
             height={24}
-            className="ml-[185.49px] mr-[8px]"
+            className={'cursor-pointer'}
+            onClick={onHamburgerClick}
           />
-        </Link>
-        <Image
-          src={hamburger}
-          alt="hamburger"
-          width={24}
-          height={24}
-          className={'cursor-pointer'}
-          onClick={onHamburgerClick}
-        />
+        </div>
       </div>
     </div>
   );

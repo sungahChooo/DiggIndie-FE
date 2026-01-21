@@ -66,4 +66,25 @@ export const mockArtists: Artist[] = [
     description: "앨범 진짜 너무 안 냄",
     keyWords: ["키워드1", "키워드2", "키워드3"]
   },
+  {
+    id: "band-7",
+    name: "라 밴드명7",
+    memberCount: 5,
+    imageUrl: "/mocks/mockArtistImage.png",
+    genre: "인디 록",
+    popularSong: "곡제목 곡제목 곡제목",
+    description: "앨범 진짜 너무 안 냄",
+    keyWords: ["키워드1", "키워드2", "키워드3"]
+  },
+
+  {
+    id: "band-8",
+    name: "라 밴드명8",
+    memberCount: 5,
+    imageUrl: "/mocks/mockArtistImage.png",
+    genre: "인디 록",
+    popularSong: "곡제목 곡제목 곡제목",
+    description: "앨범 진짜 너무 안 냄",
+    keyWords: ["키워드1", "키워드2", "키워드3"]
+  },
 ];

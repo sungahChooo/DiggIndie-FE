@@ -1,13 +1,11 @@
 'use client';
 import InputSection from '@/components/auth/InputSection';
-import Button from '@/components/common/Button';
-import xButton from '@/assets/auth/xButton.svg';
-import Image from 'next/image';
-import Link from 'next/link';
+import LinkButton from '@/components/common/LinkButton';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { joinSchema } from '@/lib/auth';
 import { authService } from '@/services/authService';
+import JoinHeader from '@/components/auth/JoinHeader';
 
 export default function JoinPage() {
   const router = useRouter();
@@ -18,15 +16,17 @@ export default function JoinPage() {
     id: '',
     password: '',
     confirmPassword: '',
-    emailLocal: '',
-    emailDomain: '',
+    phoneNumber: '',
+    email: '',
+    emailConfirm: '',
   });
   const [errors, setErrors] = useState<{
     id?: string;
     password?: string;
     confirmPassword?: string;
-    emailLocal?: string;
-    emailDomain?: string;
+    phoneNumber?: string;
+    email?: string;
+    emailConfirm?: string;
   }>({});
 
   const handleJoin = async () => {
@@ -39,8 +39,9 @@ export default function JoinPage() {
         id: fieldErrors.id?.[0],
         password: fieldErrors.password?.[0],
         confirmPassword: fieldErrors.confirmPassword?.[0],
-        emailLocal: fieldErrors.emailLocal?.[0],
-        emailDomain: fieldErrors.emailDomain?.[0],
+        phoneNumber: fieldErrors.phoneNumber?.[0],
+        email: fieldErrors.email?.[0],
+        emailConfirm: fieldErrors.emailConfirm?.[0],
       });
       return;
     }
@@ -55,7 +56,7 @@ export default function JoinPage() {
     }
 
     // 3️. 회원가입
-    await authService.signup(form.id, form.password, form.emailLocal, form.emailDomain);
+    await authService.signup(form.id, form.password, form.email);
 
     router.push('/auth/agree');
   };
@@ -86,19 +87,15 @@ export default function JoinPage() {
   };
 
   return (
-    <div className="text-white flex flex-col h-screen items-center gap-6">
-      <section className="flex px-5 py-3 w-full justify-between">
-        <Link href="/auth/login">
-          <Image src={xButton} alt="xButton" width={20} />
-        </Link>
-        <span className="text-base font-semibold text-white pr-35">회원가입</span>
-      </section>
-      <section className="flex flex-col gap-2">
+    <div className="text-white flex flex-col h-screen items-center gap-6 overflow-y-auto pb-25">
+      <JoinHeader />
+      {/* 아이디 입력 섹션 */}
+      <section className="flex flex-col gap-2 w-full px-5 mt-9">
         <span className="text-xs font-medium text-gray-300 px-1 mb-2">아이디</span>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <InputSection
             placeholder="아이디"
-            width="w-[228px] h-[46px]"
+            width="w-[255px] h-11"
             value={form.id}
             onChange={(e) => {
               setIsIdChecked(false);
@@ -107,15 +104,16 @@ export default function JoinPage() {
             }}
           />
           <button
-            className="bg-main-red-4 px-4 py-3 rounded-sm text-white text-base font-semibold border-main-red-1 border cursor-pointer"
+            className="bg-main-red-4 px-4 h-11 rounded-sm text-white text-sm font-medium border-main-red-1 border cursor-pointer whitespace-nowrap "
             onClick={handleCheckId}
           >
             중복확인
           </button>
         </div>
         {errors.id && <p className="text-red-400 text-xs px-3">{errors.id}</p>}
-        <span className="text-xs font-medium text-gray-300 px-3">4~12이내</span>
+        <span className="text-xs font-medium text-gray-300 px-3">4~12자 이내</span>
       </section>
+      {/* 비밀번호 입력 섹션 */}
       <section className="flex flex-col gap-2">
         <span className="text-xs font-medium text-gray-300 mb-2">비밀번호</span>
         <div className="flex flex-col gap-3">
@@ -143,34 +141,60 @@ export default function JoinPage() {
           6~20자/ 영문, 숫자, 특수문자 중 2가지 이상 조합
         </span>
       </section>
-      <section className="flex flex-col gap-4">
+      {/*전화번호 입력 섹션 */}
+      <section className="flex flex-col gap-2">
+        <span className="text-xs font-medium text-gray-300 px-1 mb-2">전화번호</span>
+        <InputSection
+          placeholder="전화번호"
+          width="w-[335px] h-[46px]"
+          value={form.phoneNumber}
+          onChange={(e) => {
+            setIsIdChecked(false);
+            setIsIdValid(false);
+            setForm({ ...form, phoneNumber: e.target.value });
+          }}
+        />
+        {errors.phoneNumber && <p className="text-red-400 text-xs px-3">{errors.phoneNumber}</p>}
+        <span className="text-xs font-medium text-gray-300 px-3">-----</span>
+      </section>
+      {/* 이메일 입력 섹션 */}
+      <section className="flex flex-col gap-4 px-5 w-full">
         <span className="text-xs font-medium  text-gray-300">이메일</span>
-        <div className="flex gap-3 justify-center items-center">
+        <div className="flex gap-3">
           <InputSection
             placeholder="이메일"
-            width="w-[150px] h-[46px]"
-            value={form.emailLocal}
-            onChange={(e) => setForm({ ...form, emailLocal: e.target.value })}
+            width="w-[237px] h-11"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
-          <span className="font-semibold text-xl text-gray-600">@</span>
-          <select
-            className="w-[130px] h-[46px] border border-gray-700 rounded-sm px-4 py-3 text-sm text-gray-600 bg-gray-900 text-base"
-            value={form.emailDomain}
-            onChange={(e) => setForm({ ...form, emailDomain: e.target.value })}
+          <button
+            className="bg-main-red-4 px-2 h-11 rounded-sm text-white text-sm font-medium border-main-red-1 border cursor-pointer whitespace-nowrap "
+            onClick={handleCheckId}
           >
-            <option value="" className="text-base">
-              선택
-            </option>
-            <option value="@gmail.com">gmail.com</option>
-            <option value="@naver.com">naver.com</option>
-            <option value="@kakao.com">kakao.com</option>
-          </select>
+            인증번호 전송
+          </button>
         </div>
-        {errors.emailLocal && <p className="text-red-400 text-xs px-3">{errors.emailLocal}</p>}
-        {errors.emailDomain && <p className="text-red-400 text-xs px-3">{errors.emailDomain}</p>}
+        <div className="flex gap-3">
+          <InputSection
+            placeholder="이메일"
+            width="w-[237px] h-11"
+            value={form.emailConfirm}
+            onChange={(e) => setForm({ ...form, emailConfirm: e.target.value })}
+          />
+          <button
+            className="bg-main-red-4 px-2 h-11 rounded-sm text-white text-sm font-medium border-main-red-1 border cursor-pointer whitespace-nowrap"
+            onClick={handleCheckId}
+          >
+            인증번호 확인
+          </button>
+        </div>
+        {errors.email && <p className="text-red-400 text-xs px-3">{errors.email}</p>}
+        {errors.emailConfirm && <p className="text-red-400 text-xs px-3">{errors.emailConfirm}</p>}
       </section>
       <div className="w-[375px] px-5 absolute bottom-5">
-        <Button onClick={handleJoin}>가입하기</Button>
+        <LinkButton onClick={handleJoin} disabled={false}>
+          가입하기
+        </LinkButton>
       </div>
     </div>
   );

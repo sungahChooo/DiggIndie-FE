@@ -2,11 +2,9 @@ import { authApi } from '@/api/auth';
 import { useAuthStore } from '@/stores/authStore';
 
 export const authService = {
-  async signup(id: string, password: string, emailLocal: string, emailDomain: string) {
-    const email = `${emailLocal}${emailDomain}`;
+  async signup(id: string, password: string, email: string) {
     try {
       const res = await authApi.signup({ userId: id, email, password });
-      console.log('[signup] 응답 성공', res.payload);
       if (!res || !res.payload) {
         throw new Error('서버 응답에 데이터가 없습니다.');
       }
@@ -24,16 +22,14 @@ export const authService = {
   },
 
   async login(userId: string, password: string) {
-    try {
-      const res = await authApi.login({ userId, password });
-      const { accessToken, userId: responseUserId } = res.payload;
-      useAuthStore.getState().login(accessToken, responseUserId);
-      console.log('login 성공', res.payload);
-      return res;
-    } catch (err) {
-      console.log('login 실패', err);
-      throw err;
+    const res = await authApi.login({ userId, password });
+    if (!res) {
+      throw new Error('로그인 응답이 없습니다.');
     }
+    console.log('login', res);
+    const { accessToken, userId: responseUserId } = res.payload;
+    useAuthStore.getState().login(accessToken, responseUserId);
+    return res;
   },
 
   async logout() {
@@ -50,31 +46,25 @@ export const authService = {
   },
 
   async checkId(userId: string) {
-    try {
-      if (!userId) return null;
+    if (!userId) return null;
 
-      const result = await authApi.checkId(userId);
-
-      console.log('아이디 중복 체크 성공');
-      return result.payload.isAvailable;
-    } catch (err) {
-      console.log('아이디 중복 체크 실패', err);
+    const result = await authApi.checkId(userId);
+    if (!result) {
+      throw new Error('로그인 응답이 없습니다.');
     }
+    console.log('아이디 중복 체크 성공', result);
+    return result.payload.isAvailable;
   },
 
   async refreshAccessToken() {
-    try {
-      const res = await authApi.reissue();
-      const { accessToken, userId } = res.payload;
-
-      // 재발급 받은 새 토큰을 스토어에 업데이트
-      useAuthStore.getState().login(accessToken, userId);
-      return accessToken;
-    } catch (err) {
-      console.log('access token 재발급 실패', err);
-      // Refresh Token까지 만료된 상황
+    const res = await authApi.reissue();
+    if (!res) {
       useAuthStore.getState().logout();
-      throw err;
+      throw new Error('토큰 재발급 실패');
     }
+    const { accessToken, userId } = res.payload;
+    // 재발급 받은 새 토큰을 스토어에 업데이트
+    useAuthStore.getState().login(accessToken, userId);
+    return accessToken;
   },
 };

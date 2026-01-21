@@ -1,5 +1,5 @@
 'use client';
-import Button from '@/components/common/Button';
+import LinkButton from '@/components/common/LinkButton';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -11,30 +11,32 @@ export default function AgreePage() {
   const [state1, setState1] = useState(false); // 서비스 이용약관
   const [state2, setState2] = useState(false); // 제3자 제공 동의
   const [state3, setState3] = useState(false); // 개인정보 수집 및 이용 안내
-  const allChecked = state1 && state2 && state3;
+  const [state4, setState4] = useState(false); // 마케팅 수신 동의
+  const requiredCheck = state1 && state2 && state3;
 
   const toggleAll = () => {
-    const next = !(state1 && state2 && state3);
+    const next = !(state1 && state2 && state3 && state4);
     setState1(next);
     setState2(next);
     setState3(next);
+    setState4(next);
   };
 
   return (
-    <div className="text-white flex flex-col h-screen w-[375px]">
-      <section className="ml-5 font-bold text-2xl mt-70 mb-11">
+    <div className="text-white flex flex-col h-screen min-w-[375px]">
+      <section className="ml-5 font-bold text-2xl mt-55 mb-11">
         서비스 이용을 위해
         <br /> 이용약관 동의가 필요합니다.
       </section>
       <section className="mx-5 py-5 flex gap-2 border-b border-gray-600 items-center justitfy-center">
         <label>
-          <input type="checkbox" className="hidden" checked={allChecked} onChange={toggleAll} />
+          <input type="checkbox" className="hidden" checked={requiredCheck} onChange={toggleAll} />
 
           <span
             className={`flex
       w-4 h-4 rounded-full border
       transition-colors
-      ${allChecked ? 'bg-main-red-4 border-main-red-4' : 'bg-transparent border-white'}
+      ${requiredCheck ? 'bg-main-red-4 border-main-red-4' : 'bg-transparent border-white'}
     `}
           />
         </label>
@@ -64,7 +66,14 @@ export default function AgreePage() {
               서비스 이용약관&nbsp;<span className="text-main-red-1">(필수)</span>
             </span>
           </span>
-          <span className="text-gray-600 text-sm underline">보기</span>
+          <a
+            className="text-gray-600 text-sm underline"
+            href="https://www.notion.so/diggindie-2e43f601039f808ab65fd15529200981?source=copy_link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            보기
+          </a>
         </div>
         <div className="flex px-5 justify-between">
           <span className="flex gap-2">
@@ -88,7 +97,14 @@ export default function AgreePage() {
               제 3자 제공 동의 &nbsp;<span className="text-main-red-1">(필수)</span>
             </span>
           </span>
-          <span className="text-gray-600 text-sm underline">보기</span>
+          <a
+            className="text-gray-600 text-sm underline"
+            href="https://www.notion.so/3-2e43f601039f80d6a84df777449f1db4?source=copy_link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            보기
+          </a>
         </div>
         <div className="flex justify-between px-5">
           <span className="flex gap-2">
@@ -112,13 +128,51 @@ export default function AgreePage() {
               개인정보 수집 및 이용 안내&nbsp;<span className="text-main-red-1">(필수)</span>
             </span>
           </span>
-          <span className="text-gray-600 text-sm underline">보기</span>
+          <a
+            className="text-gray-600 text-sm underline"
+            href="https://www.notion.so/2e43f601039f808eb43dde8f495239ec?source=copy_link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            보기
+          </a>
+        </div>
+        <div className="flex justify-between px-5">
+          <span className="flex gap-2">
+            <label>
+              <input
+                type="checkbox"
+                className="hidden"
+                checked={state4}
+                onChange={() => setState4((prev) => !prev)}
+              />
+
+              <span
+                className={`flex
+      w-4 h-4 rounded-full border
+      transition-colors
+      ${state4 ? 'bg-main-red-4 border-main-red-4' : 'bg-transparent border-gray-400'}
+    `}
+              />
+            </label>
+            <span className="font-medium text-sm text-gray-400">
+              마케팅 수신 동의&nbsp;<span className="text-main-red-1">(선택)</span>
+            </span>
+          </span>
+          <a
+            className="text-gray-600 text-sm underline"
+            href="https://www.notion.so/2-2e43f601039f80ab9911fce97bb05ed0?source=copy_link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            보기
+          </a>
         </div>
       </section>
       <div className="w-[375px] px-5 absolute bottom-5">
-        <Button onClick={handleAgree} disabled={!allChecked}>
+        <LinkButton onClick={handleAgree} disabled={!requiredCheck}>
           확인
-        </Button>
+        </LinkButton>
       </div>
     </div>
   );

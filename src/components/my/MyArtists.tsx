@@ -1,11 +1,13 @@
+// src/components/my/MyArtists.tsx
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import downBtn from "@/assets/icons/down.svg";
 
-import { mockArtists } from "@/mocks/mockArtists";
-import MyArtistGrid from "@/components/my/MockArtistGrid";
+import ArtistGrid from "@/components/my/ArtistGrid";
+import { useMyArtists } from "@/hooks/useMyArtists";
+import { myArtistToArtistItem } from "@/services/artistMappers";
 
 type SortKey = "updated" | "korean";
 
@@ -14,29 +16,29 @@ export default function MyArtists() {
   const [sortKey, setSortKey] = useState<SortKey>("updated");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // 바깥 클릭 시 드롭다운 닫기
+  const { artists: myArtists, isLoading, error, refetch } = useMyArtists();
+
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       if (!dropdownRef.current) return;
-      if (!dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
+      if (!dropdownRef.current.contains(e.target as Node)) setIsOpen(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, []);
 
+  const artistItems = useMemo(() => myArtists.map(myArtistToArtistItem), [myArtists]);
+
   const sortedArtists = useMemo(() => {
-    const arr = [...mockArtists];
+    const arr = [...artistItems];
 
     if (sortKey === "korean") {
-      arr.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "ko"));
+      arr.sort((a, b) => (a.artistName ?? "").localeCompare(b.artistName ?? "", "ko"));
       return arr;
     }
 
-
     return arr;
-  }, [sortKey]);
+  }, [artistItems, sortKey]);
 
   const label = sortKey === "updated" ? "업데이트순" : "가나다순";
 
@@ -69,9 +71,7 @@ export default function MyArtists() {
                 setIsOpen(false);
               }}
               className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === "updated"
-                  ? "bg-[#332F2F] text-white"
-                  : "text-[#8C8888]"
+                sortKey === "updated" ? "bg-[#332F2F] text-white" : "text-[#8C8888]"
               }`}
             >
               <span className="ml-[8px] mt-[3px]">업데이트순</span>
@@ -84,24 +84,38 @@ export default function MyArtists() {
                 setIsOpen(false);
               }}
               className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === "korean"
-                  ? "bg-[#332F2F] text-white"
-                  : "text-[#8C8888]"
+                sortKey === "korean" ? "bg-[#332F2F] text-white" : "text-[#8C8888]"
               }`}
             >
               <span className="ml-[8px] mt-[3px]">가나다순</span>
             </button>
 
             <div className="flex w-[84px] h-[28px] rounded-[4px] text-[14px]">
-              <span className="ml-[8px] mt-[3px] text-[#8C8888]">
-                스크랩순
-              </span>
+              <span className="ml-[8px] mt-[3px] text-[#8C8888]">스크랩순</span>
             </div>
           </div>
         )}
       </div>
 
-      <MyArtistGrid artists={sortedArtists} />
+      {/* 로딩/에러 (임시, 에러 시 대응방법 기획과 상의? */}
+      {isLoading && (
+        <div className="mt-[16px] text-[14px] text-[#8C8888]">불러오는 중...</div>
+      )}
+
+      {error && (
+        <div className="mt-[16px] flex items-center gap-[8px]">
+          <span className="text-[14px] text-[#8C8888]">{error}</span>
+          <button
+            type="button"
+            onClick={refetch}
+            className="text-[14px] text-white underline underline-offset-2"
+          >
+            다시 시도
+          </button>
+        </div>
+      )}
+
+      {!isLoading && !error && <ArtistGrid artists={sortedArtists} />}
     </section>
   );
 }

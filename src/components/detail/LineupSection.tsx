@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import concertData from '@/mocks/mockConcertDetail.json';
+// import concertData from '@/mocks/mockConcertDetail.json';
 import lineup from '@/assets/common/Profile.svg';
+import { ConcertDetail } from '@/types/concerts';
 
 interface LineupSectionProps {
-  concert: (typeof concertData.concerts)[number];
+  concert: ConcertDetail;
 }
 export default function LineupSection({ concert }: LineupSectionProps) {
   return (
@@ -14,8 +15,8 @@ export default function LineupSection({ concert }: LineupSectionProps) {
       </p>
       <p>
         {concert.lineUp.map((artist) => (
-          <span key={artist.artistId} className="font-medium text-sm mr-4">
-            {artist.artistName}
+          <span key={artist.bandId} className="font-medium text-sm mr-4">
+            {artist.bandName}
           </span>
         ))}
       </p>

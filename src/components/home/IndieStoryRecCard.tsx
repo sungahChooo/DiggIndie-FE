@@ -1,9 +1,9 @@
-import { IndieStory } from "@/types/indieStory";
+import { MockIndieStory } from "@/types/mocks/mockIndieStory";
 import { ImageTile } from "@/components/home/ImageTile";
 
 
 type Props = {
-  indieStory: IndieStory;
+  indieStory: MockIndieStory;
 };
 
 export default function PersonalConcertRecCard({ indieStory }: Props) {

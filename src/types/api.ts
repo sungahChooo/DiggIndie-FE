@@ -1,3 +1,5 @@
+import { OnboardArtist } from './artists';
+
 export interface ApiResponse<T> {
   statusCode: number;
   isSuccess: boolean;
@@ -13,4 +15,8 @@ export interface KeywordResponse {
   isSuccess: boolean;
   message: string;
   payload: Keyword[];
+}
+
+export interface SelectedArtistsResponse {
+  bands: OnboardArtist[];
 }

@@ -15,25 +15,15 @@ type Props = {
 export default function CalendarHeader({ onToggleCalendar, isCalendarOpen, }: Props) {
   const router = useRouter();
 
-  const [weekOffset] = useState(0);
-  const dates = getThisWeekDates(weekOffset);
-
-  const today = new Date().getDay();
-  const initialIndex = today === 0 ? 6 : today - 1;
-  const [selectedIndex] = useState(initialIndex);
-
-  const fullDate = `${dates[selectedIndex].split("-")[0]}년 
-                    ${Number(dates[selectedIndex].split("-")[1])}월 
-                    ${Number(dates[selectedIndex].split("-")[2])}일`;
 
   return (
-    <div className="flex w-[375px] h-[56px] items-center gap-[88px] bg-black py-[17px]">
-      <button onClick={() => router.back()} className="ml-[20px] cursor-pointer">
+    <div className="flex w-full h-[56px] items-center bg-black py-4 px-5 justify-between">
+      <button onClick={() => router.back()} className=" cursor-pointer">
         <Image src={backBtn} alt="back" width={24} height={24} />
       </button>
 
       <span className="text-[16px] font-semibold text-white">
-        {fullDate}
+        전체 캘린더
       </span>
 
       <button onClick={onToggleCalendar}>

@@ -14,13 +14,13 @@
       "albums": [
         {
           "albumId": 301,
-          "albumImage": "https://cdn.pixabay.com/photo/2020/04/25/07/34/vinyl-5086366_1280.jpg",
+          "albumImage": "",
           "title": "NONADAPTATION",
           "year": 2017
         },
         {
           "albumId": 302,
-          "albumImage": "https://cdn.pixabay.com/photo/2016/11/29/09/32/vinyl-1869170_1280.jpg",
+          "albumImage": "",
           "title": "LET'S GO",
           "year": 2019
         }
@@ -59,7 +59,7 @@
       "albums": [
         {
           "albumId": 303,
-          "albumImage": "https://cdn.pixabay.com/photo/2015/03/26/09/54/vinyl-690039_1280.jpg",
+          "albumImage": "",
           "title": "SUMMER PLUMAGE",
           "year": 2021
         }

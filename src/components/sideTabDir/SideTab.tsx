@@ -1,16 +1,16 @@
-import homeIcon from '@/assets/sidTab/Home 2.svg';
+import homeIcon from '@/assets/sideTab/Home 2.svg';
 import concertIcon from '@/assets/common/Calendar.svg';
 import artistIcon from '@/assets/common/Voice 3.svg';
-import communityIcon from '@/assets/sidTab/Chat 2.svg';
-import indieIcon from '@/assets/sidTab/Document.svg';
-import myIcon from '@/assets/common/Profile.svg';
-import xIcon from '@/assets/sidTab/Star 8.svg';
-import loginIcon from '@/assets/sidTab/Login.svg';
-import logoutIcon from '@/assets/sidTab/Logout.svg';
+import communityIcon from '@/assets/sideTab/Chat 2.svg';
+import indieIcon from '@/assets/sideTab/Document.svg';
+import xIcon from '@/assets/sideTab/Star 8.svg';
+import loginIcon from '@/assets/sideTab/Login.svg';
+import logoutIcon from '@/assets/sideTab/Logout.svg';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/services/authService';
 import { useAuthStore } from '@/stores/authStore';
+import ProfileIcon from '@/assets/common/ProfileIcon';
 
 interface SideTabProps {
   onClose: () => void;
@@ -31,7 +31,7 @@ export default function SideTab({ onClose }: SideTabProps) {
   };
 
   return (
-    <section className="bg-black flex flex-col h-screen w-[307px] gap-5 absolute top-0 z-50 right-0 h-screen">
+    <section className="bg-black flex flex-col h-screen w-[307px] gap-5 absolute top-0 z-50 right-0 min-h-screen">
       <div className="px-8 py-3 cursor-pointer mt-7" onClick={onClose}>
         <Image src={xIcon} alt="닫기" />
       </div>
@@ -45,23 +45,29 @@ export default function SideTab({ onClose }: SideTabProps) {
         </div>
         <div
           className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800"
-          onClick={() => router.push('/search/concert')}
+          onClick={() => router.push('/concert')}
         >
           <Image src={concertIcon} alt="공연" />
           <span className="text-white">공연</span>
         </div>
         <div
           className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800"
-          onClick={() => router.push('/search/artist')}
+          onClick={() => router.push('/artist')}
         >
           <Image src={artistIcon} alt="아티스트" />
           <span className="text-white">아티스트</span>
         </div>
-        <div className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800">
-          <Image src={communityIcon} alt="커뮤니티" />
-          <span className="text-white">커뮤니티</span>
+        <div
+          className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800"
+          onClick={() => router.push('/community/free')}
+        >
+          <Image src={communityIcon} alt="디깅라운지" />
+          <span className="text-white">디깅라운지</span>
         </div>
-        <div className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800">
+
+        <div className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800"
+             onClick={() => router.push('/indieStory')}
+        >
           <Image src={indieIcon} alt="인디스토리" />
           <span className="text-white">인디스토리</span>
         </div>
@@ -75,10 +81,10 @@ export default function SideTab({ onClose }: SideTabProps) {
             onClose();
           }}
         >
-          <Image src={myIcon} alt="마이페이지" className={`${isAuthed ? '' : 'opacity-40'}`} />
+          <ProfileIcon stroke={`${isAuthed ? 'white' : '#4A4747'}`} />
           <span className={`${isAuthed ? 'text-white' : 'text-gray-700'}`}>마이페이지</span>
         </div>
-        <hr className="border-t border-gray-700 my-6" />
+        <hr className="border-t-2 border-gray-700 my-6" />
 
         <div
           className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800"

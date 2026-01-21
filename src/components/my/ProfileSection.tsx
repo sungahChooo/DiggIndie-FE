@@ -4,7 +4,7 @@ export default function ProfileSection() {
   return (
     <div className="px-5 py-3 flex items-center gap-[21px]">
       <Image src={profileIcon} alt="Profile Icon" width={60} height={60} />
-      <span>CEOS1943</span>
+      <span className="text-white text-xl font-semibold">ddddd</span>
     </div>
   );
 }
