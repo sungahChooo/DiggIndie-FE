@@ -2,7 +2,7 @@
 import { fetchClient } from "@/api/client";
 import type {
   WeeklyConcertPayload, GetConcertsPayload, MonthConcertPayload, MyConcertItem, MyConcertPayload,
-  RecConcertItem, RecConcertPayload, ConcertItem
+  RecConcertPayload, ConcertItem
 }
   from '@/types/concerts';
 

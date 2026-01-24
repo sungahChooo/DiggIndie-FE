@@ -3,21 +3,23 @@
 import MyHeader from '@/components/my/MyHeader';
 import ArticleList from '@/components/community/ArticleList';
 import { MockArticles } from '@/mocks/mockArticles';
-import CommentTab from '@/components/my/CommentTab';
+import BoardTab from '@/components/my/BoardTab';
 
-export default function MyTradeCommentPage() {
+export default function MyTradeArticlePage() {
   return (
     <div className="text-white flex flex-col h-screen bg-black relative overflow-hidden">
       <header className="sticky top-0 z-50 h-[52px] bg-black flex items-center shrink-0">
-        <MyHeader title={'MY 댓글'} />
+        <MyHeader title={'MY 게시물'} />
       </header>
 
       <div className="shrink-0">
-        <CommentTab />
+        <BoardTab />
       </div>
 
       <main className="flex-1 min-h-0 overflow-y-auto scrollbar flex flex-col bg-black">
+        {/*
         <ArticleList articles={MockArticles} basePath={'/community/trade'} variant={"trade"}/>
+        */}
       </main>
     </div>
   );

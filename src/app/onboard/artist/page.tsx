@@ -15,12 +15,13 @@ import type { OnboardArtist } from '@/types/artists';
 import { saveSelectedArtists } from '@/services/artistsService';
 import { useOnboardArtists } from '@/hooks/useOnboardArtists';
 import { onBoardKeywordService } from '@/services/onBoardKeyword.service';
+import ArtistSkeletonGrid from '@/components/onBoard/ArtistSkeletonGrid';
 
 export default function OnboardArtistPage() {
   const router = useRouter();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-
+  const [isloading, setIsLoading] = useState(false);
   const {
     artists,
     searchTerm,
@@ -33,6 +34,7 @@ export default function OnboardArtistPage() {
 
   useEffect(() => {
     const initData = async () => {
+      setIsLoading(true);
       // 기존에 선택했던 아티스트 정보 가져오기
       const savedArtists = await onBoardKeywordService.getSelectedArtists();
 
@@ -41,7 +43,8 @@ export default function OnboardArtistPage() {
         const ids = savedArtists.map((artist: OnboardArtist) => artist.bandId);
         setSelectedIds(ids);
       }
-      void loadFirstPage(undefined);
+      void (await loadFirstPage(undefined));
+      setIsLoading(false);
     };
 
     initData();
@@ -69,13 +72,12 @@ export default function OnboardArtistPage() {
   const handleComplete = async () => {
     if (selectedIds.length < 2) return;
 
-    try {
-      //키워드 저장
-      await saveSelectedArtists(selectedIds);
-      router.push('/onboard/genre');
-    } catch (err) {
-      console.log('키워드 저장에 실패했습니다. 다시 시도해주세요.', err);
-    }
+    //선택 아티스트 저장
+    setIsLoading(true);
+
+    await saveSelectedArtists(selectedIds);
+    router.push('/onboard/genre');
+    setIsLoading(false);
   };
 
   return (
@@ -104,8 +106,9 @@ export default function OnboardArtistPage() {
             onSubmit={onSubmitSearch}
           />
         </div>
-
-        {artists.length > 0 ? (
+        {isloading ? (
+          <ArtistSkeletonGrid />
+        ) : artists.length > 0 ? (
           <div className="overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4 px-5 pt-5">
             {artists.map((artist: OnboardArtist) => (
               <OnboardArtistItem

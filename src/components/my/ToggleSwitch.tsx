@@ -37,8 +37,10 @@ export const ToggleSwitch = styled((props: SwitchProps) => (
       }),
     },
     '&.Mui-disabled + .MuiSwitch-track': {
-      opacity: 0.7,
+      backgroundColor: '#A5A1A1',
+      opacity: 1,
       ...theme.applyStyles('dark', {
+        backgroundColor: '#A5A1A1',
         opacity: 0.3,
       }),
     },

@@ -6,6 +6,7 @@
   --color-main-red-4: #880405;
   --color-main-red-2: #ff3637;
   --color-main-red-1: #c31c20;
+  --color-main-red-3: #ff6a46;
   --color-gray-100: #e4e4e4;
   --color-gray-200: #fff;
   --color-gray-300: #bebaba;
@@ -17,6 +18,7 @@
   --color-gray-800: #413d3d;
   --color-gray-850: #332f2f;
   --color-gray-900: #1f1d1d;
+  --color-BG: #0b0f14;
 
   /* Font */
   --font-sf-pro: 'Pretendard', sans-serif;

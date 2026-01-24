@@ -36,10 +36,9 @@ export async function apiFetch<T>(
 
   const headers = new Headers(init.headers);
 
-  if (!headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
+  if (!headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
   }
-
 
   if (useDevAuth) {
     const token = process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN;
@@ -48,7 +47,7 @@ export async function apiFetch<T>(
 
   if (auth) {
     const token = getAccessTokenSafely();
-    if (token) headers.set("Authorization", `Bearer ${token}`);
+    if (token) headers.set('Authorization', `Bearer ${token}`);
   }
 
   const res = await fetch(url.toString(), {
@@ -68,7 +67,7 @@ export async function apiFetch<T>(
   }
 
   // 빈 바디
-  const text = await res.text().catch(() => "");
+  const text = await res.text().catch(() => '');
   if (!text) {
     return undefined as T;
   }
@@ -83,10 +82,7 @@ type FetchOptions = RequestInit & {
   baseUrl?: string;
 };
 
-export async function fetchClient<T>(
-  url: string,
-  options: FetchOptions
-): Promise<ApiResponse<T>> {
+export async function fetchClient<T>(url: string, options: FetchOptions): Promise<ApiResponse<T>> {
   const { auth = false, headers, baseUrl, ...rest } = options;
   const token = useAuthStore.getState().accessToken;
 
@@ -95,9 +91,9 @@ export async function fetchClient<T>(
   const sendRequest = (t: string | null) =>
     fetch(`${origin}${url}`, {
       ...rest,
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...(auth && t ? { Authorization: `Bearer ${t}` } : {}),
         ...headers,
       },
@@ -105,12 +101,19 @@ export async function fetchClient<T>(
 
   let res = await sendRequest(token);
 
-  if (res.status === 401 && auth && url !== "/auth/reissue") {
+  //access token 만료 시 재발급 시도
+  if (res.status === 401 && auth && token && url !== '/auth/reissue') {
     try {
       const newToken = await authService.refreshAccessToken();
       res = await sendRequest(newToken);
     } catch (err) {
-      console.log("new access token 재발급 실패", err);
+      console.log('new access token 재발급 실패', err);
+      const { logout } = useAuthStore.getState();
+      logout();
+
+      if (typeof window !== 'undefined') {
+        window.location.replace('/');
+      }
     }
   }
 

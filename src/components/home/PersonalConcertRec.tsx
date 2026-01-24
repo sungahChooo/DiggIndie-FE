@@ -26,7 +26,7 @@ function parseDday(dday: string) {
 // 비로그인용 카드 자리만 동일하게 차지하는 이미지 카드
 function GuestConcertCard() {
   return (
-    <div className="shrink-0">
+    <div className="relative w-[160px] h-[200px] shrink-0">
       <Image
         src="/mocks/mockConcertImage.png"
         alt="mock concert"
@@ -35,6 +35,22 @@ function GuestConcertCard() {
         className="rounded-[8px] object-cover"
         priority={false}
       />
+      <div className="absolute inset-0 bg-[#0B0F1499]" />
+
+      <div className="flex flex-col absolute inset-0 z-10 flex flex-col justify-end mb-3 px-2">
+        <span className={"bg-[#FF3637] w-[41px] h-[17px] text-white font-medium text-[12px] text-center"}>
+          D-7
+        </span>
+        <span className={"text-white font-medium text-[16px] mt-1"}>
+          공연 제목
+        </span>
+        <span className={"text-white font-normal text-[14px]"}>
+          공연 아티스트 라인업
+        </span>
+        <span className={"text-[#8C8888] font-medium text-[12px]"}>
+          2024.08.06 ~ 2026.01.23
+        </span>
+      </div>
     </div>
   );
 }
@@ -58,8 +74,8 @@ export default function PersonalConcertRec({ isLoggedIn }: Props) {
         </span>
       </div>
 
-      <div className={`flex w-full overflow-x-auto ${!isLoggedIn ? 'blur-sm' : 'blur-none'}`}>
-        <div className="flex gap-4 w-max">
+      <div className={`flex w-full overflow-x-auto ${!isLoggedIn ? 'blur-[3px]' : 'blur-none'}`}>
+        <div className="flex gap-3 w-max">
           {!isLoggedIn ? (
             //로그인 안 했을 시 불러올 임시 사진
             <>

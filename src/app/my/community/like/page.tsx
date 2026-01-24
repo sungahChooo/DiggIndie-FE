@@ -12,7 +12,9 @@ export default function MyFreeArticlePage() {
       </header>
 
       <main className="flex-1 min-h-0 overflow-y-auto scrollbar flex flex-col bg-black">
+        {/*
         <ArticleList articles={MockArticles} basePath={'/community/free'} variant={"free"}/>
+        */}
       </main>
     </div>
   );

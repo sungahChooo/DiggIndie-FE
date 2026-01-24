@@ -39,12 +39,8 @@ export default function OnBoardGenrePage() {
   const handleComplete = async () => {
     if (selectedIds.length < 2) return;
 
-    try {
-      await onBoardKeywordService.saveSelectedKeywords(selectedIds);
-      router.push('/onboard/end');
-    } catch (err) {
-      console.log('키워드 저장에 실패했습니다. 다시 시도해주세요.', err);
-    }
+    await onBoardKeywordService.saveSelectedKeywords(selectedIds);
+    router.push('/onboard/end');
   };
 
   return (

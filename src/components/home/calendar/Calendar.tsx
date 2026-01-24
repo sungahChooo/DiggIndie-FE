@@ -5,6 +5,13 @@ import nextBtn from "@/assets/common/next.svg";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
+import { pad2 } from '@/hooks/calendarHooks'
+import { makeKey } from '@/hooks/calendarHooks'
+import { uniqSorted } from '@/hooks/calendarHooks'
+import { buildInclusiveRangeKeys } from '@/hooks/calendarHooks'
+import { addDaysKey } from '@/hooks/calendarHooks'
+
+
 type CalendarProps = {
   selectedDates: string[];
   onChangeSelectedDates: (next: string[]) => void;
@@ -16,51 +23,8 @@ type Cell = {
   m: number;
   d: number;
   inMonth: boolean;
-  key: string;
+  key: string; // YYYY-MM-DD
 };
-
-function pad2(n: number) {
-  return String(n).padStart(2, "0");
-}
-
-function makeKey(y: number, m0: number, d: number) {
-  return `${y}-${pad2(m0 + 1)}-${pad2(d)}`;
-}
-
-function uniqSorted(dates: Iterable<string>) {
-  return Array.from(new Set(dates)).sort();
-}
-
-function parseKey(key: string) {
-  const [yy, mm, dd] = key.split("-").map((v) => Number(v));
-  return new Date(yy, mm - 1, dd);
-}
-
-function makeKeyFromDate(dt: Date) {
-  return `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())}`;
-}
-
-function buildInclusiveRangeKeys(aKey: string, bKey: string) {
-  const a = parseKey(aKey);
-  const b = parseKey(bKey);
-
-  a.setHours(0, 0, 0, 0);
-  b.setHours(0, 0, 0, 0);
-
-  const forward = a.getTime() <= b.getTime();
-  const start = forward ? a : b;
-  const end = forward ? b : a;
-
-  const keys: string[] = [];
-  const cur = new Date(start);
-
-  while (cur.getTime() <= end.getTime()) {
-    keys.push(makeKeyFromDate(cur));
-    cur.setDate(cur.getDate() + 1);
-  }
-
-  return keys;
-}
 
 export default function SimpleCalendar({
                                          selectedDates,
@@ -139,18 +103,17 @@ export default function SimpleCalendar({
     lastKeyRef.current = cell.key;
   }
 
-  function enterCellWhileDown(cell: Cell) {
+  function updateWhileDown(nextKey: string) {
     if (!pointerDownRef.current) return;
-
-    if (!didDragRef.current) didDragRef.current = true;
 
     const startKey = startKeyRef.current;
     if (!startKey) return;
 
-    if (lastKeyRef.current === cell.key) return;
-    lastKeyRef.current = cell.key;
+    if (lastKeyRef.current === nextKey) return;
+    lastKeyRef.current = nextKey;
 
-    commitRange(startKey, cell.key);
+    if (!didDragRef.current) didDragRef.current = true;
+    commitRange(startKey, nextKey);
   }
 
   function endPointer() {
@@ -180,19 +143,7 @@ export default function SimpleCalendar({
     };
   }, []);
 
-  useEffect(() => {
-    const onDown = (e: PointerEvent) => {
-      const el = wrapperRef.current;
-      if (!el) return;
-      if (el.contains(e.target as Node)) return;
-      onChangeSelectedDates([]);
-    };
-
-    window.addEventListener("pointerdown", onDown);
-    return () => {
-      window.removeEventListener("pointerdown", onDown);
-    };
-  }, [onChangeSelectedDates]);
+  const HALF_GAP = 5.415;
 
   return (
     <div
@@ -200,8 +151,16 @@ export default function SimpleCalendar({
       className={
         "flex flex-col items-center w-[335px] bg-gray-900 " +
         "border-gray-800 border-[1px] " +
-        "py-[16px]"
+        "py-[16px] touch-none"
       }
+      onPointerMove={(e) => {
+        if (!pointerDownRef.current) return;
+
+        const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+        const cellEl = el?.closest?.("[data-key]") as HTMLElement | null;
+        const key = cellEl?.dataset?.key;
+        if (key) updateWhileDown(key);
+      }}
     >
       <div className={"flex w-[295px] ml-[10px] gap-[75px]"}>
         <button
@@ -212,7 +171,18 @@ export default function SimpleCalendar({
           <Image src={prevBtn} alt="prev" width={24} height={24} />
         </button>
 
-        <div className={"text-white text-[20px] font-semibold"}>
+        <div
+          className={"text-white text-[20px] font-semibold cursor-pointer"}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+          }}
+          onClick={() => onChangeSelectedDates([])}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") onChangeSelectedDates([]);
+          }}
+        >
           {year}. {pad2(month + 1)}
         </div>
 
@@ -244,23 +214,58 @@ export default function SimpleCalendar({
           const isSelected = selectedSet.has(cell.key);
           const isGray = !cell.inMonth;
 
+          const prevKey = addDaysKey(cell.key, -1);
+          const nextKey = addDaysKey(cell.key, 1);
+
+          const canHavePrev = i % 7 !== 0;
+          const canHaveNext = i % 7 !== 6;
+
+          //연속 선택
+          const hasPrevGlobal = isSelected && selectedSet.has(prevKey);
+          const hasNextGlobal = isSelected && selectedSet.has(nextKey);
+
+          const isStart = isSelected && !hasPrevGlobal;
+          const isEnd = isSelected && !hasNextGlobal;
+          const isEdge = isStart || isEnd;
+
+          //같은 줄에서만 이어붙이기. 배경색 조정
+          const hasPrevInRow = hasPrevGlobal && canHavePrev;
+          const hasNextInRow = hasNextGlobal && canHaveNext;
+
+
           return (
             <div
               key={`${cell.key}-${i}`}
+              data-key={cell.key}
               onPointerDown={(e) => {
                 e.preventDefault();
+                (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
                 beginPointer(cell);
               }}
-              onPointerEnter={() => {
-                enterCellWhileDown(cell);
-              }}
-              className={`w-[30px] h-[35px] flex items-center justify-center cursor-pointer select-none rounded-[4px]
-                font-medium text-[12px]
-                ${isGray ? "text-gray-600" : "text-white"}
-                ${isSelected ? "bg-[#880405] border-[#C31C20] border-[0.5px]" : "bg-transparent"}
-              `}
+              className={[
+                "relative overflow-visible",
+                "w-[30px] h-[35px] flex items-center justify-center cursor-pointer select-none",
+                "font-medium text-[12px]",
+                isGray ? "text-gray-600" : "text-white",
+              ].join(" ")}
             >
-              {pad2(cell.d)}
+              {isSelected && (
+                <div
+                  className="pointer-events-none absolute inset-y-0 z-0 bg-[#5E0D0E]"
+                  style={{
+                    left: hasPrevInRow ? `-${HALF_GAP}px` : 0,
+                    right: hasNextInRow ? `-${HALF_GAP}px` : 0,
+                    borderRadius: 0,
+                  }}
+                />
+              )}
+
+              {isSelected && isEdge && (
+                <div className="pointer-events-none absolute inset-0 z-10 rounded-[4px] bg-[#880405] border-[#C31C20] border-[0.5px]" />
+              )}
+
+
+              <span className="relative z-20">{pad2(cell.d)}</span>
             </div>
           );
         })}

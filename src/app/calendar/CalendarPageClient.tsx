@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -127,11 +128,12 @@ export default function CalendarPageClient() {
       <div className="w-full max-w-[375px] h-[40px] mt-3 flex px-5 py-2">
         {selectedDates[0] && (
           <div
+            onClick={() => setSelectedDates([])}
             className={`text-[16px] font-medium ${
-              noConcertsToday ? "text-gray-700" : "text-[#BEBABA]"
+              noConcertsToday ? 'text-gray-700' : 'text-[#BEBABA]'
             }`}
           >
-            {selectedDates[0].slice(0, 4)}년 {selectedDates[0].slice(5, 7)}월{" "}
+            {selectedDates[0].slice(0, 4)}년 {selectedDates[0].slice(5, 7)}월{' '}
             {selectedDates[0].slice(8, 10)}일
           </div>
         )}
@@ -145,7 +147,6 @@ export default function CalendarPageClient() {
           >
             금일 예정된 공연은 없습니다
           </div>
-
         ) : (
           <div className="w-full">
             <ConcertGrid concerts={concertsToShow} />

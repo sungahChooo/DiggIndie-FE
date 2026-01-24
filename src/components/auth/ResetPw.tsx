@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 import Link from 'next/link';
 
 export default function ResetPw() {
   return (
     <div className="w-[375px] bg-black flex flex-col items-center px-[20px] py-6 gap-3">
-
-      <div className="w-[335px] flex items-end gap-3">
+      <div className="w-full flex items-end gap-3">
         <div className="flex-1">
           <input
             type="text"
@@ -22,7 +21,7 @@ export default function ResetPw() {
         </button>
       </div>
 
-      <div className="w-[335px] flex items-end gap-3">
+      <div className="w-full flex items-end gap-3">
         <div className="flex-1">
           <input
             type="text"

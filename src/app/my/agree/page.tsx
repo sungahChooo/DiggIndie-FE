@@ -47,7 +47,7 @@ export default function MyAgreePage() {
           className="flex py-2 justify-between cursor-pointer"
           onClick={() => router.push('/my/agree/settings')}
         >
-          <p className="flex gap-2 items-center ">
+          <span className="flex gap-2 items-center ">
             <span className="font-medium text-base text-white">마케팅 수신 동의</span>
             <a
               className="font-medium text-xs text-gray-600 underline"
@@ -57,7 +57,7 @@ export default function MyAgreePage() {
             >
               보기
             </a>
-          </p>
+          </span>
           <Image src={rightArrow} alt="more아이콘" />
         </p>
       </div>

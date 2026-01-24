@@ -7,6 +7,7 @@ import HomeCalendar from '@/components/home/HomeCalendar';
 import PersonalConcertRec from '@/components/home/PersonalConcertRec';
 import IndieStoryRec from '@/components/home/IndieStoryRec';
 import ResetPreference from '@/components/home/ResetPreference';
+import Popular from '@/components/home/Popular';
 
 import { useEffect, useState } from 'react';
 import SideTab from '@/components/sideTabDir/SideTab';
@@ -21,16 +22,19 @@ export default function HomePage() {
   }, [isSideTabOpen]);
 
   return (
-    <div className="text-white flex flex-col h-screen bg-black relative">
+    <div className="text-white min-h-screen bg-black relative">
       <div className="flex flex-col">
-        <main className="overflow-y-auto scrollbar flex flex-col items-center bg-black pb-20">
+        <main className="flex flex-col items-center bg-black pb-20">
           <HomeHeader onHamburgerClick={() => setIsSideTabOpen(true)} />
           <IndieStoryRec />
-          <LoginBanner isLoggedIn={isAuthed} />
+          <div className="px-5 w-full">
+            <LoginBanner isLoggedIn={isAuthed} />
+          </div>
           <PersonalArtistRec isLoggedIn={isAuthed} />
           <PersonalConcertRec isLoggedIn={isAuthed} />
           <ResetPreference isLoggedIn={isAuthed} />
           <HomeCalendar />
+          <Popular />
         </main>
       </div>
       {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}

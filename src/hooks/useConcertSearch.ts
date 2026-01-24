@@ -44,6 +44,8 @@ export function useConcertsSearch(options: Options) {
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
+  const didLoadFirstPageRef = useRef(false);
+
   const fetchPage = useCallback(
     async (nextPage: number, mode: "replace" | "append") => {
       if (!enabled) return;
@@ -62,8 +64,8 @@ export function useConcertsSearch(options: Options) {
           sort,
         });
 
-        const nextConcerts = res.payload.concerts ?? [];
-        const nextPageInfo = res.payload.pageInfo ?? {
+        const nextConcerts = res.payload?.concerts ?? [];
+        const nextPageInfo = res.payload?.pageInfo ?? {
           page: nextPage,
           size,
           hasNext: false,
@@ -75,6 +77,8 @@ export function useConcertsSearch(options: Options) {
 
         if (mode === "replace") {
           setConcerts(nextConcerts);
+          // 첫 페이지 로드 완료 플래그 (요청 성공 시점)
+          didLoadFirstPageRef.current = true;
         } else {
           setConcerts((prev) => mergeUniqueById(prev, nextConcerts));
         }
@@ -84,6 +88,7 @@ export function useConcertsSearch(options: Options) {
         lastSortRef.current = sortKey;
       } catch (e) {
         setError(e instanceof Error ? e.message : "Unknown error");
+
         if (mode === "replace") {
           setConcerts([]);
           setPageInfo({
@@ -93,6 +98,7 @@ export function useConcertsSearch(options: Options) {
             totalElements: 0,
             totalPages: 0,
           });
+          didLoadFirstPageRef.current = false;
         }
       } finally {
         if (mode === "append") setIsFetchingMore(false);
@@ -103,12 +109,17 @@ export function useConcertsSearch(options: Options) {
   );
 
   const loadFirstPage = useCallback(async () => {
+    didLoadFirstPageRef.current = false;
     await fetchPage(0, "replace");
   }, [fetchPage]);
 
   const loadNextPage = useCallback(async () => {
     if (!enabled) return;
     if (isFetching || isFetchingMore) return;
+
+    // 첫 페이지 로드 끝나기 전 nextPage 요청 금지
+    if (!didLoadFirstPageRef.current) return;
+
     if (!pageInfo.hasNext) return;
 
     const expectedQuery = q;
@@ -145,9 +156,11 @@ export function useConcertsSearch(options: Options) {
 
   // 무한스크롤
   useEffect(() => {
+    if (!enabled) return;
+    if (!pageInfo.hasNext) return;
+
     const el = sentinelRef.current;
     if (!el) return;
-    if (!enabled) return;
 
     let locked = false;
 
@@ -176,7 +189,7 @@ export function useConcertsSearch(options: Options) {
 
     io.observe(el);
     return () => io.disconnect();
-  }, [enabled, loadNextPage]);
+  }, [enabled, pageInfo.hasNext, loadNextPage]);
 
   return {
     concerts,

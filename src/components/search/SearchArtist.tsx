@@ -6,16 +6,19 @@ import downBtn from "@/assets/icons/down.svg";
 import searchBtn from "@/assets/icons/artistSearch.svg";
 import searchBack from "@/assets/icons/searchBack.svg";
 import searchGrayBtn from "@/assets/icons/searchGray.svg";
+import deleteBtn from '@/assets/community/delete.svg';
 
 import ArtistGrid from "@/components/my/ArtistGrid";
 import SearchCardSkeleton from "@/components/search/SearchCardSkeleton";
 import { useArtistSearch } from "@/hooks/useArtistSearch";
+import { useRouter } from 'next/navigation';
 
 type SortKey = "updated" | "korean";
 
 export default function MyArtistsWithSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter()
 
   // debounce, loading
   const [debouncedTerm, setDebouncedTerm] = useState("");
@@ -91,23 +94,36 @@ export default function MyArtistsWithSearch() {
   const label = sortKey === "updated" ? "업데이트순" : "가나다순";
 
   return (
-    <section className="relative w-full flex flex-col px-[20px] mt-[12px]">
-      {/* 검색 초기화 */}
+    <section className="relative w-full flex flex-col items-center mt-[12px]">
+      {/* 뒤로가기 */}
       <Image
         src={searchBack}
         alt="back"
         className="absolute left-[20px] mt-[10px] cursor-pointer"
-        onClick={() => {
-          setIsLoading(true);
-          onClearSearch().finally(() => setIsLoading(false));
-        }}
+        onClick={() => router.push('/')}
       />
 
       {/* 검색 input */}
       <div
-        className={`relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white 
-        ${searchTerm ? "w-[307px] ml-[28px] mr-[12px]" : "w-[335px]"}`}
+        className={`relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white
+        ${searchTerm ? 'w-[307px] ml-auto mr-5' : 'w-[335px]'}`}
       >
+
+        {/* 검색 지우기 */}
+        {searchTerm ? (
+          <button
+            type="button"
+            onClick={() => {
+              setIsLoading(true);
+              onClearSearch().finally(() => setIsLoading(false));
+            }}
+            aria-label="clear search"
+            className="absolute right-[40px] top-1/2 -translate-y-1/2 cursor-pointer"
+          >
+            <Image src={deleteBtn} alt="삭제" />
+          </button>
+        ) : null
+        }
         <Image
           src={searchTerm ? searchGrayBtn : searchBtn}
           alt="Search"
@@ -127,7 +143,7 @@ export default function MyArtistsWithSearch() {
       </div>
 
       {/* 드롭다운 */}
-      <div className="relative w-fit" ref={dropdownRef}>
+      <div className="relative w-fit self-start ml-5" ref={dropdownRef}>
         <button
           type="button"
           onClick={() => setIsOpen((v) => !v)}

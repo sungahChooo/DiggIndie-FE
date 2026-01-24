@@ -31,7 +31,7 @@ export default function ArtistCard({ artist }: Props) {
         />
 
         {/* 아티스트명 */}
-        <div className="absolute z-5 items-center justify-center mt-[130px] mx-[12px] max-w-[136px] truncate">
+        <div className="absolute text-white z-5 items-center justify-center mt-[130px] mx-[12px] max-w-[136px] truncate">
           {artist.artistName}
         </div>
       </div>

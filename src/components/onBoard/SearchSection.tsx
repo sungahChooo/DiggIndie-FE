@@ -28,7 +28,14 @@ export default function SearchSection({
       />
       <div className="flex gap-2">
         {searchTerm && (
-          <Image src={clearIcon} alt="검색어 삭제" onClick={onClear} className="cursor-pointer" />
+          <Image
+            src={clearIcon}
+            alt="검색어 삭제"
+            onClick={onClear}
+            className="cursor-pointer"
+            height={20}
+            width={20}
+          />
         )}
         <GraySearchIcon className="text-gray-300" />
       </div>

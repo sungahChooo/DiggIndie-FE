@@ -10,18 +10,16 @@ export default function AuthFindHeader({ title }: props) {
   const router = useRouter();
 
   return (
-    <div className="w-[375px] h-[96px] flex flex-col items-center font-semibold bg-black px-[20px]">
-      <div className="w-[335px] h-[48px] flex justify-center items-center font-semibold">
-        <Image
-          src={back}
-          alt="logo"
-          width={24}
-          height={24}
-          className={'absolute left-[20px] cursor-pointer'}
-          onClick={() => router.back()}
-        />
-        <span>{title}</span>
-      </div>
+    <div className="w-full h-14 flex items-center justify-between bg-black px-5 py-3">
+      <Image
+        src={back}
+        alt="logo"
+        width={24}
+        height={24}
+        className="cursor-pointer"
+        onClick={() => router.back()}
+      />
+      <span className="font-semibold text-white text-base mx-auto">{title}</span>
     </div>
   );
 }

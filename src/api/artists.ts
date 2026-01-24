@@ -49,7 +49,7 @@ export const artistAPI = {
   },
 };
 
-//공연 검색 용
+//아티스트 검색 용
 export async function getArtists(params: GetArtistsParams = {}): Promise<ArtistPayload> {
   const { order = 'recent', query = '', page = 0, size = 20 } = params;
 

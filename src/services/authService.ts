@@ -26,9 +26,10 @@ export const authService = {
     if (!res) {
       throw new Error('로그인 응답이 없습니다.');
     }
-    console.log('login', res);
     const { accessToken, userId: responseUserId } = res.payload;
     useAuthStore.getState().login(accessToken, responseUserId);
+    //  곧바로 userId 정보도 가져와서 스토어 완성시키기
+    await this.getUserId();
     return res;
   },
 
@@ -62,9 +63,98 @@ export const authService = {
       useAuthStore.getState().logout();
       throw new Error('토큰 재발급 실패');
     }
-    const { accessToken, userId } = res.payload;
+    const { accessToken } = res.payload;
     // 재발급 받은 새 토큰을 스토어에 업데이트
-    useAuthStore.getState().login(accessToken, userId);
+    useAuthStore.getState().login(accessToken);
     return accessToken;
+  },
+
+  async getUserId() {
+    try {
+      const res = await authApi.getUserId();
+      const { userId } = res.payload;
+      // API 호출 성공 시 스토어의 userId를 업데이트
+      useAuthStore.getState().login(useAuthStore.getState().accessToken!, res.payload.userId);
+      return userId;
+    } catch (err) {
+      console.log('user id 조회 api 오류', err);
+    }
+  },
+  async checkEmail(email: string, type: 'SIGNUP' | 'PASSWORD_RESET' | 'FIND_USER_ID') {
+    if (!email) return null;
+    try {
+      const res = await authApi.checkEmail({ email: email, type: type });
+      console.log('email 유효성 검사', res.payload);
+      return res.payload.success;
+    } catch (err) {
+      throw err;
+    }
+  },
+  async verifyCode(
+    email: string,
+    code: string,
+    type: 'SIGNUP' | 'PASSWORD_RESET' | 'FIND_USER_ID',
+    newPassword: string
+  ) {
+    try {
+      const res = await authApi.verifyCode({
+        email: email,
+        code: code,
+        type: type,
+        newPassword: newPassword,
+      });
+      return res.payload;
+    } catch (err) {
+      throw err;
+    }
+  },
+  async getAuthURL(platform: 'KAKAO' | 'GOOGLE' | 'NAVER') {
+    try {
+      const res = await authApi.getAuthURL(platform);
+      console.log('auth url 데이터', res.payload);
+      return res.payload;
+    } catch (err) {
+      throw err;
+    }
+  },
+  async socialLogin(code: string, platform: 'KAKAO' | 'GOOGLE' | 'NAVER', state: string) {
+    try {
+      const res = await authApi.socialLogin(code, platform, state);
+      // console.log('소셜 로그인 반환 데이터', res.payload);
+      return res.payload;
+    } catch (err) {
+      throw err;
+    }
+  },
+  //마이페이지 연동된 소셜 계정 조회
+  async getSocialAcounts() {
+    try {
+      const res = await authApi.getSocialAccounts();
+      console.log('연동된 소셜계정 조회', res.payload);
+      return res.payload;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  //마이페이지 소셜계정 연동 토글
+  async linkSocialAccount(code: string, platform: 'KAKAO' | 'GOOGLE' | 'NAVER', state: string) {
+    try {
+      const res = await authApi.linkSocialAccount(code, platform, state);
+      console.log('마이페이지 소셜 계정 연동하기', res.payload);
+      return res.payload;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  //마이페이지 소셜 계정 연동 해제
+  async unlinkSocialAccount(platform: 'KAKAO' | 'GOOGLE' | 'NAVER') {
+    try {
+      await authApi.unlinkSocailAccount(platform);
+      console.log('소셜로그인 해제 성공');
+    } catch (err) {
+      throw err;
+    }
   },
 };

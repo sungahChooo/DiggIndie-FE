@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import back from '@/assets/common/back.svg';
 import { useRouter } from 'next/navigation';
@@ -6,8 +8,13 @@ interface CommunityHeaderProps {
   onRightButtonClick?: () => void;
   disabled?: boolean;
 }
-export default function CommunityHeader({ onRightButtonClick, disabled }: CommunityHeaderProps) {
+
+export default function CommunityWriteHeader({
+                                               onRightButtonClick,
+                                               disabled = false,
+                                             }: CommunityHeaderProps) {
   const router = useRouter();
+
   return (
     <header className="px-5 py-3 flex justify-between w-full mb-3">
       <Image
@@ -18,10 +25,13 @@ export default function CommunityHeader({ onRightButtonClick, disabled }: Commun
         className="cursor-pointer"
         onClick={() => router.push('/community/free')}
       />
+
       <span className="font-semibold text-base text-white">게시물 작성</span>
+
       <button
-        className={`text-normal text-sm ${
-          disabled ? 'text-gray-700 disabled' : 'text-main-red-2 cursor-pointer'
+        type="button"
+        className={`text-sm ${
+          disabled ? 'text-gray-700' : 'text-main-red-2 cursor-pointer'
         }`}
         onClick={onRightButtonClick}
         disabled={disabled}

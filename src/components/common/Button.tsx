@@ -10,7 +10,7 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-export default function Button({ disabled, href, isFinished, children }: ButtonProps) {
+export default function Button({ disabled = false, href, isFinished, children }: ButtonProps) {
   const isDisabled = disabled || !href || isFinished;
   return (
     <Link

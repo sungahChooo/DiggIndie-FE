@@ -4,13 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import downBtn from '@/assets/icons/down.svg';
 import Image from 'next/image';
 
-type Props = {
-  headers: string[];
-  value: string;
-  onChangeAction: (v: string) => void;
+type Props<T extends string> = {
+  headers: readonly T[];
+  value: T;
+  onChangeAction: (v: T) => void;
 };
 
-export default function CommunityHeaderFilter({ headers, value, onChangeAction }: Props) {
+export default function CommunityHeaderFilter<T extends string>({
+                                                                  headers,
+                                                                  value,
+                                                                  onChangeAction,
+                                                                }: Props<T>) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 

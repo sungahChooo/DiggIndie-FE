@@ -17,7 +17,7 @@ export default function CalendarHeader({ onToggleCalendar, isCalendarOpen, }: Pr
 
 
   return (
-    <div className="flex w-full h-[56px] items-center bg-black py-4 px-5 justify-between">
+    <div className="flex w-full h-[56px] items-center bg-black py-4 px-5 justify-between ">
       <button onClick={() => router.back()} className=" cursor-pointer">
         <Image src={backBtn} alt="back" width={24} height={24} />
       </button>
@@ -26,7 +26,7 @@ export default function CalendarHeader({ onToggleCalendar, isCalendarOpen, }: Pr
         전체 캘린더
       </span>
 
-      <button onClick={onToggleCalendar}>
+      <button onClick={onToggleCalendar} className={'cursor-pointer'}>
         <Image src={isCalendarOpen ? redCalendarIcon : calendarIcon} alt="calendar" width={24} height={24} />
       </button>
     </div>

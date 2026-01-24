@@ -8,9 +8,9 @@ type props = {
 
 export default function SearchHeader({ title, onHamburgerClick }: props) {
   return (
-    <div className="w-full h-[52px] flex flex-col items-center font-semibold bg-black px-[20px]">
-      <div className="w-[335px] h-[52px] flex items-center font-semibold text-[20px]">
-        <span className={'mr-auto'}>{title}</span>
+    <div className="w-full h-13 items-center font-semibold bg-black px-5 py-3">
+      <div className="flex items-center justify-between text-[20px]">
+        <span>{title}</span>
         <Image
           src={hamburger}
           alt="menu"

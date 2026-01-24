@@ -1,4 +1,4 @@
-// src/components/my/MyArtists.tsx
+
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";

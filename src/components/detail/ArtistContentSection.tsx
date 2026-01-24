@@ -8,39 +8,56 @@ import BookmarkIcon from '@/components/detail/BookmarkIcon';
 // import artistData from '@/mocks/mockArtistDetail.json';
 import default_album_image from '@/assets/detail/default_album.svg';
 import { ArtistDetail } from '@/types/artists';
-import { useAuthStore } from '@/stores/authStore';
+import needLogin from '@/assets/community/isNotLoggined.svg';
 
 interface ArtistContentSectionProps {
   artist: ArtistDetail;
   onToggleScrap: () => Promise<void>;
   isScrapped: boolean;
+  isLogined: boolean;
 }
 export default function ArtistContentSection({
   artist,
   onToggleScrap,
   isScrapped,
+  isLogined,
 }: ArtistContentSectionProps) {
-  // zustand에서 로그인 상태 구독
-  const isLoggedIn = useAuthStore((state) => state.isAuthed);
-
   return (
-    <section className="px-5 pt-5 border-b-4 border-gray-850 mb-6">
+    <section className="px-5 pt-5 border-b-4 border-gray-850 mb-6 ">
       <div className="flex flex-col gap-1 pb-3 border-b border-gray-850">
         <p className="flex justify-between items-center gap-6">
-          <span className="font-semibold text-xl">{artist.artistName}</span>
-          <BookmarkIcon
-            isActive={isScrapped}
-            onClick={isLoggedIn ? onToggleScrap : undefined}
-            className={`w-6 h-6 transition-colors
+          <span className="font-semibold text-xl w-full">{artist.artistName}</span>
+          <span className="flex flex-col group items-end relative w-100">
+            <BookmarkIcon
+              isActive={isScrapped}
+              onClick={isLogined ? onToggleScrap : undefined}
+              className={`w-6 h-6 transition-colors 
             ${
-              isLoggedIn
+              isLogined
                 ? isScrapped
                   ? 'text-white scale-110 cursor-pointer'
                   : 'text-white cursor-pointer'
                 : 'text-gray-600 cursor-not-allowed'
             }
           `}
-          />
+            />
+            {!isLogined ? (
+              <Image
+                src={needLogin}
+                alt="로그인 필요 아이콘"
+                height={100}
+                width={400}
+                className="
+      absolute top-7
+      opacity-0
+      group-hover:opacity-100
+      transition-opacity
+    "
+              />
+            ) : (
+              <></>
+            )}
+          </span>
         </p>
         <div className="flex">
           {artist.keywords.map((keyword, index) => (
@@ -65,7 +82,9 @@ export default function ArtistContentSection({
               </span>
             ))
           ) : (
-            <span className="font-bold text-sm text-gray-400 text-sm">1인 아티스트입니다.</span>
+            <span className="font-bold text-sm text-gray-400 text-sm">
+              정보가 존재하지 않습니다.
+            </span>
           )}
         </div>
       </div>
@@ -79,12 +98,15 @@ export default function ArtistContentSection({
             rel="noopener noreferrer"
           >
             <Image src={play} alt="play" width={24} height={24} />
-            <span className="font-medium text-base text-gray-200">
+            <span
+              className={`font-medium text-base text-gray-200 ${artist.topTrack ? 'hover:text-gray-400' : ''}`}
+            >
               {artist.topTrack ? artist.topTrack.title : '대표곡이 없습니다.'}
             </span>
           </a>
-          <span className="font-normal text-sm text-gray-500">response에 없음</span>
+          {/* <span className="font-normal text-sm text-gray-500">response에 없음</span> */}
         </div>
+        {/*아티스트 */}
         <div className="flex flex-col gap-2 pb-3 border-b border-gray-850">
           <p className="flex gap-2">
             <Image src={voice} alt="voice" width={24} height={24} />
@@ -98,6 +120,8 @@ export default function ArtistContentSection({
               : '없는 정보입니다.'}
           </p>
         </div>
+        {/*앨범 */}
+
         <div className="flex flex-col gap-3 pb-7">
           <p className="flex gap-2">
             <Image src={albumIcon} alt="album" width={24} height={24} />

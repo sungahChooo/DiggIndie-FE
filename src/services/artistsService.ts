@@ -33,6 +33,7 @@ export async function getArtistsPage(params: {
   return { artists: res.payload, pageInfo: res.pageInfo };
 }
 
+//온보딩 취향 재설정 페이지 선택 아티스트 저장
 export async function saveSelectedArtists(bands: number[]): Promise<void> {
   try {
     const res = await postOnboardArtist(bands);
@@ -41,6 +42,7 @@ export async function saveSelectedArtists(bands: number[]): Promise<void> {
   }
 }
 
+//아티스트 상세 페이지
 export async function getArtistDetail(artistId: number): Promise<ArtistDetail> {
   try {
     const res = await artistAPI.getDetailArtist(artistId);
@@ -55,6 +57,7 @@ export async function getArtistDetail(artistId: number): Promise<ArtistDetail> {
   }
 }
 
+//아티스트 상세 스크랩 토글
 export async function scrapArtist(artistId: number): Promise<void> {
   try {
     const res = await artistAPI.toggleScrapArtist({ bandIds: [artistId] });

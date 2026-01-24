@@ -1,63 +1,164 @@
 'use client';
+
 import ArticleHeader from '@/components/community/ArticleHeader';
 import CommentCard from '@/components/community/CommentCard';
-import freeDetailData from '@/mocks/community/freeDetailDummy.json';
 import ArticleBody from '@/components/community/ArticleBody';
 import ReplyInputSection from '@/components/community/ReplyInputSection';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { boardDetailService } from '@/services/boardDetail.service';
+import type { FreeBoardDetail } from '@/types/board';
+import { useAuthStore } from '@/stores/authStore';
+import { useParams, useRouter } from 'next/navigation';
+import { deleteFree, likeFree } from '@/api/freeBoard';
+import { useCommentFree } from '@/hooks/useCommentFree';
 
-interface Comment {
-  commentId: number;
-  member: {
-    memberId: number;
+export default function FreeArticleDetailPage() {
+  const { isAuthed } = useAuthStore();
+  const params = useParams();
+  const router = useRouter();
+
+  const boardId = Number(params.id);
+  const [board, setBoard] = useState<FreeBoardDetail | null>(null);
+
+  const [replyTarget, setReplyTarget] = useState<{
+    parentCommentId: number;
     nickname: string;
-  };
-  content: string;
-  isLiked: boolean;
-  likeCount: number;
-  hasParent: boolean;
-  parentId: number | null;
-}
-type Props = {
-  params: { id: string };
-};
+    depth: 0 | 1;
+  } | null>(null);
 
-export default function FreeArticleDetailPage({ params }: Props) {
-  const [comments, setComments] = useState(freeDetailData.comments);
+  const {
+    submitComment,
+    toggleCommentLike,
+    isSubmitting: isCommentSubmitting,
+    isLiking: isCommentLiking,
+  } = useCommentFree({
+    boardId,
+    setBoard,
+  });
 
-  const addReply = (content: string) => {
-    setComments((prev) => [
-      ...prev,
-      {
-        commentId: Date.now(),
-        member: {
-          memberId: -1, // 임시값
-          nickname: '나',
-        },
-        content,
-        isLiked: false,
-        likeCount: 0,
-        hasParent: false,
-        parentId: null,
-      },
-    ]);
+  useEffect(() => {
+    if (!boardId) return;
+
+    const fetchDetail = async () => {
+      const content = await boardDetailService.getFreeBoardDetail(boardId);
+      setBoard(content);
+    };
+
+    fetchDetail();
+  }, [boardId]);
+
+  const handleEdit = () => {
+    if (!boardId) return;
+    router.push(`/community/write?mode=edit&board=free&id=${boardId}`);
   };
+
+  const handleDelete = async () => {
+    if (!boardId) return;
+
+    const res = await deleteFree({ boardId });
+
+    if (!res.isSuccess) {
+      alert(res.message || '삭제에 실패했습니다.');
+      return;
+    }
+
+    router.replace('/community/free');
+  };
+
+  const handleToggleLike = async () => {
+    if ((!board) || (board.isMine)) return;
+
+    const prev = {
+      isLiked: board.isLiked,
+      likeCount: board.likeCount,
+    };
+
+    setBoard((prevBoard) =>
+      prevBoard
+        ? {
+          ...prevBoard,
+          isLiked: !prevBoard.isLiked,
+          likeCount: prevBoard.isLiked ? prevBoard.likeCount - 1 : prevBoard.likeCount + 1,
+        }
+        : prevBoard
+    );
+
+    try {
+      const res = await likeFree({ boardId });
+
+      if (!res.isSuccess) {
+
+        alert(res.message || '좋아요 처리에 실패했습니다.');
+        setBoard((prevBoard) =>
+          prevBoard ? { ...prevBoard, isLiked: prev.isLiked, likeCount: prev.likeCount } : prevBoard
+        );
+        return;
+      }
+
+      setBoard((prevBoard) =>
+        prevBoard
+          ? {
+            ...prevBoard,
+            isLiked: res.payload.isLiked,
+            likeCount: res.payload.likeCount,
+          }
+          : prevBoard
+      );
+    } catch {
+      setBoard((prevBoard) =>
+        prevBoard ? { ...prevBoard, isLiked: prev.isLiked, likeCount: prev.likeCount } : prevBoard
+      );
+      alert('좋아요 처리에 실패했습니다.');
+    }
+  };
+
+  const addReply = (content: string, isAnonymous: boolean) => {
+    submitComment({
+      content,
+      isAnonymous,
+      parentCommentId: replyTarget?.parentCommentId ?? null,
+    });
+
+    setReplyTarget(null);
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white max-w-[375px] relative bottom-0 pb-20 ">
-      <ArticleHeader title="자유 라운지" />
-      <div className="mt-10 pb-[90px]">
-        <ArticleBody
-          nickname={freeDetailData.member.nickname}
-          time={freeDetailData.createdAt}
-          title={freeDetailData.boardTitle}
-          content={freeDetailData.boardContent}
-          images={freeDetailData.imageUrls}
-          likes={freeDetailData.liked}
-          commentCount={freeDetailData.comment}
-        />
-        <CommentCard comments={comments} />
-      </div>
-      <ReplyInputSection addReply={addReply} />
+    <div className="min-h-screen bg-black text-white max-w-[375px] relative bottom-0 pb-20">
+      <ArticleHeader title="자유 라운지" isMine={board?.isMine} onEdit={handleEdit} onDelete={handleDelete} />
+
+      {!board ? (
+        <div className="h-screen flex items-center justify-center">
+          <span className="text-gray-300 font-normal text-base">없는 게시글입니다</span>
+        </div>
+      ) : !isAuthed ? (
+        <div className="flex flex-1 items-center justify-center min-h-[calc(100vh-56px)]">
+          <span className="text-base font-normal text-[#A6A6A6]">로그인 후 가능한 페이지입니다</span>
+        </div>
+      ) : (
+        <>
+          <div className="pb-20">
+            <ArticleBody content={board} onToggleLike={handleToggleLike} />
+
+            <CommentCard
+              comments={board.comments}
+              onToggleLike={(commentId) => {
+                if (isCommentLiking) return;
+                toggleCommentLike(commentId);
+              }}
+              onReplyClick={(parentCommentId, nickname, depth) =>
+                setReplyTarget({ parentCommentId, nickname, depth })
+              }
+            />
+          </div>
+
+          <ReplyInputSection
+            addReply={addReply}
+            disabled={isCommentSubmitting}
+            replyTarget={replyTarget}
+            onCancelReply={() => setReplyTarget(null)}
+          />
+        </>
+      )}
     </div>
   );
 }

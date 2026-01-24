@@ -6,6 +6,7 @@ import location from '@/assets/detail/Location.svg';
 import BookmarkIcon from '@/components/detail/BookmarkIcon';
 import { ConcertDetail } from '@/types/concerts';
 import { formatConcertDate } from '@/hooks/getDay';
+import needLogin from '@/assets/community/isNotLoggined.svg';
 
 interface ConcertContentSectionProps {
   concert: ConcertDetail;
@@ -19,15 +20,16 @@ export default function ConcertContentSection({
   isScrapped,
   onToggleScrap,
 }: ConcertContentSectionProps) {
-  console.log('Concert Data exists:', !!concert, '스크랩 데이터', isScrapped);
+  console.log('스크랩 데이터', isScrapped);
   return (
     <section className="px-5 pt-5 pb-7 border-b-4 border-gray-800">
       <p className="flex justify-between gap-6 pb-1">
         <span className="font-semibold text-xl">{concert.concertName}</span>
-        <BookmarkIcon
-          isActive={isScrapped}
-          onClick={isLoggedIn ? onToggleScrap : undefined}
-          className={`w-6 h-6 transition-colors
+        <span className="flex flex-col group items-end relative w-100">
+          <BookmarkIcon
+            isActive={isScrapped}
+            onClick={isLoggedIn ? onToggleScrap : undefined}
+            className={`w-6 h-6 transition-colors 
             ${
               isLoggedIn
                 ? isScrapped
@@ -36,7 +38,24 @@ export default function ConcertContentSection({
                 : 'text-gray-600 cursor-not-allowed'
             }
           `}
-        />
+          />
+          {!isLoggedIn ? (
+            <Image
+              src={needLogin}
+              alt="로그인 필요 아이콘"
+              height={100}
+              width={400}
+              className="
+      absolute top-7
+      opacity-0
+      group-hover:opacity-100
+      transition-opacity
+    "
+            />
+          ) : (
+            <></>
+          )}
+        </span>
       </p>
       <p className="flex flex-col pb-4 border-b border-gray-850">
         <span className="flex gap-2 items-start">
