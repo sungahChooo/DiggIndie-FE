@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { authService } from '@/services/authService';
+import { useRouter } from 'next/navigation';
 
 export default function FindPw() {
+  const router = useRouter();
   const [newPw, setNewPw] = useState('');
   const [confirmNewPw, setConfirmNewPw] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false); // 인증번호 전송 버튼 클릭 여부
@@ -58,7 +60,7 @@ export default function FindPw() {
   return (
     <div className="w-full bg-black flex flex-col items-center px-5 py-6 gap-3">
       {/* 아이디 입력, 인증정보 api 수정 후 수정 예정*/}
-      {/* <div className="w-[335px] flex items-end gap-3">
+      <div className="w-[335px] flex items-end gap-3">
         <div className="flex-1">
           <input
             type="text"
@@ -70,7 +72,7 @@ export default function FindPw() {
         <button className="w-[87px] h-[33px] rounded-[4px] bg-[#4B4747] text-[#BEBABA] text-[12px] font-medium cursor-pointer">
           확인
         </button>
-      </div> */}
+      </div>
 
       {/* 이메일 입력 */}
       <div className="flex flex-col gap-2">
@@ -161,14 +163,13 @@ export default function FindPw() {
         </>
       )}
       {/* 아이디 찾기 빨간 버튼 */}
-      <Link href="/auth/find/pw/reset/result">
-        <button
-          className={`${!isEmailSent || !isEmailVerified ? 'bg-gray-600 cursor-not-allowed' : 'bg-main-red-2 cursor-pointer'} min w-[335px] h-13 mt-4 rounded-sm text-white text-base font-semibold`}
-          disabled={!isEmailSent || !isEmailVerified}
-        >
-          인증 확인
-        </button>
-      </Link>
+      <button
+        className={`${!isEmailSent || !isEmailVerified ? 'bg-gray-600 cursor-not-allowed' : 'bg-main-red-2 cursor-pointer'} min w-[335px] h-13 mt-4 rounded-sm text-white text-base font-semibold`}
+        disabled={!isEmailSent || !isEmailVerified}
+        onClick={() => router.push('/auth/find/pw/reset/result')}
+      >
+        인증 확인
+      </button>
     </div>
   );
 }

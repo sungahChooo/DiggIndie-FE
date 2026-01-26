@@ -87,6 +87,7 @@ export type ChildCommentFree = {
   content: string;
   likeCount: number;
   isLiked: boolean;
+  isMine: boolean;
   depth: number;
 }
 
@@ -98,6 +99,7 @@ export type CommentFreePayload = {
   content: string;
   likeCount: number;
   isLiked: boolean;
+  isMine: boolean;
   replies: ChildCommentFree[]
 }
 

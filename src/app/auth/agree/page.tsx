@@ -1,5 +1,6 @@
 'use client';
 import LinkButton from '@/components/common/LinkButton';
+import { authService } from '@/services/authService';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -14,14 +15,26 @@ export default function AgreePage() {
   const [state4, setState4] = useState(false); // 마케팅 수신 동의
   const requiredCheck = state1 && state2 && state3;
 
-  const toggleAll = () => {
+  const toggleAll = async () => {
     const next = !(state1 && state2 && state3 && state4);
     setState1(next);
     setState2(next);
     setState3(next);
-    setState4(next);
+    if (state4 !== next) {
+      await updateMarketingAgree(next);
+    }
   };
-
+  const updateMarketingAgree = async (next: boolean) => {
+    // UI 먼저 반영
+    setState4(next);
+    try {
+      //  api 호출
+      await authService.toggleMarketingAgree(next);
+    } catch (e) {
+      //  실패 시 롤백
+      setState4(!next);
+    }
+  };
   return (
     <div className="text-white flex flex-col h-screen min-w-[375px]">
       <section className="ml-5 font-bold text-2xl mt-55 mb-11">
@@ -144,7 +157,7 @@ export default function AgreePage() {
                 type="checkbox"
                 className="hidden"
                 checked={state4}
-                onChange={() => setState4((prev) => !prev)}
+                onChange={() => updateMarketingAgree(!state4)}
               />
 
               <span

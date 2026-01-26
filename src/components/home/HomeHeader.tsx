@@ -10,7 +10,7 @@ type Props = {
 export default function HomeHeader({ onHamburgerClick }: Props) {
   const router = useRouter();
   return (
-    <div className="w-full justify-between px-5 py-3 flex h-13 flex-col items-center font-bold bg-gray-850">
+    <div className="w-full justify-between px-5 py-3 flex h-13 flex-col items-center font-bold">
       <div className="flex w-full justify-between items-center font-bold">
         <Image
           src={logo}

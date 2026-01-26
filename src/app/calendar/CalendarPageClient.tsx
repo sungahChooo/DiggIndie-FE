@@ -30,12 +30,11 @@ export default function CalendarPageClient() {
     setSelectedDates([dateParam]);
   }, [dateParam]);
 
-  const monthEnabled = selectedDates.length === 0;
 
   const { data: monthData, isLoading: isMonthLoading } = useMonthConcerts({
     year: viewYear,
     month: viewMonth,
-    enabled: monthEnabled,
+    enabled: true,
   });
 
   const fetchDates = useMemo((): string[] | null => {
@@ -107,6 +106,15 @@ export default function CalendarPageClient() {
     return () => io.disconnect();
   }, [concertsEnabled, loadMore]);
 
+  //공연 있는 날짜
+  const datesWithConcerts = useMemo((): string[] => {
+    if (!monthData) return [];
+    const days = monthData.days ?? [];
+    return days
+      .filter((d) => d.hasConcert)
+      .map((d) => `${viewYear}-${pad2(viewMonth)}-${pad2(d.day)}`);
+  }, [monthData, viewYear, viewMonth]);
+
   return (
     <div className="text-white flex flex-col items-center min-h-screen bg-black pb-4">
       <CalendarHeader
@@ -122,6 +130,7 @@ export default function CalendarPageClient() {
             setViewYear(y);
             setViewMonth(m);
           }}
+          datesWithConcerts={datesWithConcerts}
         />
       )}
 

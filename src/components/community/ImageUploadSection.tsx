@@ -1,35 +1,107 @@
 'use client';
+
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { postImage } from '@/api/file';
 
 interface ImageUploadSectionProps {
   required?: boolean;
+  onChangeImageUrls?: (urls: string[]) => void;
+  onUploadingChange?: (uploading: boolean) => void;
 }
-export default function ImageUploadSection({ required }: ImageUploadSectionProps) {
+
+function sanitizeFileName(name: string) {
+  return name.replace(/[^\w.\-() ]+/g, '_');
+}
+
+async function uploadOne(file: File) {
+  const safeName = sanitizeFileName(file.name);
+
+  const res = await postImage({ fileName: safeName });
+
+  if (!res?.isSuccess) {
+    throw new Error(res?.message || 'Presigned URL 발급 실패');
+  }
+
+  const { presignedUrl, fileKey } = res.payload;
+
+  const putRes = await fetch(presignedUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': file.type || 'application/octet-stream',
+    },
+    body: file,
+  });
+
+  if (!putRes.ok) {
+    throw new Error(`S3 업로드 실패 (${putRes.status})`);
+  }
+
+  return fileKey;
+}
+
+export default function ImageUploadSection({ required, onChangeImageUrls, onUploadingChange }: ImageUploadSectionProps) {
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [fileKeys, setFileKeys] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  useEffect(() => {
+    onChangeImageUrls?.(fileKeys);
+  }, [fileKeys, onChangeImageUrls]);
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
     const selectedFiles = Array.from(e.target.files);
 
-    // 최대 개수 제한
     const MAX_IMAGES = 10;
     if (images.length + selectedFiles.length > MAX_IMAGES) {
       alert(`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요.`);
+      e.target.value = '';
       return;
     }
 
-    setImages((prev) => [...prev, ...selectedFiles]);
-
     const previewUrls = selectedFiles.map((file) => URL.createObjectURL(file));
+
+    setImages((prev) => [...prev, ...selectedFiles]);
     setPreviews((prev) => [...prev, ...previewUrls]);
+
+    onUploadingChange?.(true);
+    try {
+      const uploadedKeys = await Promise.all(selectedFiles.map((f) => uploadOne(f)));
+      setFileKeys((prev) => [...prev, ...uploadedKeys]);
+    } catch (err) {
+      console.error(err);
+      alert('이미지 업로드에 실패했습니다.');
+      setImages((prev) => prev.slice(0, prev.length - selectedFiles.length));
+      setPreviews((prev) => {
+        const next = prev.slice(0, prev.length - previewUrls.length);
+        return next;
+      });
+      previewUrls.forEach((u) => URL.revokeObjectURL(u));
+    } finally {
+      onUploadingChange?.(false);
+      e.target.value = '';
+    }
   };
+
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
-    setPreviews((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => {
+      const url = prev[index];
+      if (url) URL.revokeObjectURL(url);
+      return prev.filter((_, i) => i !== index);
+    });
+    setFileKeys((prev) => prev.filter((_, i) => i !== index));
   };
+
+  useEffect(() => {
+    return () => {
+      previews.forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, [previews]);
+
   return (
     <div className="py-3 flex flex-col gap-3 px-5">
       <div className="flex gap-[7px] items-end">
@@ -48,7 +120,6 @@ export default function ImageUploadSection({ required }: ImageUploadSectionProps
           onChange={handleImageChange}
           className="hidden"
         />
-        {/* + 버튼 */}
         {images.length < 10 && (
           <button
             type="button"

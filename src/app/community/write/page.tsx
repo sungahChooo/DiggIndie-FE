@@ -72,7 +72,6 @@ export default function Write() {
   const board = (sp.get('board') as Board) ?? 'free';
   const id = Number(sp.get('id') ?? '0');
 
-  // 수정모드
   const isEdit = mode === 'edit' && (board === 'free' || board === 'trade') && Number.isFinite(id) && id > 0;
 
   const generalTag: UiGeneralTag[] = ['없음', '정보', '공연 후기', '추천', '신보', '음악 뉴스', '동행'];
@@ -89,7 +88,8 @@ export default function Write() {
   const [price, setPrice] = useState<number | null>(null);
   const [chatUrl, setChatUrl] = useState('');
 
-  const imageUrls: string[] = [];
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPrefilling, setIsPrefilling] = useState(false);
@@ -100,9 +100,7 @@ export default function Write() {
     const run = async () => {
       setIsPrefilling(true);
       try {
-        // 수정 시 게시판은 수정 불가
         if (board === 'free') {
-          //수정 시 저장된 제목, 글 내용 다시 가져오기
           const detail = await boardDetailService.getFreeBoardDetail(id);
 
           setBoardType('general');
@@ -112,10 +110,10 @@ export default function Write() {
           setSelectedTag(mapFreeCategoryToUi(detail.category));
           setPrice(null);
           setChatUrl('');
+          setImageUrls(detail.imageUrls ?? []);
           return;
         }
 
-        // 거래/양도 게시판
         const detail = await boardDetailService.getTradeBoardDetail(id);
 
         setBoardType('trade');
@@ -124,7 +122,8 @@ export default function Write() {
         setSelectedTag(mapMarketTypeToUi(detail.type));
         setPrice(typeof detail.price === 'number' ? detail.price : 0);
         setChatUrl(detail.chatUrl ?? '');
-        setAnonymous(false); // market isAnonymous 추가 후 수정
+        setAnonymous(false);
+        setImageUrls(detail.imageUrls ?? []);
       } finally {
         setIsPrefilling(false);
       }
@@ -134,7 +133,6 @@ export default function Write() {
   }, [isEdit, id, board]);
 
   const handleBoardTypeChange = (type: 'general' | 'trade') => {
-    // 수정 시 게시판 변경 방지
     if (isEdit) return;
 
     setBoardType(type);
@@ -153,12 +151,11 @@ export default function Write() {
       chatUrl.trim().length > 0;
 
   const handleSubmit = async () => {
-    if (!isFormValid || isSubmitting || isPrefilling) return;
+    if (!isFormValid || isSubmitting || isPrefilling || isUploadingImages) return;
 
     try {
       setIsSubmitting(true);
 
-      // 수정 게시판분리
       if (isEdit) {
         if (board === 'free') {
           const res = await editFree({
@@ -178,7 +175,6 @@ export default function Write() {
           return;
         }
 
-        // 거래/양도 수정
         const res = await editMarket({
           marketId: id,
           title,
@@ -197,7 +193,6 @@ export default function Write() {
         return;
       }
 
-      // 작성
       if (boardType === 'general') {
         const res = await postFree({
           title,
@@ -237,13 +232,12 @@ export default function Write() {
     }
   };
 
-  // 수정 시 클릭 방지 (임의, 회의 후 다시 결정)
   const boardLockClass = isEdit ? 'pointer-events-none opacity-60' : '';
 
   return (
     <div className="mb-16">
       <CommunityWriteHeader
-        disabled={!isFormValid || isSubmitting || isPrefilling}
+        disabled={!isFormValid || isSubmitting || isPrefilling || isUploadingImages}
         onRightButtonClick={handleSubmit}
       />
 
@@ -316,7 +310,11 @@ export default function Write() {
         ))}
       </div>
 
-      <ImageUploadSection required={boardType === 'trade'} />
+      <ImageUploadSection
+        required={boardType === 'trade'}
+        onChangeImageUrls={setImageUrls}
+        onUploadingChange={setIsUploadingImages}
+      />
 
       {boardType === 'trade' && (
         <>

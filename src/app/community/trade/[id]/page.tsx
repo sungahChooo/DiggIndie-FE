@@ -180,21 +180,24 @@ export default function TradeArticleDetailPage() {
               )}
             </p>
 
-            <div className="flex items-center gap-6 mb-1 justify-between">
-              <div className={"flex gap-1"}>
-                <span className="font-semibold text-xl">[{board.type}]</span>
-                <span className="font-semibold text-xl">{board.title}</span>
+            <div className="flex w-full items-center gap-6 mb-1 justify-between">
+              <div className="flex items-center gap-1 w-full h-7 min-w-0">
+                <span className="shrink-0 font-semibold text-xl">[{board.type}]</span>
+                  <span className="min-w-0 flex-1 font-semibold text-xl truncate">
+                    {board.title}
+                  </span>
+                  <span className="shrink-0 flex items-center gap-[3px]">
+                  <BookmarkIcon
+                    isActive={board.isScraped}
+                    onClick={!board.isMine ? handleToggleScrap : undefined}
+                    className={`cursor-pointer w-6 h-6 transition-colors ${
+                      board.isScraped ? 'text-white scale-110' : 'text-gray-600'
+                    }`}
+                  />
+                  <span className="text-gray-300 font-normal text-sm">{board.scrapCount}</span>
+                </span>
               </div>
-              <span className="flex gap-[3px]">
-                <BookmarkIcon
-                  isActive={board.isScraped}
-                  onClick={!board.isMine ? handleToggleScrap : undefined}
-                  className={`cursor-pointer w-6 h-6 transition-colors 
-            ${(board.isScraped )? 'text-white scale-110' : 'text-gray-600'}
-          `}
-                />
-                <span className="text-gray-300 font-normal text-sm">{board.scrapCount}</span>
-              </span>
+
             </div>
 
             <span className="text-white font-medium text-xl mb-1">{board.price}원</span>

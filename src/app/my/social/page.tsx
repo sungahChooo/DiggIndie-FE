@@ -32,7 +32,7 @@ export default function MySocailPage() {
 
       if (checked) {
         // 연동 → OAuth 다시 태우는 게 일반적
-        const { authUrl } = await authService.getAuthURL(platform);
+        const { authUrl } = await authService.getAuthURL(platform, 'link');
         window.location.href = authUrl;
       } else {
         // 연동 해제
@@ -83,7 +83,7 @@ export default function MySocailPage() {
           </span>
           <ToggleSwitch
             checked={isConnected('KAKAO')}
-            disabled={loadingPlatform === 'KAKAO'}
+            disabled={loadingPlatform === 'KAKAO' || (isConnected('KAKAO') && connectedCount === 1)}
             onChange={(_, checked) => handleToggle('KAKAO', checked)}
           />
         </p>

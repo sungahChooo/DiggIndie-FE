@@ -2,9 +2,10 @@ import { fetchClient } from "@/api/client";
 
 import type {
   GetMarketListParams, MarketListPayload, MarketPayload, PostMarketParams, EditMarketParams,
-  ScrapMarketParams, ScrapMarketPayload,
+  ScrapMarketParams, ScrapMarketPayload
 }
   from '@/types/marketBoard';
+import { ApiResponse } from '@/types/api';
 
 export async function postMarket(params: PostMarketParams) {
   return fetchClient<MarketPayload>("/markets", {
@@ -63,3 +64,4 @@ export async function scrapMarket(params: ScrapMarketParams) {
     auth: true
   });
 }
+

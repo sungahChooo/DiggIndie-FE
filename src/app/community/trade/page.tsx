@@ -64,7 +64,7 @@ export default function CommunityTradePage() {
   return (
     <div className="text-white flex flex-col h-screen bg-black relative overflow-hidden">
       <header className="sticky top-0 z-50 h-[52px] bg-black flex items-center shrink-0">
-        <CommunityHeader title={'중고 거래'} onHamburgerClick={() => setIsSideTabOpen(true)} />
+        <CommunityHeader title="디깅 라운지" onHamburgerClick={() => setIsSideTabOpen(true)} />
       </header>
 
       <div className="shrink-0">
@@ -72,7 +72,11 @@ export default function CommunityTradePage() {
       </div>
 
       <main className="flex-1 min-h-0 overflow-y-auto scrollbar flex flex-col bg-black">
-        <CommunityHeaderFilter headers={headerOptions} value={header} onChangeAction={handleHeaderChange} />
+        <CommunityHeaderFilter
+          headers={headerOptions}
+          value={header}
+          onChangeAction={handleHeaderChange}
+        />
 
         {isLoading && isFirstPage && <div className="px-5 py-4 text-gray-500">로딩중...</div>}
         {!isLoading && error && <div className="px-5 py-4 text-gray-500">{error}</div>}

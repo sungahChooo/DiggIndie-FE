@@ -3,6 +3,7 @@
 import { Checkbox } from '@mui/material';
 import Image from 'next/image';
 import sendIcon from '@/assets/community/Send.svg';
+import sendRed from '@/assets/community/SendRed.svg'
 import { useEffect, useRef, useState } from 'react';
 
 interface Props {
@@ -109,8 +110,15 @@ export default function ReplyInputSection({ addReply, disabled, replyTarget, onC
           />
         </div>
         <button type="button" disabled={disabled} onClick={handleSend}>
-          <Image src={sendIcon} alt="send" width={24} height={24}
-                 className="float-right cursor-pointer" />
+          <Image
+            src={input.trim().length > 0 ? sendRed : sendIcon}
+            alt="send"
+            width={24}
+            height={24}
+            className={`float-right ${
+              disabled ? 'cursor-default' : 'cursor-pointer'
+            }`}
+          />
         </button>
       </div>
     </section>

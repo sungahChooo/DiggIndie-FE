@@ -65,12 +65,20 @@ export default function CommentCard({ comments, onToggleLike, onReplyClick }: Pr
                   답글 달기
                 </span>
 
-                <p className="flex gap-1 pl-3 items-center">
+                <p className={`flex gap-1 pl-3 items-center ${
+                  comment.isMine ? 'cursor-default pointer-events-none' : 'cursor-pointer'
+                }`}
+                >
                   <HeartIcon
                     size={16}
                     active={comment.isLiked}
-                    onClick={() => onToggleLike?.(comment.commentId)}
+                    firstStroke={comment.isMine ? '#736F6F' : undefined}
+                    onClick={() => {
+                      if (comment.isMine) return;
+                      onToggleLike?.(comment.commentId);
+                    }}
                   />
+
                   <span className="text-sm font-normal text-gray-600">{comment.likeCount}</span>
                 </p>
               </div>
@@ -99,12 +107,20 @@ export default function CommentCard({ comments, onToggleLike, onReplyClick }: Pr
                         답글 달기
                       </span>
 
-                      <p className="flex gap-1 pl-3 items-center">
+                      <p className={`flex gap-1 pl-3 items-center ${
+                        reply.isMine ? 'cursor-default pointer-events-none' : 'cursor-pointer'
+                      }`}
+                      >
                         <HeartIcon
                           size={14}
                           active={reply.isLiked}
-                          onClick={() => onToggleLike?.(reply.commentId)}
+                          firstStroke={reply.isMine ? '#736F6F' : undefined}
+                          onClick={() => {
+                            if (reply.isMine) return;
+                            onToggleLike?.(reply.commentId);
+                          }}
                         />
+
                         <span className="text-sm text-gray-600">{reply.likeCount}</span>
                       </p>
                     </div>
@@ -135,12 +151,21 @@ export default function CommentCard({ comments, onToggleLike, onReplyClick }: Pr
                             })()}
                           </p>
 
-                          <div className="flex items-center mt-2">
+                          <div
+                            className={`flex items-center mt-2 ${
+                              child.isMine ? 'cursor-default pointer-events-none' : 'cursor-pointer'
+                            }`}
+                          >
                             <HeartIcon
                               size={14}
                               active={child.isLiked}
-                              onClick={() => onToggleLike?.(child.commentId)}
+                              firstStroke={child.isMine ? '#736F6F' : undefined}
+                              onClick={() => {
+                                if (child.isMine) return;
+                                onToggleLike?.(child.commentId);
+                              }}
                             />
+
                             <span className="text-sm text-gray-600 ml-1">{child.likeCount}</span>
                           </div>
                         </div>

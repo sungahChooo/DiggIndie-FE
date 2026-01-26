@@ -114,3 +114,16 @@ export interface Concert {
   lineUp: string[];
   concertDate: string;
 }
+
+//추천 아티스트 만족도 조사
+export type RecSatisfactionParams = {
+  isSatisfied: boolean;
+  reason: string;
+}
+
+export type RecSatisfactionPayload = {
+  recommendSatisfactionId: number;
+  isSatisfied: boolean;
+  reason: string;
+  createdAt: string;
+}

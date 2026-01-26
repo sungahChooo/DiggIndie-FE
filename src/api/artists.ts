@@ -10,6 +10,8 @@ import type {
   OnboardArtistsResponse,
   PageInfo,
   RecArtistPayload,
+  RecSatisfactionPayload,
+  RecSatisfactionParams
 } from '@/types/artists';
 
 export function fetchArtists(params: { page: number; size: number; query?: string }) {
@@ -127,7 +129,7 @@ export async function postUpdateBandRecommendations(): Promise<RecArtistPayload>
     baseUrl: AI_BASE_URL,
     body: JSON.stringify({}),
     headers: {
-      'Content-Type': undefined as any, // or delete override
+      'Content-Type': undefined as never, // or delete override
     },
   });
 
@@ -147,4 +149,20 @@ export async function getRecommendedArtists() {
     throw new Error('홈 아티스트 추천 반환 데이터 null입니다.');
   }
   return res.payload;
+}
+
+// 추천 아티스트 만족도 추가
+export async function postRecSatisfaction(
+  params: RecSatisfactionParams
+): Promise<ApiResponse<RecSatisfactionPayload>> {
+  const { isSatisfied, reason } = params;
+
+  return fetchClient<RecSatisfactionPayload>(`/artists/recommendations/satisfaction`, {
+    method: 'POST',
+    auth: true,
+    body: JSON.stringify({
+      isSatisfied,
+      reason,
+    }),
+  });
 }

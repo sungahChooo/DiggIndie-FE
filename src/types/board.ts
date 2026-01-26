@@ -5,7 +5,6 @@ export interface FreeBoardDetail {
   writerNickname: string;
   createdAt: string;
   content: string;
-  imageUrls: string[];
   views: number;
   likeCount: number;
   isLiked: boolean;
@@ -13,6 +12,7 @@ export interface FreeBoardDetail {
   comments: Comment[];
   isAnonymous: boolean;
   isMine: boolean;
+  imageUrls?: string[];
 }
 export interface Comment {
   commentId: number;
@@ -21,6 +21,7 @@ export interface Comment {
   content: string;
   likeCount: number;
   isLiked: boolean;
+  isMine: boolean;
   replies: Reply[];
 }
 
@@ -30,6 +31,7 @@ export interface Reply {
   writerNickname: string;
   replyToNickname: string;
   createdAt: string;
+  isMine: boolean;
   content: string;
   likeCount: number;
   isLiked: boolean;
@@ -49,6 +51,7 @@ export interface TradeBoardDetail {
   isScraped: boolean;
   scrapCount: number;
   isMine: boolean;
+  imageUrls?: string[];
   images: [
     {
       imageUrl: string;

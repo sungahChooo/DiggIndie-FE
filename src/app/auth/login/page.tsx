@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import diggindie from '@/assets/common/diggindie.svg';
-import LinkButton from '@/components/common/LinkButton';
+import LoginButton from '@/components/auth/LoginButton';
 import InputSection from '@/components/auth/InputSection';
 import { useRouter } from 'next/navigation';
 import googleIcon from '@/assets/auth/google.svg';
@@ -34,7 +34,8 @@ export default function LoginPage() {
     password?: string;
   }>({});
 
-  const handleLogin = async () => {
+  const handleLogin = async (e?: React.FormEvent) => {
+    e?.preventDefault(); // 엔터 시 새로고침 방지
     setErrors({});
 
     const result = loginSchema.safeParse(form);
@@ -65,14 +66,14 @@ export default function LoginPage() {
     }
   };
   const handleSocialLogin = async (platform: 'GOOGLE' | 'NAVER' | 'KAKAO') => {
-    const { authUrl } = await authService.getAuthURL(platform);
+    const { authUrl } = await authService.getAuthURL(platform, 'login');
     window.location.href = authUrl;
   };
   return (
     <div className="text-white flex flex-col h-screen items-center relative">
       <MyHeader title="로그인" backUrl="/" />
       <Image src={diggindie} alt="diggindie icon" width={235} className="mt-35" />
-      <section className="flex flex-col gap-3 mt-17">
+      <form className="flex flex-col gap-3 mt-17" onSubmit={handleLogin}>
         <InputSection
           placeholder="아이디를 입력해주세요."
           width="w-[335px] h-[52px]"
@@ -95,10 +96,10 @@ export default function LoginPage() {
 
         {errors.id && <p className="text-red-400 text-xs">{errors.id}</p>}
         {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
-        <LinkButton onClick={handleLogin} disabled={false}>
+        <LoginButton type="submit" onClick={handleLogin} disabled={false}>
           로그인
-        </LinkButton>
-      </section>
+        </LoginButton>
+      </form>
       <div className="mt-5">
         <span
           className="text-gray-300 text-xs px-3 border-r cursor-pointer"
