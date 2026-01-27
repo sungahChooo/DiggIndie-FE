@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import ConcertCard from '@/components/home/ConcertCard';
+import ArtistConcertSkeleton from '@/components/home/ArtistConcertSkeleton';
 import Image from 'next/image';
 
 import { useRecConcerts } from '@/hooks/useRecConcerts';
@@ -26,31 +27,16 @@ function parseDday(dday: string) {
 // 비로그인용 카드 자리만 동일하게 차지하는 이미지 카드
 function GuestConcertCard() {
   return (
-    <div className="relative w-[160px] h-[200px] shrink-0">
+    <div className="relative w-[160px] h-[200px] shrink-0 overflow-hidden touch-none">
       <Image
-        src="/mocks/mockConcertImage.png"
+        src="/mocks/defaultConcert.png"
         alt="mock concert"
         width={160}
         height={200}
-        className="rounded-[8px] object-cover"
+        className="rounded-[8px] object-cover pointer-events-none"
         priority={false}
       />
-      <div className="absolute inset-0 bg-[#0B0F1499]" />
-
-      <div className="flex flex-col absolute inset-0 z-10 flex flex-col justify-end mb-3 px-2">
-        <span className={"bg-[#FF3637] w-[41px] h-[17px] text-white font-medium text-[12px] text-center"}>
-          D-7
-        </span>
-        <span className={"text-white font-medium text-[16px] mt-1"}>
-          공연 제목
-        </span>
-        <span className={"text-white font-normal text-[14px]"}>
-          공연 아티스트 라인업
-        </span>
-        <span className={"text-[#8C8888] font-medium text-[12px]"}>
-          2024.08.06 ~ 2026.01.23
-        </span>
-      </div>
+      <div className="absolute inset-0 bg-[#0B0F1499] pointer-events-none" />
     </div>
   );
 }
@@ -85,14 +71,20 @@ export default function PersonalConcertRec({ isLoggedIn }: Props) {
             </>
           ) : (
             <>
-              {isLoading && <div className="text-[14px] text-[#8C8888]">불러오는 중...</div>}
               {!isLoading && error && <div className="text-[14px] text-[#8C8888]">{error}</div>}
+
+              {isLoading && <ArtistConcertSkeleton />}
+
+              {!isLoading && error && (
+                <div className="text-sm text-gray-500">불러오기에 실패했습니다.</div>
+              )}
 
               {!isLoading &&
                 !error &&
                 visibleConcerts.map((concert) => (
                   <ConcertCard key={concert.concertId} concert={concert} />
                 ))}
+
             </>
           )}
         </div>

@@ -12,7 +12,7 @@ export interface FreeBoardDetail {
   comments: Comment[];
   isAnonymous: boolean;
   isMine: boolean;
-  imageUrls?: string[];
+  imageUrls?: string[] | undefined;
 }
 export interface Comment {
   commentId: number;
@@ -54,7 +54,7 @@ export interface TradeBoardDetail {
   imageUrls?: string[];
   images: [
     {
-      imageUrl: string;
+      imageUrl: string | undefined;
       imageOrder: number;
     },
   ];

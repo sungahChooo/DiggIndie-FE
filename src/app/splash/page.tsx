@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Diggindie from '@/assets/common/diggindie.svg';
 
@@ -9,8 +9,10 @@ export default function SplashPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [fade, setFade] = useState(true);
-
+  const searchParams = useSearchParams();
+  const next = searchParams.get('next') || 'home';
   useEffect(() => {
+    sessionStorage.setItem('hasSeenSplash', 'true');
     // 1초 후 첫 텍스트 → 두 번째 텍스트로 페이드전환 시작
     const timer1 = setTimeout(() => {
       setFade(false); // fade-out
@@ -24,7 +26,7 @@ export default function SplashPage() {
 
     // 전체 스플래시 끝 → 메인페이지 이동
     const timer3 = setTimeout(() => {
-      router.push('/onboard/artist');
+      router.replace(`${next}`);
     }, 3000);
 
     return () => {

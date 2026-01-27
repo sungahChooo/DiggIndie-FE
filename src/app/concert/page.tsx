@@ -11,7 +11,7 @@ export default function ConcertPage() {
   return (
     <div className="text-white flex flex-col h-screen bg-black relative overflow-auto">
       <div className="flex flex-col">
-        <div className={'sticky top-0 z-50 mb-3'}>
+        <div className={'sticky top-0 z-50'}>
           <SearchHeader title={'공연'} onHamburgerClick={() => setIsSideTabOpen(true)} />
         </div>
         <SearchConcert />

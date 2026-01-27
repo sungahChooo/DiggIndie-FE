@@ -85,7 +85,7 @@ export const authService = {
     try {
       const res = await authApi.checkEmail({ email: email, type: type });
       console.log('email 유효성 검사', res.payload);
-      return res.payload.success;
+      return res.payload;
     } catch (err) {
       throw err;
     }
@@ -93,15 +93,13 @@ export const authService = {
   async verifyCode(
     email: string,
     code: string,
-    type: 'SIGNUP' | 'PASSWORD_RESET' | 'FIND_USER_ID',
-    newPassword: string
+    type: 'SIGNUP' | 'PASSWORD_RESET' | 'FIND_USER_ID'
   ) {
     try {
       const res = await authApi.verifyCode({
         email: email,
         code: code,
         type: type,
-        newPassword: newPassword,
       });
       return res.payload;
     } catch (err) {
@@ -176,6 +174,14 @@ export const authService = {
       const res = await authApi.toggleMarketingAgree(marketingConsent);
       console.log('마케팅 수신 동의 여부 토글', res.payload);
       return res.payload;
+    } catch (err) {
+      throw err;
+    }
+  },
+  //비밀번호 초기화
+  async resetPw(email: string, resetToken: string, password: string) {
+    try {
+      await authApi.resetPw(email, resetToken, password);
     } catch (err) {
       throw err;
     }

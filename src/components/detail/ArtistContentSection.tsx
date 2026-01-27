@@ -27,7 +27,7 @@ export default function ArtistContentSection({
       <div className="flex flex-col gap-1 pb-3 border-b border-gray-850">
         <p className="flex justify-between items-center gap-6">
           <span className="font-semibold text-xl w-full">{artist.artistName}</span>
-          <span className="flex flex-col group items-end relative w-100">
+          <span className="group inline-flex items-center relative">
             <BookmarkIcon
               isActive={isScrapped}
               onClick={isLogined ? onToggleScrap : undefined}
@@ -41,21 +41,25 @@ export default function ArtistContentSection({
             }
           `}
             />
-            {!isLogined ? (
-              <Image
-                src={needLogin}
+            {!isLogined && (
+              <img
+                src={needLogin.src}
                 alt="로그인 필요 아이콘"
-                height={100}
-                width={400}
                 className="
-      absolute top-7
-      opacity-0
-      group-hover:opacity-100
-      transition-opacity
+    absolute
+    top-full 
+    right-18
+    mt-2
+    w-[240px]
+    scale-[7]
+    origin-top
+    opacity-0
+    group-hover:opacity-100
+    transition-opacity
+    pointer-events-none
+    z-10
     "
               />
-            ) : (
-              <></>
             )}
           </span>
         </p>

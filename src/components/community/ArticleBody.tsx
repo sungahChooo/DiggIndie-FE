@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import commentsIcon from '@/assets/sideTab/Chat 2.svg';
 import HeartIcon from '@/assets/community/HeartIcon';
+import { useState } from "react";
 import { FreeBoardDetail } from '@/types/board';
 
 interface ArticleBodyProps {
@@ -10,7 +11,57 @@ interface ArticleBodyProps {
   onToggleLike: () => void;
 }
 
+//S3로부터 오는 fileKey를 절대경로 URL로 가공
+const S3_BASE = "https://diggindie-imgs.s3.ap-northeast-2.amazonaws.com";
+
+function normalizeBoardImageSrc(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const v = raw.trim();
+  if (!v) return null;
+  // 이미 절대 URL이면 그대로 사용
+  if (v.startsWith("http://") || v.startsWith("https://")) {
+    try {
+      new URL(v);
+      return v;
+    } catch {
+      return null;
+    }
+  }
+  // S3 문자열로
+  const src = `${S3_BASE}/${encodeURIComponent(v)}`;
+
+  try {
+    new URL(src);
+    return src;
+  } catch {
+    return null;
+  }
+}
+
+//이미지 실패 대비
+function SingleImage({ src }: { src: string }) {
+  const [imgSrc, setImgSrc] = useState(src);
+
+  return (
+    <div className="w-[200px] h-[200px] relative mb-3">
+      <Image
+        src={imgSrc}
+        alt="article-image-1"
+        fill
+        className="object-cover"
+        onError={() => setImgSrc("/mocks/concertDefault.png")}
+      />
+    </div>
+  );
+}
+
+
 export default function ArticleBody({ content, onToggleLike }: ArticleBodyProps) {
+
+  const imageSrcs = (content.imageUrls ?? [])
+    .map(normalizeBoardImageSrc)
+    .filter((v): v is string => Boolean(v));
+
   return (
     <div className="flex flex-col w-full py-4 px-5 border-b-4 border-gray-850">
       <span className="font-semibold text-xl text-white mb-1 break-words line-clamp-2">
@@ -29,20 +80,11 @@ export default function ArticleBody({ content, onToggleLike }: ArticleBodyProps)
       </div>
 
       {/* 이미지 */}
-      {content.imageUrls?.length === 1 && (
-        <div className="w-full aspect-square relative mb-3">
-          <Image
-            src={content.imageUrls[0]}
-            alt="article-image"
-            fill
-            className="object-cover rounded-sm"
-          />
-        </div>
-      )}
+      {imageSrcs.length === 1 && <SingleImage src={imageSrcs[0]} />}
 
-      {content.imageUrls && content.imageUrls.length > 1 && (
-        <div className="flex gap-3 overflow-x-scroll mb-3">
-          {content.imageUrls.map((src, idx) => (
+      {imageSrcs.length > 1 && (
+        <div className="flex gap-3 overflow-x-auto mb-3">
+          {imageSrcs.map((src, idx) => (
             <div key={`${src}-${idx}`} className="w-[200px] h-[200px] flex-shrink-0 relative">
               <Image src={src} alt={`article-image-${idx + 1}`} fill className="object-cover" />
             </div>

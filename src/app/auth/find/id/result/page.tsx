@@ -4,7 +4,6 @@ import AuthFindHeader from '@/components/auth/AuthFindHeader';
 import FindIdResult from '@/components/auth/FindIdResult';
 
 export default function FindIdResultPage() {
-  const id = sessionStorage.getItem('FOUND_USER_ID');
   return (
     <div className="text-white flex flex-col h-screen bg-black">
       <div className="flex flex-col">

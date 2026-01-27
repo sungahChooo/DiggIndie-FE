@@ -10,6 +10,7 @@ import SideTab from '@/components/sideTabDir/SideTab';
 
 import { useFreeList } from '@/hooks/useFreeList';
 import type { FreeCategory } from '@/types/freeBoard';
+import { useAuthStore } from '@/stores/authStore';
 
 const headerOptions = ['전체', '정보', '공연 후기', '추천', '신보', '음악 뉴스', '동행'] as const;
 type UiHeader = (typeof headerOptions)[number];
@@ -27,7 +28,7 @@ const headerToCategory: Record<UiHeader, FreeCategory> = {
 export default function CommunityFreePage() {
   const [header, setHeader] = useState<UiHeader>('전체');
   const [isSideTabOpen, setIsSideTabOpen] = useState(false);
-
+  const { isAuthed } = useAuthStore();
   const initialCategory = useMemo(() => headerToCategory[header], [header]);
 
   const { articles, isLoading, error, setCategory, loadMore, params } = useFreeList({
@@ -70,7 +71,7 @@ export default function CommunityFreePage() {
   return (
     <div className="text-white flex flex-col h-screen bg-black relative overflow-hidden">
       <header className="sticky top-0 z-50 h-[52px] bg-black flex items-center shrink-0">
-        <CommunityHeader title={'디깅 라운지'} onHamburgerClick={() => setIsSideTabOpen(true)} />
+        <CommunityHeader isLoggedIn = {isAuthed} title={'디깅 라운지'} onHamburgerClick={() => setIsSideTabOpen(true)} />
       </header>
 
       <div className="shrink-0">

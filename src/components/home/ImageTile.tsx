@@ -22,7 +22,6 @@ const variantSize: Record<Variant, { w: number; h: number; wrap: string }> = {
 
 export function ImageTile({
                             src,
-                            alt,
                             variant = "todayArtistRec",
                             className,
                             gradient,

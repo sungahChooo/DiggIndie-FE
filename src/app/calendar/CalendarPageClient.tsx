@@ -116,12 +116,16 @@ export default function CalendarPageClient() {
   }, [monthData, viewYear, viewMonth]);
 
   return (
-    <div className="text-white flex flex-col items-center min-h-screen bg-black pb-4">
+    <div className="text-white flex flex-col items-center min-h-screen
+      bg-black pb-5 "
+    >
       <CalendarHeader
         isCalendarOpen={showCalendar}
         onToggleCalendar={() => setShowCalendar((prev) => !prev)}
       />
-
+      <div className={"bg-black text-[#BEBABA] text-[12px] font-medium w-full text-center mt-5 mb-4"}>
+        날짜를 드래그해서 기간을 선택할 수 있어요
+      </div>
       {showCalendar && (
         <Calendar
           selectedDates={selectedDates}
@@ -134,7 +138,7 @@ export default function CalendarPageClient() {
         />
       )}
 
-      <div className="w-full max-w-[375px] h-[40px] mt-3 flex px-5 py-2">
+      <div className="w-full max-w-[375px] h-[40px] mt-3 flex px-5 py-2 ">
         {selectedDates[0] && (
           <div
             onClick={() => setSelectedDates([])}

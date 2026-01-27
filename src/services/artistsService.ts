@@ -49,7 +49,6 @@ export async function getArtistDetail(artistId: number): Promise<ArtistDetail> {
     if (!res.isSuccess) {
       throw new Error(res.message || '아티스트 조회 실패');
     }
-    console.log('아티스트 상세 데이터', res?.payload);
     return res.payload;
   } catch (err) {
     console.log('아티스트 상세 조회 중 에러', err);
@@ -61,7 +60,6 @@ export async function getArtistDetail(artistId: number): Promise<ArtistDetail> {
 export async function scrapArtist(artistId: number): Promise<void> {
   try {
     const res = await artistAPI.toggleScrapArtist({ bandIds: [artistId] });
-    console.log('아티스트 스크랩 데이터', res);
   } catch (err) {
     throw err;
   }

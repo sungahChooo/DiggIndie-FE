@@ -7,12 +7,17 @@ import playBtn from "@/assets/common/play.svg";
 import artistDefault from "@/assets/detail/artist_default.svg";
 import { useRouter } from 'next/navigation';
 
+
 type Props = {
   artist: ArtistItem;
 };
 
 export default function ArtistCard({ artist }: Props) {
-  const img = (artist.artistImage ?? "").trim() || artistDefault;
+  const img =
+    (artist.artistImage ?? "").trim().startsWith("http") &&
+    !artist.artistImage.includes("open.spotify.com")
+      ? artist.artistImage.trim()
+      : artistDefault;
   const router = useRouter();
 
   return (

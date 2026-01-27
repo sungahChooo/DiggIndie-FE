@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
       {
+        protocol: "https",
+        hostname: "diggindie-imgs.s3.ap-northeast-2.amazonaws.com",
+        pathname: "/**",
+      },
+      {
         protocol: 'https',
         hostname: 's3.amazonaws.com',
         pathname: '/**',
@@ -26,6 +31,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'picsum.photos',
         pathname: '/**',
+      },
+      {
+        protocol: "https",
+        hostname: "i.scdn.co",
+        pathname: "/image/**",
       },
       {
         protocol: 'https',
@@ -41,6 +51,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "diggindie-images.s3.ap-northeast-2.amazonaws.com",
         pathname: "/**",
+      },
+      {
+        protocol: 'https',
+        hostname: 'diggindie-imgs.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',

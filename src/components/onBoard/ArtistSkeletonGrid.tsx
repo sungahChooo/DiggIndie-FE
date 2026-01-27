@@ -6,7 +6,7 @@ interface Props {
 
 export default function ArtistSkeletonGrid({ count = 12 }: Props) {
   return (
-    <div className="grid grid-cols-3 gap-4 px-5 pt-5">
+    <div className="col-span-3 w-full grid grid-cols-3 gap-4 ">
       {Array.from({ length: count }).map((_, i) => (
         <ArtistItemSkeleton key={i} />
       ))}

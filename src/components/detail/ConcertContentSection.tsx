@@ -25,7 +25,7 @@ export default function ConcertContentSection({
     <section className="px-5 pt-5 pb-7 border-b-4 border-gray-800">
       <p className="flex justify-between gap-6 pb-1">
         <span className="font-semibold text-xl">{concert.concertName}</span>
-        <span className="flex flex-col group items-end relative w-100">
+        <span className="group inline-flex items-center relative">
           <BookmarkIcon
             isActive={isScrapped}
             onClick={isLoggedIn ? onToggleScrap : undefined}
@@ -39,21 +39,25 @@ export default function ConcertContentSection({
             }
           `}
           />
-          {!isLoggedIn ? (
-            <Image
-              src={needLogin}
+          {!isLoggedIn && (
+            <img
+              src={needLogin.src}
               alt="로그인 필요 아이콘"
-              height={100}
-              width={400}
               className="
-      absolute top-7
-      opacity-0
-      group-hover:opacity-100
-      transition-opacity
-    "
+               absolute
+               top-full 
+               right-18
+               mt-2
+               w-[240px]
+               scale-[7]
+               origin-top
+               opacity-0
+               group-hover:opacity-100
+               transition-opacity
+               pointer-events-none
+               z-10
+               "
             />
-          ) : (
-            <></>
           )}
         </span>
       </p>

@@ -59,9 +59,9 @@ export default function ReplyInputSection({ addReply, disabled, replyTarget, onC
   };
 
   return (
-    <section className="fixed bottom-0 p-5 min-w-[375px] z-30">
-      <div className="flex bg-gray-800 px-4 py-4 rounded-sm justify-between">
-        <div className="flex items-center justify-between">
+    <section className="fixed bottom-0 py-5 z-30">
+      <div className="flex items-center bg-gray-800 px-4 py-4 rounded-sm">
+        <div className="flex items-center min-w-0">
           <Checkbox
             checked={isChecked}
             onChange={(e) => setIsChecked(e.target.checked)}
@@ -91,12 +91,12 @@ export default function ReplyInputSection({ addReply, disabled, replyTarget, onC
 
           <span
             onClick={() => setIsChecked((v) => !v)}
-            className={`cursor-pointer text-sm font-medium ${
+            className={`cursor-pointer text-sm font-medium pl-1 pr-2 ${
               isChecked ? 'text-main-red-2' : 'text-gray-400'
-            } pl-1 pr-2`}
+            }`}
           >
-          익명
-        </span>
+            익명
+          </span>
 
           <input
             ref={inputRef}
@@ -106,18 +106,23 @@ export default function ReplyInputSection({ addReply, disabled, replyTarget, onC
             type="text"
             placeholder="댓글을 입력하세요."
             disabled={disabled}
-            className="focus:outline-none font-normal text-sm placeholder-gray-600 bg-transparent text-white"
+            className="flex-1 min-w-0 bg-transparent text-white text-sm placeholder-gray-600 focus:outline-none"
           />
         </div>
-        <button type="button" disabled={disabled} onClick={handleSend}>
+
+        {/* send */}
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={handleSend}
+          className="ml-3 shrink-0"
+        >
           <Image
             src={input.trim().length > 0 ? sendRed : sendIcon}
             alt="send"
             width={24}
             height={24}
-            className={`float-right ${
-              disabled ? 'cursor-default' : 'cursor-pointer'
-            }`}
+            className={disabled ? 'cursor-default' : 'cursor-pointer'}
           />
         </button>
       </div>

@@ -145,7 +145,7 @@ export default function HomeCalendar() {
               </span>
 
               <div className={'flex gap-1 mt-1'}>
-                <div className="flex gap-1 font-normal min-w-0 pb-8">
+                <div className="flex gap-1 font-normal min-w-0 pb-8 shrink-0">
                   <Image src={ticket} alt="ticket" width={20} height={20} />
                 </div>
 

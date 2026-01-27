@@ -64,7 +64,7 @@ export default function MyPage() {
 
   return (
     <div className="text-white flex flex-col h-screen bg-black relative">
-      <div className="sticky">
+      <div className="sticky top-0 z-50">
         <MyPageHeader onOpenSideTab={() => setIsSideTabOpen(true)} />
       </div>
       <div className="flex flex-col pb-6 bg-black mt-13">

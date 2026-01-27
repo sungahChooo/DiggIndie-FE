@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import ConcertCard from '@/components/home/ConcertCard';
-import type { ConcertItem } from '@/types/concerts';
+import { useMemo } from "react";
+import ConcertCard from "@/components/home/ConcertCard";
+import type { ConcertItem } from "@/types/concerts";
 
 type Props = {
   concerts: ConcertItem[];
@@ -11,8 +11,8 @@ type Props = {
 export default function ConcertGrid({ concerts }: Props) {
   const sortedConcerts = useMemo(() => {
     return [...concerts].sort((a, b) => {
-      const aEnded = a.dDay === '공연 종료';
-      const bEnded = b.dDay === '공연 종료';
+      const aEnded = a.dDay === "공연 종료";
+      const bEnded = b.dDay === "공연 종료";
 
       if (aEnded && !bEnded) return 1;
       if (!aEnded && bEnded) return -1;
@@ -30,22 +30,29 @@ export default function ConcertGrid({ concerts }: Props) {
     [sortedConcerts]
   );
 
-  console.log(concerts.map((c) => c.dDay));
-
+  const isSingle = sortedConcerts.length === 1;
 
   return (
-    <div className="flex justify-start gap-[16px]">
-      <div className="flex flex-col gap-[20px]">
-        {leftColumn.map((concert) => (
-          <ConcertCard key={concert.concertId} concert={concert} />
-        ))}
-      </div>
+    <div className={`flex justify-start gap-[16px] ${isSingle ? "w-full" : "w-fit"}`}>
+      {isSingle ? (
+        <div className="flex flex-col gap-[20px]">
+          <ConcertCard key={sortedConcerts[0].concertId} concert={sortedConcerts[0]} />
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col gap-[20px]">
+            {leftColumn.map((concert) => (
+              <ConcertCard key={concert.concertId} concert={concert} />
+            ))}
+          </div>
 
-      <div className="flex flex-col gap-[20px]">
-        {rightColumn.map((concert) => (
-          <ConcertCard key={concert.concertId} concert={concert} />
-        ))}
-      </div>
+          <div className="flex flex-col gap-[20px]">
+            {rightColumn.map((concert) => (
+              <ConcertCard key={concert.concertId} concert={concert} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

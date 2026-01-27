@@ -9,6 +9,8 @@ interface TextAreaProps {
   onChangeContent: (value: string) => void;
 }
 
+const MAX_HEIGHT = 150;
+
 export default function TextArea({ title, content, onChangeTitle, onChangeContent }: TextAreaProps) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -17,7 +19,14 @@ export default function TextArea({ title, content, onChangeTitle, onChangeConten
     if (!el) return;
 
     el.style.height = 'auto';
-    el.style.height = `${el.scrollHeight}px`;
+
+    if (el.scrollHeight <= MAX_HEIGHT) {
+      el.style.height = `${el.scrollHeight}px`;
+      el.style.overflowY = 'hidden';
+    } else {
+      el.style.height = `${MAX_HEIGHT}px`;
+      el.style.overflowY = 'auto';
+    }
   };
 
   useEffect(() => {
@@ -40,9 +49,17 @@ export default function TextArea({ title, content, onChangeTitle, onChangeConten
         ref={textareaRef}
         value={content}
         rows={6}
-        className="px-2 py-4 text-gray-300 text-normal focus:outline-none placeholder-gray-700 bg-transparent resize-none overflow-hidden"
         placeholder="내용을 입력해주세요."
         onChange={(e) => onChangeContent(e.target.value)}
+        className={[
+          'px-2 py-4',
+          'text-gray-300 text-normal',
+          'focus:outline-none',
+          'placeholder-gray-700',
+          'bg-transparent',
+          'resize-none',
+          'overflow-y-auto', // 내부 스크롤 허용
+        ].join(' ')}
       />
     </div>
   );

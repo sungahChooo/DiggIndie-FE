@@ -22,7 +22,7 @@ export default function OnBoardEndPage() {
         />
       </div>
       <div className="p-5 bg-transparent">
-        <Button href="/">완료</Button>
+        <Button href="/home?reset=true">완료</Button>
       </div>
     </div>
   );

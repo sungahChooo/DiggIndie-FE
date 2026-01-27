@@ -74,49 +74,50 @@ export default function SearchFree() {
 
   return (
     <section className="relative w-full flex flex-col items-center mt-[12px]">
-      <Image
-        src={searchBack}
-        alt="back"
-        className="absolute left-[20px] mt-[10px] cursor-pointer"
-        onClick={() => router.push('/community/free')}
-      />
+      <div className={"flex w-full justify-between px-5 gap-1"}>
+        <Image
+          src={searchBack}
+          alt="back"
+          className="mb-4 cursor-pointer shrink-0"
+          onClick={() => router.push('/community/free')}
+        />
+        {/* 검색 */}
+        <div
+          className={"relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] w-full bg-[#4A4747] text-white"}
+        >
+          {draft ? (
+            <button
+              type="button"
+              onClick={clearSearch}
+              aria-label="clear search"
+              className="absolute right-[40px] top-1/2 -translate-y-1/2 cursor-pointer"
+            >
+              <Image src={deleteBtn} alt="삭제" />
+            </button>
+          ) : null
+          }
 
-      {/* 검색 */}
-      <div
-        className={`relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white
-        ${draft ? 'w-[307px] ml-auto mr-5' : 'w-[335px]'}`}
-      >
-        {draft ? (
           <button
             type="button"
-            onClick={clearSearch}
-            aria-label="clear search"
-            className="absolute right-[40px] top-1/2 -translate-y-1/2 cursor-pointer"
+            onClick={runSearch}
+            aria-label="search"
+            className="absolute right-[8px] top-1/2 -translate-y-1/2 cursor-pointer"
           >
-            <Image src={deleteBtn} alt="삭제" />
+            <Image src={draft ? searchBtn : searchGrayBtn} alt="Search" />
           </button>
-        ) : null
-        }
 
-        <button
-          type="button"
-          onClick={runSearch}
-          aria-label="search"
-          className="absolute right-[8px] top-1/2 -translate-y-1/2 cursor-pointer"
-        >
-          <Image src={draft ? searchBtn : searchGrayBtn} alt="Search" />
-        </button>
-
-        <input
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') runSearch();
-          }}
-          placeholder="검색어를 입력하세요"
-          className="placeholder:text-[#A6A6A6] font-regular outline-none bg-transparent w-full pr-[28px]"
-        />
+          <input
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') runSearch();
+            }}
+            placeholder="검색어를 입력하세요"
+            className="placeholder:text-[#A6A6A6] font-regular outline-none bg-transparent w-full pr-[28px]"
+          />
+        </div>
       </div>
+
       {/* 리스트 */}
       {!error && (
         <ArticleList articles={articles} basePath="/community/free" variant="free" />

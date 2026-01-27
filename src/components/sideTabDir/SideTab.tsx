@@ -38,7 +38,7 @@ export default function SideTab({ onClose }: SideTabProps) {
       <div className="flex flex-col ">
         <div
           className="px-8 py-3 cursor-pointer flex gap-3 hover:bg-gray-800"
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/home')}
         >
           <Image src={homeIcon} alt="홈" />
           <span className="text-white">홈</span>

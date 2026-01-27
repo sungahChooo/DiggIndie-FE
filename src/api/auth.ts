@@ -65,13 +65,13 @@ export const authApi = {
     email: string;
     code: string;
     type: 'SIGNUP' | 'PASSWORD_RESET' | 'FIND_USER_ID';
-    newPassword: string;
   }) {
     return await fetchClient<{
       message: string;
       success: boolean;
-      userId: string;
+      maskedUserId: string;
       createdAt: string;
+      resetToken: string;
     }>('/auth/email/verify', {
       method: 'POST',
       auth: false,
@@ -138,6 +138,15 @@ export const authApi = {
       method: 'PATCH',
       auth: true,
       body: JSON.stringify({ marketingConsent: marketingConsent }),
+    });
+  },
+
+  //비밀번호 초기화
+  async resetPw(email: string, resetToken: string, password: string) {
+    return fetchClient<void>('/auth/password/reset', {
+      method: 'POST',
+      auth: false,
+      body: JSON.stringify({ email, resetToken, newPassword: password }),
     });
   },
 };

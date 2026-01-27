@@ -12,7 +12,7 @@ export default function TradingLinkArea({ value, onChange }: Props) {
   const hasValue = value.length > 0;
 
   return (
-    <div className="py-3 flex flex-col px-5">
+    <div className=" flex flex-col px-5">
       <span className="font-medium text-base text-white mb-3">링크</span>
 
       <div className="flex relative bg-gray-900 border border-gray-850 rounded-sm px-2 ">

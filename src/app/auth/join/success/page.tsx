@@ -23,7 +23,7 @@ export default function JoinSuccessPage() {
         </span>
       </div>
       <div className="w-[375px] px-5 absolute bottom-5">
-        <Button href="/splash">시작하기</Button>
+        <Button href="/splash?next=/onboard/artist">시작하기</Button>
       </div>
     </div>
   );

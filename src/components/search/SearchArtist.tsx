@@ -13,7 +13,7 @@ import SearchCardSkeleton from "@/components/search/SearchCardSkeleton";
 import { useArtistSearch } from "@/hooks/useArtistSearch";
 import { useRouter } from 'next/navigation';
 
-type SortKey = "updated" | "korean";
+type SortKey = "updated" | "korean" | "scrap";
 
 export default function MyArtistsWithSearch() {
   const [isOpen, setIsOpen] = useState(false);
@@ -91,24 +91,18 @@ export default function MyArtistsWithSearch() {
     };
   }, [debouncedTerm]);
 
-  const label = sortKey === "updated" ? "업데이트순" : "가나다순";
+  const label =
+    sortKey === "updated"
+      ? "업데이트순"
+      : sortKey === "korean"
+        ? "가나다순"
+        : "스크랩순";
 
   return (
-    <section className="relative w-full flex flex-col items-center mt-[12px]">
-      {/* 뒤로가기 */}
-      <Image
-        src={searchBack}
-        alt="back"
-        className="absolute left-[20px] mt-[10px] cursor-pointer"
-        onClick={() => router.push('/')}
-      />
+    <section className="relative w-full flex flex-col items-center mt-[12px] px-3">
 
       {/* 검색 input */}
-      <div
-        className={`relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white
-        ${searchTerm ? 'w-[307px] ml-auto mr-5' : 'w-[335px]'}`}
-      >
-
+      <div className={"relative flex w-full h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white"}>
         {/* 검색 지우기 */}
         {searchTerm ? (
           <button
@@ -143,13 +137,13 @@ export default function MyArtistsWithSearch() {
       </div>
 
       {/* 드롭다운 */}
-      <div className="relative w-fit self-start ml-5" ref={dropdownRef}>
+      <div className="relative w-fit self-start" ref={dropdownRef}>
         <button
           type="button"
           onClick={() => setIsOpen((v) => !v)}
-          className="w-[100px] h-[28px] border border-[#736F6F] rounded-[4px] flex items-center gap-[4px]"
+          className="w-[100px] h-[28px] border justify-between border-[#736F6F] rounded-[4px] flex items-center pr-[10.5px]"
         >
-          <span className="ml-[10.5px] text-[14px] tracking-[-0.42px] font-medium text-white">
+          <span className="ml-[10.5px] text-[14px] tracking-[-0.42px] font-medium text-white cursor-pointer">
             {label}
           </span>
           <div className="w-[16px] h-[16px]">
@@ -163,41 +157,20 @@ export default function MyArtistsWithSearch() {
                        border border-[#736F6F] flex flex-col items-center
                        py-[8px] gap-[4px] bg-black shadow-lg z-50"
           >
-            <button
-              type="button"
-              onClick={() => {
-                setSortKey("updated" as SortKey);
-                setIsOpen(false);
-              }}
-              className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === "updated"
-                  ? "bg-[#332F2F] text-white"
-                  : "text-[#8C8888]"
-              }`}
-            >
-              <span className="ml-[8px] mt-[3px]">업데이트순</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setSortKey("korean" as SortKey);
-                setIsOpen(false);
-              }}
-              className={`flex w-[84px] h-[28px] rounded-[4px] text-[14px] ${
-                sortKey === "korean"
-                  ? "bg-[#332F2F] text-white"
-                  : "text-[#8C8888]"
-              }`}
-            >
-              <span className="ml-[8px] mt-[3px]">가나다순</span>
-            </button>
-
-            <div className="flex w-[84px] h-[28px] rounded-[4px] text-[14px]">
-              <span className="ml-[8px] mt-[3px] text-[#8C8888]">
-                스크랩순
-              </span>
-            </div>
+            {(["updated", "korean", "scrap"] as SortKey[]).map((key) => (
+              <button
+                key={key}
+                onClick={() => {
+                  setSortKey(key);
+                  setIsOpen(false);
+                }}
+                className={`w-full h-[28px] px-2 text-left text-[14px] ${
+                  sortKey === key ? "bg-[#332F2F] text-white" : "text-[#8C8888]"
+                }`}
+              >
+                {key === "updated" ? "업데이트순" : key === "korean" ? "가나다순" : "스크랩순"}
+              </button>
+              ))}
           </div>
         )}
       </div>

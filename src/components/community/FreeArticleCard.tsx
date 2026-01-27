@@ -9,7 +9,7 @@ type Props = {
 export default function FreeArticleCard({ article }: Props) {
 
   return (
-    <div className="w-[min(375px,100%)] mr-auto h-[76px] flex items-center border-b-[1px] border-[#332F2F] py-4 px-5">
+    <div className="w-full h-[76px] flex items-center border-b-[1px] border-[#332F2F] py-4 px-5">
       <div className="flex flex-col min-w-0 pr-[24px]">
         <div className="flex min-w-0">
           {article.category !== null && (

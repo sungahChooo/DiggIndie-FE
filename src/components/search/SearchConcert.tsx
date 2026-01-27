@@ -8,7 +8,6 @@ import ConcertGrid from "@/components/my/ConcertGrid";
 import SearchCardSkeleton from "@/components/search/SearchCardSkeleton";
 
 import searchBtn from "@/assets/icons/artistSearch.svg";
-import searchBack from "@/assets/icons/searchBack.svg";
 import searchGrayBtn from "@/assets/icons/searchGray.svg";
 import deleteBtn from '@/assets/community/delete.svg';
 import { useRouter } from 'next/navigation';
@@ -77,20 +76,10 @@ export default function SearchConcert() {
   const showSkeleton = isTypingLoading || (isFetching && pageInfo.page === 0);
 
   return (
-    <section className="relative w-full flex flex-col items-center mt-[12px]">
-      {/* 뒤로가기 */}
-      <Image
-        src={searchBack}
-        alt="back"
-        className="absolute left-[20px] mt-[10px] cursor-pointer"
-        onClick={() => router.push('/')}
-      />
+    <section className="relative w-full flex flex-col items-center mt-[12px] px-3">
 
       {/* 검색 input */}
-      <div
-        className={`relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white
-        ${query ? 'w-[307px] ml-auto mr-5' : 'w-[335px]'}`}
-      >
+      <div className={"w-full relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white"}>
         {/* 검색 지우기 */}
         {query ? (
           <button
@@ -124,11 +113,11 @@ export default function SearchConcert() {
       </div>
 
       {/* 드롭다운 */}
-      <div className="relative w-fit self-start ml-5" ref={dropdownRef}>
+      <div className="relative w-fit self-start" ref={dropdownRef}>
         <button
           type="button"
           onClick={() => setIsOpen((v) => !v)}
-          className="w-[100px] h-[28px] border border-[#736F6F] rounded-[4px] flex items-center gap-[4px]"
+          className="w-[100px] h-[28px] border justify-between border-[#736F6F] rounded-[4px] flex items-center pr-[10.5px]"
         >
           <span className="ml-[10.5px] text-[14px] tracking-[-0.42px] font-medium text-white">{label}</span>
           <Image src={downBtn} alt="open dropdown" />
@@ -137,7 +126,7 @@ export default function SearchConcert() {
         {isOpen && (
           <div
             className="absolute left-0 mt-[8px] w-[100px] h-[108px] rounded-[4px]
-                       border border-[#736F6F] flex flex-col items-center
+                       border border-[#736F6F] flex flex-col items-start
                        py-[8px] gap-[4px] bg-black shadow-lg z-50"
           >
             {(["recent", "view", "scrap"] as SortKey[]).map((key) => (
@@ -147,11 +136,11 @@ export default function SearchConcert() {
                   setSortKey(key);
                   setIsOpen(false);
                 }}
-                className={`w-full h-[28px] text-[14px] ${
+                className={`w-full h-[28px] px-2 text-left text-[14px] ${
                   sortKey === key ? "bg-[#332F2F] text-white" : "text-[#8C8888]"
                 }`}
               >
-                {key === "recent" ? "업데이트순" : key === "view" ? "조회수 순" : "스크랩순"}
+                {key === "recent" ? "업데이트순" : key === "view" ? "조회수순" : "스크랩순"}
               </button>
             ))}
           </div>
@@ -164,7 +153,6 @@ export default function SearchConcert() {
       {/* 결과 */}
       <div className="flex mt-4 justify-center">
         {showSkeleton ? <SearchCardSkeleton /> : <ConcertGrid concerts={concerts} />}
-        {isFetchingMore ? <div className="mt-3 text-[13px] text-[#8C8888] font-normal">불러오는 중...</div> : null}
       </div>
       <div ref={sentinelRef} className="h-[1px]" />
     </section>

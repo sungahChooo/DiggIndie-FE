@@ -31,12 +31,12 @@ export default function LoginCallback() {
           // UI용 최근 로그인 플랫폼 저장
           localStorage.setItem('recent_provider', res.loginData.platform);
 
-          router.push('/onboard/artist');
+          router.push('/home');
           return;
         }
         if (res.type === 'link') {
           // 연동 성공 처리
-          alert(res.linkData.platform || '계정 연동이 완료되었습니다.');
+          alert(`${res.linkData.platform} 계정 연동이 완료되었습니다.`);
           router.push('/my/social');
           return;
         }

@@ -1,29 +1,25 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { authService } from '@/services/authService';
 import { useRouter } from 'next/navigation';
+import { usePasswordResetStore } from '@/stores/authStore';
 
 export default function FindPw() {
   const router = useRouter();
-  const [newPw, setNewPw] = useState('');
-  const [confirmNewPw, setConfirmNewPw] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false); // 인증번호 전송 버튼 클릭 여부
   const [isEmailVerified, setIsEmailVerified] = useState(false); // 인증번호 확인 성공 여부
+  const setResetInfo = usePasswordResetStore((state) => state.setResetInfo);
+
   const [form, setForm] = useState({
     id: '',
     email: '',
     emailConfirm: '',
-    pw: '',
-    pwConfrim: '',
   });
   const [errors, setErrors] = useState<{
     id?: string;
     email?: string;
     emailConfirm?: string;
-    pw?: string;
-    pwConfirm?: string;
   }>({});
 
   // 1. 이메일 중복 체크 및 인증번호 전송
@@ -41,13 +37,9 @@ export default function FindPw() {
   // 2. 인증번호 확인
   const handleVerifyCode = async () => {
     try {
-      const isValid = await authService.verifyCode(
-        form.email,
-        form.emailConfirm,
-        'PASSWORD_RESET',
-        form.pw
-      );
-      if (isValid) {
+      const isValid = await authService.verifyCode(form.email, form.emailConfirm, 'PASSWORD_RESET');
+      if (isValid && isValid.resetToken) {
+        setResetInfo(form.email, isValid.resetToken);
         setIsEmailVerified(true);
         setErrors((prev) => ({ ...prev, emailConfirm: '인증되었습니다.' }));
       } else {
@@ -60,7 +52,7 @@ export default function FindPw() {
   return (
     <div className="w-full bg-black flex flex-col items-center px-5 py-6 gap-3">
       {/* 아이디 입력, 인증정보 api 수정 후 수정 예정*/}
-      <div className="w-[335px] flex items-end gap-3">
+      {/* <div className="w-[335px] flex items-end gap-3">
         <div className="flex-1">
           <input
             type="text"
@@ -69,10 +61,16 @@ export default function FindPw() {
              placeholder:text-[#736F6F] px-4 border-b-[1px] border-[#4A4747] pb-1 focus:outline-none focus:border-white focus:text-white"
           />
         </div>
-        <button className="w-[87px] h-[33px] rounded-[4px] bg-[#4B4747] text-[#BEBABA] text-[12px] font-medium cursor-pointer">
+        <button
+          className={`w-[87px] h-[33px] rounded-[4px] text-[12px] font-medium transition-colors ${
+            form.id
+              ? 'bg-main-red-4 border-main-red-1 text-white cursor-pointer'
+              : 'bg-[#4B4747] text-[#BEBABA] text-gray-300 cursor-not-allowed'
+          }`}
+        >
           확인
         </button>
-      </div>
+      </div> */}
 
       {/* 이메일 입력 */}
       <div className="flex flex-col gap-2">
@@ -92,8 +90,13 @@ export default function FindPw() {
             />
           </div>
           <button
-            className="w-22 py-2 rounded-sm bg-main-red-2 border border-main-red-1 text-white text-xs font-medium cursor-pointer"
+            className={`w-22 h-[33px] rounded-sm text-xs font-medium transition-colors ${
+              form.email
+                ? 'bg-main-red-4 border border-main-red-1 text-white cursor-pointer'
+                : 'bg-[#4B4747] text-[#BEBABA] text-gray-300 cursor-not-allowed border-none'
+            }`}
             onClick={handleEmailCheck}
+            disabled={!form.email}
           >
             인증번호 전송
           </button>
@@ -116,8 +119,13 @@ export default function FindPw() {
             />
           </div>
           <button
-            className="px-3 py-2  w-22 h-[33px] rounded-sm bg-main-red-2 border-2 border-main-red-1 text-white text-xs font-medium cursor-pointer"
+            className={`w-22 h-[33px] rounded-sm text-xs font-medium transition-colors ${
+              isEmailSent && form.emailConfirm && !isEmailVerified
+                ? 'bg-main-red-4 border border-main-red-1 text-white cursor-pointer'
+                : 'bg-[#4B4747] text-[#BEBABA] text-gray-300 cursor-not-allowed'
+            }`}
             onClick={handleVerifyCode}
+            disabled={!isEmailSent || !form.emailConfirm || isEmailVerified}
           >
             확인
           </button>
@@ -125,48 +133,11 @@ export default function FindPw() {
         {errors.emailConfirm && <p className="text-red-400 text-xs px-3">{errors.emailConfirm}</p>}
       </div>
 
-      {isEmailSent && (
-        <>
-          <div className="w-full flex items-end gap-3">
-            <div className="flex-1">
-              <input
-                type="text"
-                value={form.pw}
-                placeholder="새로운 비밀번호 재설정"
-                className="w-full bg-transparent text-[#8C8787] placeholder:text-[#736F6F]
-                       px-4 border-b border-[#4A4747] pb-1
-                       focus:outline-none focus:border-white focus:text-white"
-                onChange={(e) => setForm({ ...form, pw: e.target.value })}
-              />
-            </div>
-            <button className="w-[87px] h-[33px] rounded-sm bg-main-red-2 border border-main-red-1 text-white text-xs font-medium cursor-pointer">
-              확인
-            </button>
-          </div>
-
-          <div className="w-full flex items-end gap-3">
-            <div className="flex-1">
-              <input
-                value={form.pwConfrim}
-                type="text"
-                placeholder="새로운 비밀번호 확인"
-                className="w-full bg-transparent text-[#8C8787] placeholder:text-[#736F6F]
-                       px-4 border-b border-[#4A4747] pb-1
-                       focus:outline-none focus:border-white focus:text-white"
-                onChange={(e) => setForm({ ...form, pwConfrim: e.target.value })}
-              />
-            </div>
-            <button className="w-22 py-2 rounded-sm bg-main-red-2 border border-main-red-1 text-white text-xs font-medium cursor-pointer">
-              확인
-            </button>
-          </div>
-        </>
-      )}
       {/* 아이디 찾기 빨간 버튼 */}
       <button
         className={`${!isEmailSent || !isEmailVerified ? 'bg-gray-600 cursor-not-allowed' : 'bg-main-red-2 cursor-pointer'} min w-[335px] h-13 mt-4 rounded-sm text-white text-base font-semibold`}
         disabled={!isEmailSent || !isEmailVerified}
-        onClick={() => router.push('/auth/find/pw/reset/result')}
+        onClick={() => router.push('/auth/find/pw/reset')}
       >
         인증 확인
       </button>

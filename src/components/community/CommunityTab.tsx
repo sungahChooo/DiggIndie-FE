@@ -8,6 +8,8 @@ export default function CommunityTab() {
 
   const isFree = pathname === '/community/free';
   const isTrade = pathname === '/community/trade';
+  const isFreeSearch = pathname === '/community/free/search';
+  const isTradeSearch = pathname === '/community/trade/search';
 
   return (
     <div
@@ -15,9 +17,11 @@ export default function CommunityTab() {
       border-b-[1px] border-[#413D3D] mb-[12px]"
     >
       <span
-        onClick={() => router.push('/community/free')}
+        onClick={() =>
+          router.push(isTradeSearch ? "/community/free/search" : "/community/free")
+        }
         className={`relative w-[44px] pt-2 cursor-pointer ${
-          isFree ? 'text-white' : 'text-[#736F6F]'
+          (isFree || isFreeSearch) ? 'text-white' : 'text-[#736F6F]'
         }`}
       >
         자유
@@ -27,9 +31,11 @@ export default function CommunityTab() {
       </span>
 
       <span
-        onClick={() => router.push('/community/trade')}
+        onClick={() =>
+          router.push(isFreeSearch ? "/community/trade/search" : "/community/trade")
+        }
         className={`relative w-[68px] pt-2 cursor-pointer ${
-          isTrade ? 'text-white' : 'text-[#736F6F]'
+          (isTrade || isTradeSearch) ? 'text-white' : 'text-[#736F6F]'
         }`}
       >
         거래/양도

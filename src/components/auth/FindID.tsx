@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { authService } from '@/services/authService';
+import { useFindIdStore } from '@/stores/authStore';
 
 export default function FindId() {
+  const setResult = useFindIdStore((state) => state.setResult);
   const [form, setForm] = useState({
     email: '',
     emailConfirm: '',
@@ -31,17 +33,15 @@ export default function FindId() {
   // 2. 인증번호 확인
   const handleVerifyCode = async () => {
     try {
-      const isValid = await authService.verifyCode(
-        form.email,
-        form.emailConfirm,
-        'FIND_USER_ID',
-        'stringst'
-      );
+      const isValid = await authService.verifyCode(form.email, form.emailConfirm, 'FIND_USER_ID');
+
       if (isValid) {
+        setResult({
+          userId: isValid.maskedUserId,
+          createdAt: isValid.createdAt,
+        });
         setIsEmailVerified(true);
         setErrors((prev) => ({ ...prev, emailConfirm: '인증되었습니다.' }));
-        sessionStorage.setItem('FOUND_USER_ID', isValid.userId);
-        sessionStorage.setItem('SIGNUP_DATE', isValid.createdAt);
       } else {
         setErrors((prev) => ({ ...prev, emailConfirm: '인증번호가 일치하지 않습니다.' }));
       }
@@ -69,8 +69,13 @@ export default function FindId() {
             />
           </div>
           <button
-            className="w-[87px] h-[33px] rounded-[4px] bg-[#4B4747] text-[#BEBABA] text-[12px] font-medium cursor-pointer"
+            className={`w-[87px] h-[33px] rounded-[4px] text-[12px] font-medium transition-colors text-white ${
+              form.email
+                ? 'bg-main-red-4 cursor-pointer border border-main-red-1'
+                : 'bg-gray-700 cursor-not-allowed'
+            }`}
             onClick={handleEmailCheck}
+            disabled={!form.email}
           >
             인증번호 전송
           </button>
@@ -87,18 +92,21 @@ export default function FindId() {
               className="w-full bg-transparent text-[#8C8787] placeholder:text-[#736F6F] px-4
                        border-b-1 border-[#4A4747] pb-1 text-white"
               onChange={(e) => {
-                setIsEmailSent(false);
-                setIsEmailVerified(false);
                 setForm({ ...form, emailConfirm: e.target.value });
-                //if (errors.id) setErrors({});
+                setErrors((prev) => ({ ...prev, emailConfirm: undefined }));
               }}
             />
           </div>
           <button
-            className="w-[87px] h-[33px] rounded-[4px] bg-[#4B4747] text-[#BEBABA] text-[12px] font-medium cursor-pointer"
+            className={`w-[87px] h-[33px] rounded-[4px] text-[12px] font-medium transition-colors ${
+              isEmailSent && form.emailConfirm && !isEmailVerified
+                ? 'bg-main-red-4 border border-main-red-1 text-white cursor-pointer'
+                : 'bg-[#4B4747] text-[#BEBABA] cursor-not-allowed'
+            }`}
             onClick={handleVerifyCode}
+            disabled={!isEmailSent || !form.emailConfirm || isEmailVerified}
           >
-            확인
+            {isEmailVerified ? '완료' : '확인'}
           </button>
         </div>
         {errors.emailConfirm && <p className="text-red-400 text-xs px-3">{errors.emailConfirm}</p>}

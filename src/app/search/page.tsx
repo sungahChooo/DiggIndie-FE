@@ -9,17 +9,18 @@ import ConcertCard from '@/components/home/ConcertCard';
 import mikeIcon from '@/assets/common/Voice 3.svg';
 import calendarIcon from '@/assets/common/Calendar.svg';
 import documentIcon from '@/assets/sideTab/Document.svg';
-import IndieStoryRecard from '@/components/home/IndieStoryRecCard';
 import SearchCardSkeleton from '@/components/search/SearchCardSkeleton';
 import { useRouter } from 'next/navigation';
 import RecentSearchSection from '@/components/search/RecentSearchSection';
 import { searchService } from '@/services/searchService';
 import type { RecentSearch } from '@/types/searches';
 import { useAuthStore } from '@/stores/authStore';
-import { mockIndieStory } from '@/mocks/mockIndieStory';
 
 import { useArtistSearch } from '@/hooks/useArtistSearch';
 import { useConcertsSearch } from '@/hooks/useConcertSearch';
+import { useMagazines } from '@/hooks/useMagazines';
+
+import MagazineCard from '@/components/indieStory/IndieStoryCard';
 
 export default function HomeSearch() {
   const router = useRouter();
@@ -51,7 +52,22 @@ export default function HomeSearch() {
     enabled: true,
   });
 
-  // 디바운스
+  const {
+    magazines,
+    isLoading: isMagazineFetching,
+  } = useMagazines({
+    order: 'recent',
+    query: debouncedTerm.trim() ? debouncedTerm.trim() : undefined,
+    size: 20,
+    enabled: debouncedTerm.trim().length > 0,
+  });
+
+  const artistCount = artistPageInfo?.totalElements ?? artists.length;
+  const concertCount = concertPageInfo?.totalElements ?? concerts.length;
+  const magazineCount = magazines.length;
+
+  const isAnyFetching = isArtistFetching || isConcertFetching || isMagazineFetching;
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedTerm(searchTerm);
@@ -60,7 +76,6 @@ export default function HomeSearch() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // 검색 실행 (엔터)
   const handleSubmit = () => {
     const q = searchTerm.trim();
     if (!q) return;
@@ -77,23 +92,19 @@ export default function HomeSearch() {
     setIsSubmitted(false);
   };
 
-  // 최근 검색 저장
   useEffect(() => {
     if (!isAuthed) return;
     if (!isSubmitted || !debouncedTerm.trim()) return;
     searchService.saveRecent({ content: debouncedTerm.trim() });
   }, [isSubmitted, debouncedTerm, isAuthed]);
 
-  // 디바운스된 검색어로 아티스트 조회
   useEffect(() => {
     const q = debouncedTerm.trim();
     if (!q) return;
 
     loadArtistFirstPage({ query: q });
-    // 콘서트는 훅 내부 useEffect가 query 변화 감지해서 loadFirstPage 호출함
   }, [debouncedTerm, loadArtistFirstPage]);
 
-  // 최근 검색 조회
   const loadRecentSearches = async () => {
     const data = await searchService.getRecentSearches();
     setRecentSearches(data);
@@ -120,11 +131,6 @@ export default function HomeSearch() {
     await loadRecentSearches();
   };
 
-  const artistCount = artistPageInfo?.totalElements ?? artists.length;
-  const concertCount = concertPageInfo?.totalElements ?? concerts.length;
-
-  const isAnyFetching = isArtistFetching || isConcertFetching;
-
   return (
     <div className="min-h-screen w-full bg-black">
       <div className="px-5 py-3 w-full flex gap-1">
@@ -133,7 +139,7 @@ export default function HomeSearch() {
           alt="이전으로"
           width={24}
           height={24}
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/home')}
           className="cursor-pointer"
         />
         <SearchSection
@@ -146,6 +152,7 @@ export default function HomeSearch() {
             loadRecentSearches();
           }}
           onSubmit={handleSubmit}
+          placeholder="아티스트, 공연을 검색해보세요"
         />
       </div>
 
@@ -154,7 +161,11 @@ export default function HomeSearch() {
           {isRecentLoading ? (
             <SearchCardSkeleton />
           ) : (
-            <RecentSearchSection searches={recentSearches} onDelete={handleDelete} onClearAll={handleClearAll} />
+            <RecentSearchSection
+              searches={recentSearches}
+              onDelete={handleDelete}
+              onClearAll={handleClearAll}
+            />
           )}
         </>
       )}
@@ -162,7 +173,7 @@ export default function HomeSearch() {
       {searchTerm !== '' && (
         <>
           <span className="block font-medium text-sm text-gray-400 px-5 py-5">
-            검색결과 {artistCount + concertCount}개
+            검색결과 {artistCount + concertCount + magazineCount}개
           </span>
 
           {isAnyFetching ? (
@@ -173,7 +184,9 @@ export default function HomeSearch() {
                 <div className="flex gap-1 mb-4 px-5">
                   <Image src={mikeIcon} alt="마이크" />
                   <span className="text-xl font-semibold text-white">아티스트</span>
-                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">{artistCount}개</span>
+                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">
+                    {artistCount}개
+                  </span>
                 </div>
 
                 <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
@@ -187,7 +200,9 @@ export default function HomeSearch() {
                 <div className="flex gap-1 mb-4 px-5">
                   <Image src={calendarIcon} alt="달력" />
                   <span className="text-xl font-semibold text-white">공연</span>
-                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">{concertCount}개</span>
+                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">
+                    {concertCount}개
+                  </span>
                 </div>
 
                 <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
@@ -200,13 +215,13 @@ export default function HomeSearch() {
               <section className="pb-9">
                 <div className="flex gap-1 mb-4 px-5">
                   <Image src={documentIcon} alt="문서" />
-                  <span className="text-xl font-semibold text-white">인디 스토리</span>
-                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">000개</span>
+                  <span className="text-xl font-semibold text-white">매거진</span>
+                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">{magazineCount}개</span>
                 </div>
 
                 <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
-                  {mockIndieStory.map((indieStory) => (
-                    <IndieStoryRecard key={indieStory.id} indieStory={indieStory} />
+                  {magazines.map((magazine) => (
+                    <MagazineCard rounded={false} key={magazine.magazineId} magazine={magazine} />
                   ))}
                 </div>
               </section>

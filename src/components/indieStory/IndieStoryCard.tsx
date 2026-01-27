@@ -1,21 +1,26 @@
-import type { MockIndieStory } from "@/types/mocks/mockIndieStory";
 import { ImageTile } from "@/components/home/ImageTile";
+import type { MagazineItem } from "@/types/magazine";
 
 type Props = {
-  indieStory: MockIndieStory;
+  magazine?: MagazineItem | null;
+  rounded?: boolean;
 };
 
-export default function IndieStoryCard({ indieStory }: Props) {
-  const img = indieStory.imageUrl
+export default function MagazineCard({ magazine, rounded }: Props) {
+  const img = magazine?.imageUrls?.[0] ?? "";
+  const externalUrl = magazine?.externalUrl
 
   return (
-    <div className="flex flex-col flex-none w-[160px] bg-[#1F1D1D] rounded-b-[4px]">
-      <div className={"relative flex flex-col"}>
+    <div className={`flex flex-col flex-none w-[160px] bg-[#1F1D1D] `}>
+      <div className={`relative flex flex-col cursor-pointer ${
+        rounded ? "rounded-sm" : ""}`}
+           onClick={() => window.open(externalUrl, "_blank", "noopener,noreferrer")}
+      >
         <ImageTile
           src={img}
-          alt={indieStory.title}
+          alt={magazine?.title ?? ""}
           variant="indieStory"
-          className={"rounded-[4px]"}
+          className={`${rounded ? "rounded-sm" : ""}`}
         />
       </div>
     </div>

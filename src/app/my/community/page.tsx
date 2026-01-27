@@ -7,7 +7,7 @@ export default function MyCommunityPage() {
   const router = useRouter();
   return (
     <div className="text-white flex flex-col h-screen bg-black relative py-10">
-      <MyHeader title={'MY 커뮤니티 활동'} />
+      <MyHeader title={'MY 커뮤니티 활동'} backUrl={'/my'}/>
       <div className="py-2 flex flex-col gap-3">
         <MyCommunityMenu
           title="MY 게시물"

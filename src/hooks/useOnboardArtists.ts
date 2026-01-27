@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useMemo, useRef, useState } from "react";
-import { OnboardArtist, PageInfo} from '@/types/artists';
-import { getArtistsPage } from "@/services/artistsService";
+import { useMemo, useRef, useState } from 'react';
+import { OnboardArtist, PageInfo } from '@/types/artists';
+import { getArtistsPage } from '@/services/artistsService';
 
-export type SortKey = "updated" | "korean";
+export type SortKey = 'updated' | 'korean';
 
 //페이지당 12개의 아티스트 로드useOn
 export function useOnboardArtists(pageSize: number = 12) {
   const [artists, setArtists] = useState<OnboardArtist[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const [page, setPage] = useState(0);
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [appliedQuery, setAppliedQuery] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
 
   // 정렬옵션
-  const [sortKey, setSortKey] = useState<SortKey>("updated");
+  const [sortKey, setSortKey] = useState<SortKey>('updated');
 
   // fetch 중복방지
   const isFetchingRef = useRef(false);
@@ -29,12 +29,13 @@ export function useOnboardArtists(pageSize: number = 12) {
   const debounceMs = 250;
 
   const sortArtistsIfNeeded = (list: OnboardArtist[]) => {
-    if (sortKey !== "korean") return list;
-    return [...list].sort((a, b) => a.bandName.localeCompare(b.bandName, "ko"));
+    if (sortKey !== 'korean') return list;
+    return [...list].sort((a, b) => a.bandName.localeCompare(b.bandName, 'ko'));
   };
 
   const loadFirstPage = async (query?: string) => {
     isFetchingRef.current = true;
+    setIsFetching(true);
     const seq = ++requestSeqRef.current;
 
     try {
@@ -58,7 +59,10 @@ export function useOnboardArtists(pageSize: number = 12) {
       setPage(0);
     } finally {
       // 최신 요청만 fetch 끝났다고 처리
-      if (seq === requestSeqRef.current) isFetchingRef.current = false;
+      if (seq === requestSeqRef.current) {
+        isFetchingRef.current = false;
+        setIsFetching(false);
+      }
     }
   };
 
@@ -68,6 +72,7 @@ export function useOnboardArtists(pageSize: number = 12) {
     if (!pageInfo?.hasNext) return;
 
     isFetchingRef.current = true;
+    setIsFetching(true);
     const seq = ++requestSeqRef.current;
 
     const nextPage = page + 1;
@@ -99,7 +104,10 @@ export function useOnboardArtists(pageSize: number = 12) {
     } catch (e) {
       console.error(e);
     } finally {
-      if (seq === requestSeqRef.current) isFetchingRef.current = false;
+      if (seq === requestSeqRef.current) {
+        isFetchingRef.current = false;
+        setIsFetching(false);
+      }
     }
   };
 
@@ -111,7 +119,7 @@ export function useOnboardArtists(pageSize: number = 12) {
     debounceTimerRef.current = window.setTimeout(async () => {
       const q = rawValue.trim();
 
-      if (q === "") return;
+      if (q === '') return;
       setAppliedQuery(q);
       await loadFirstPage(q);
     }, debounceMs);
@@ -122,11 +130,11 @@ export function useOnboardArtists(pageSize: number = 12) {
     setSearchTerm(value);
 
     // input이 완전히 비면 초기 리스트로
-    if (value === "") {
+    if (value === '') {
       // 대기 중인 자동검색 취소
       if (debounceTimerRef.current) window.clearTimeout(debounceTimerRef.current);
 
-      setAppliedQuery("");
+      setAppliedQuery('');
       await loadFirstPage(undefined);
       return;
     }
@@ -146,8 +154,8 @@ export function useOnboardArtists(pageSize: number = 12) {
 
   const onClearSearch = async () => {
     if (debounceTimerRef.current) window.clearTimeout(debounceTimerRef.current);
-    setSearchTerm("");
-    setAppliedQuery("");
+    setSearchTerm('');
+    setAppliedQuery('');
     await loadFirstPage(undefined);
   };
 
@@ -165,9 +173,8 @@ export function useOnboardArtists(pageSize: number = 12) {
     onClearSearch,
     loadFirstPage,
     loadNextPage,
-
+    isFetching,
     sortKey,
     setSortKey,
-    isFetching: isFetchingRef.current,
   };
 }
