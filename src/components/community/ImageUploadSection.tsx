@@ -1,11 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { postImage } from '@/api/file';
 
 interface ImageUploadSectionProps {
   required?: boolean;
+  value?: string[]; // fileKey 배열 수정용
   onChangeImageUrls?: (urls: string[]) => void;
   onUploadingChange?: (uploading: boolean) => void;
 }
@@ -18,10 +19,7 @@ async function uploadOne(file: File) {
   const safeName = sanitizeFileName(file.name);
 
   const res = await postImage({ fileName: safeName });
-
-  if (!res?.isSuccess) {
-    throw new Error(res?.message || 'Presigned URL 발급 실패');
-  }
+  if (!res?.isSuccess) throw new Error(res?.message || 'Presigned URL 발급 실패');
 
   const { presignedUrl, fileKey } = res.payload;
 
@@ -33,22 +31,52 @@ async function uploadOne(file: File) {
     body: file,
   });
 
-  if (!putRes.ok) {
-    throw new Error(`S3 업로드 실패 (${putRes.status})`);
-  }
+  if (!putRes.ok) throw new Error(`S3 업로드 실패 (${putRes.status})`);
 
-  return fileKey;
+  return fileKey as string;
 }
 
-export default function ImageUploadSection({ required, onChangeImageUrls, onUploadingChange }: ImageUploadSectionProps) {
-  const [images, setImages] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
-  const [fileKeys, setFileKeys] = useState<string[]>([]);
+const S3_BASE =
+  process.env.NEXT_PUBLIC_MARKET_IMAGE_BASE_URL ||
+  'https://diggindie-imgs.s3.ap-northeast-2.amazonaws.com';
+
+function toS3Url(raw?: string | null) {
+  if (!raw) return null;
+  const v = raw.trim();
+  if (!v) return null;
+  if (v.startsWith('http://') || v.startsWith('https://')) return v;
+  return `${S3_BASE}/${encodeURIComponent(v)}`;
+}
+
+export default function ImageUploadSection({
+                                             required,
+                                             value,
+                                             onChangeImageUrls,
+                                             onUploadingChange,
+                                           }: ImageUploadSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // 업로드된fileKey 목록
+  const [fileKeys, setFileKeys] = useState<string[]>(value ?? []);
+
+  const [localPreviews, setLocalPreviews] = useState<string[]>([]);
+
+  // 수정모드에서 value가 들어오면 내부 상태에 반영
+  useEffect(() => {
+    if (!value) return;
+    setFileKeys(value);
+    setLocalPreviews([]);
+  }, [value]);
+
+  // 외부로 fileKey 배열 전달
   useEffect(() => {
     onChangeImageUrls?.(fileKeys);
   }, [fileKeys, onChangeImageUrls]);
+
+  const previews = useMemo(() => {
+    const existing = fileKeys.map((k) => toS3Url(k)).filter(Boolean) as string[];
+    return [...existing, ...localPreviews];
+  }, [fileKeys, localPreviews]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -56,16 +84,14 @@ export default function ImageUploadSection({ required, onChangeImageUrls, onUplo
     const selectedFiles = Array.from(e.target.files);
 
     const MAX_IMAGES = 10;
-    if (images.length + selectedFiles.length > MAX_IMAGES) {
+    if (fileKeys.length + selectedFiles.length > MAX_IMAGES) {
       alert(`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요.`);
       e.target.value = '';
       return;
     }
 
     const previewUrls = selectedFiles.map((file) => URL.createObjectURL(file));
-
-    setImages((prev) => [...prev, ...selectedFiles]);
-    setPreviews((prev) => [...prev, ...previewUrls]);
+    setLocalPreviews((prev) => [...prev, ...previewUrls]);
 
     onUploadingChange?.(true);
     try {
@@ -74,8 +100,7 @@ export default function ImageUploadSection({ required, onChangeImageUrls, onUplo
     } catch (err) {
       console.error(err);
       alert('이미지 업로드에 실패했습니다.');
-      setImages((prev) => prev.slice(0, prev.length - selectedFiles.length));
-      setPreviews((prev) => {
+      setLocalPreviews((prev) => {
         const next = prev.slice(0, prev.length - previewUrls.length);
         return next;
       });
@@ -87,20 +112,30 @@ export default function ImageUploadSection({ required, onChangeImageUrls, onUplo
   };
 
   const removeImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-    setPreviews((prev) => {
-      const url = prev[index];
+
+    // index가 기존 영역이면 fileKeys에서 제거
+    const existingCount = fileKeys.length;
+    if (index < existingCount) {
+      setFileKeys((prev) => prev.filter((_, i) => i !== index));
+      return;
+    }
+
+    // index가 local 영역이면 localPreviews에서 제거
+    const localIndex = index - existingCount;
+    setLocalPreviews((prev) => {
+      const url = prev[localIndex];
       if (url) URL.revokeObjectURL(url);
-      return prev.filter((_, i) => i !== index);
+      return prev.filter((_, i) => i !== localIndex);
     });
-    setFileKeys((prev) => prev.filter((_, i) => i !== index));
+
+    setFileKeys((prev) => prev.filter((_, i) => i !== existingCount + localIndex));
   };
 
   useEffect(() => {
     return () => {
-      previews.forEach((u) => URL.revokeObjectURL(u));
+      localPreviews.forEach((u) => URL.revokeObjectURL(u));
     };
-  }, [previews]);
+  }, [localPreviews]);
 
   return (
     <div className="py-3 flex flex-col gap-3 px-5">
@@ -120,21 +155,20 @@ export default function ImageUploadSection({ required, onChangeImageUrls, onUplo
           onChange={handleImageChange}
           className="hidden"
         />
-        {images.length < 10 && (
+
+        {previews.length < 10 && (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="w-24 h-24 flex items-center justify-center
-                 border border-gray-800
-                 bg-gray-900
-                 text-gray-600 text-3xl shrink-0 cursor-pointer"
+            className="w-24 h-24 flex items-center justify-center border border-gray-800 bg-gray-900 text-gray-600 text-3xl shrink-0 cursor-pointer"
           >
             +
           </button>
         )}
+
         {previews.map((src, index) => (
-          <div key={index} className="relative w-24 h-24 shrink-0">
-            <Image src={src} alt="preview" fill className="object-cover rounded" />
+          <div key={`${src}-${index}`} className="relative w-24 h-24 shrink-0">
+            <Image src={src} alt="preview" fill className="object-cover rounded" unoptimized />
             <button
               type="button"
               className="absolute top-1 right-1 bg-black/60 text-white text-xs rounded-full w-5 h-5 cursor-pointer"

@@ -11,11 +11,11 @@ export default function TitleSection({
   title,
   min,
   titleClassName = 'w-full flex items-end gap-2 px-5',
-  minClassName = 'text-gray-600 text-xs font-medium leading-[var(--line-height-text)] tracking-[var(--letter-spacing-text)]',
+  minClassName = 'text-xs font-medium leading-[var(--line-height-text)] tracking-[var(--letter-spacing-text)]',
 }: TitleSectionProps) {
   return (
     <div className={titleClassName}>
-      <span className="font-bold text-2xl leading-[var(--line-height-title)] tracking-[var(--letter-spacing-title)]">
+      <span className="text-white font-bold text-2xl leading-[var(--line-height-title)] tracking-[var(--letter-spacing-title)]">
         {title}
       </span>
       <span className={minClassName}>{min}</span>

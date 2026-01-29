@@ -58,6 +58,7 @@ export default function OnBoardGenrePage() {
             </>
           }
           min="최소 2개"
+          minClassName="text-main-red-4 text-xs font-medium leading-[var(--line-height-text)] tracking-[var(--letter-spacing-text)]"
         />
         <div className="flex flex-wrap gap-4 px-5">
           {keywords.map((item) => (

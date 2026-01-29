@@ -62,84 +62,97 @@ export default function MyPage() {
     router.push('/');
   };
 
+  //사이드탭 열면 스크롤 막기
+  useEffect(() => {
+    if (isSideTabOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSideTabOpen]);
   return (
-    <div className="text-white flex flex-col h-screen bg-black relative">
-      <div className="sticky top-0 z-50">
+    <div className="text-white flex flex-col bg-black relative min-h-screen">
+      <div className="relative mx-auto w-full max-w-[375px] bg-black min-h-screen">
         <MyPageHeader onOpenSideTab={() => setIsSideTabOpen(true)} />
-      </div>
-      <div className="flex flex-col pb-6 bg-black mt-13">
-        <ProfileSection userId={userId} />
+        <div className="flex flex-col pb-6 bg-black mt-13">
+          <ProfileSection userId={userId} />
 
-        {/* 스크랩한 공연 */}
-        <div onClick={() => router.push('/my/concert')}>
-          <MenuSection title="스크랩한 공연" />
-          <HorizontalSwipeList>
-            {isMyConcertsLoading ? (
-              <div className="text-[14px] text-[#8C8888] px-5">
-                불러오는 중...
-              </div>
-            ) : mappedConcerts.length === 0 ? (
-              <div className="py-6 text-[16px] text-[#8C8888]">
-                관심있는 공연을 스크랩해 보세요
-              </div>
-            ) : (
-              mappedConcerts.map((concert) => (
-                <ConcertCard key={concert.concertId} concert={concert} />
-              ))
-            )}
-          </HorizontalSwipeList>
+          {/* 스크랩한 공연 */}
+          <div onClick={() => router.push('/my/concert')}>
+            <MenuSection title="스크랩한 공연" />
+            <HorizontalSwipeList>
+              {isMyConcertsLoading ? (
+                <div className="text-[14px] text-[#8C8888] px-5">불러오는 중...</div>
+              ) : mappedConcerts.length === 0 ? (
+                <div className="py-6 text-[16px] text-[#8C8888]">
+                  관심있는 공연을 스크랩해 보세요
+                </div>
+              ) : (
+                mappedConcerts.map((concert) => (
+                  <div key={concert.concertId} className="flex-none w-[160px]">
+                    <ConcertCard concert={concert} />
+                  </div>
+                ))
+              )}
+            </HorizontalSwipeList>
+          </div>
+
+          {/* 스크랩한 아티스트 */}
+          <div onClick={() => router.push('/my/artist')} className={'mt-6'}>
+            <MenuSection title="스크랩한 아티스트" />
+            <HorizontalSwipeList>
+              {isMyArtistsLoading ? (
+                <div className="text-[14px] text-[#8C8888] px-5">불러오는 중...</div>
+              ) : mappedArtists.length === 0 ? (
+                <div className="py-6 text-[16px] text-[#8C8888]">
+                  좋아하는 아티스트를 스크랩해 보세요
+                </div>
+              ) : (
+                mappedArtists.map((artist) => (
+                  <div key={artist.artistId} className="flex-none w-[160px]">
+                    <ArtistCard artist={artist} />
+                  </div>
+                ))
+              )}
+            </HorizontalSwipeList>
+          </div>
+
+          <div className="flex flex-col gap-3 bg-black py-2">
+            <MenuSection
+              title="MY 디깅 라운지 활동"
+              hasBorder={true}
+              onclick={() => router.push('/my/community')}
+            />
+            {/*데모데이까지 미개발 예정 */}
+            <div className="opacity-50 grayscale pointer-events-none cursor-not-allowed">
+              <MenuSection title="MY 인디스토리 활동" hasBorder={true} />
+            </div>
+            <MenuSection
+              title="약관 및 수신동의"
+              hasBorder={true}
+              onclick={() => router.push('/my/agree')}
+            />
+            <MenuSection
+              title="소셜계정 연동하기"
+              hasBorder={true}
+              onclick={() => router.push('/my/social')}
+            />
+          </div>
         </div>
-
-        {/* 스크랩한 아티스트 */}
-        <div onClick={() => router.push('/my/artist')} className={"mt-6"}>
-          <MenuSection title="스크랩한 아티스트" />
-          <HorizontalSwipeList>
-            {isMyArtistsLoading ? (
-              <div className="text-[14px] text-[#8C8888] px-5">
-                불러오는 중...
-              </div>
-            ) : mappedArtists.length === 0 ? (
-              <div className="py-6 text-[16px] text-[#8C8888]">
-                좋아하는 아티스트를 스크랩해 보세요
-              </div>
-            ) : (
-              mappedArtists.map((artist) => <ArtistCard key={artist.artistId} artist={artist} />)
-            )}
-          </HorizontalSwipeList>
-        </div>
+        <p className="flex justify-center items-center gap-2 pt-37 p-5 text-center bg-black ">
+          <span
+            className="text-sm font-normal text-gray-500 border-r border-gray-500 px-3 cursor-pointer"
+            onClick={handleLogout}
+          >
+            로그아웃
+          </span>
+          <span className="text-sm font-normal text-gray-500 px-3 cursor-pointer">회원탈퇴</span>
+        </p>
       </div>
-
-      <div className="flex flex-col gap-3 bg-black py-2">
-        <MenuSection
-          title="MY 디깅 라운지 활동"
-          hasBorder={true}
-          onclick={() => router.push('/my/community')}
-        />
-        {/*데모데이까지 미개발 예정 */}
-        <div className="opacity-50 grayscale pointer-events-none cursor-not-allowed">
-          <MenuSection title="MY 인디스토리 활동" hasBorder={true} />
-        </div>
-        <MenuSection
-          title="약관 및 수신동의"
-          hasBorder={true}
-          onclick={() => router.push('/my/agree')}
-        />
-        <MenuSection
-          title="소셜계정 연동하기"
-          hasBorder={true}
-          onclick={() => router.push('/my/social')}
-        />
-      </div>
-
-      <p className="flex justify-center items-center gap-2 pt-37 p-5 text-center bg-black ">
-        <span
-          className="text-sm font-normal text-gray-500 border-r border-gray-500 px-3 cursor-pointer"
-          onClick={handleLogout}
-        >
-          로그아웃
-        </span>
-        <span className="text-sm font-normal text-gray-500 px-3 cursor-pointer">회원탈퇴</span>
-      </p>
       {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}
     </div>
   );

@@ -5,8 +5,8 @@ import Image from "next/image";
 
 import prevBtn from "@/assets/icons/prev.svg";
 import nextBtn from "@/assets/common/next.svg";
-
-import CalendarNotice from "@/components/home/calendar/CalendarNotice";
+import questionBtn from "@/assets/common/questionMark.svg"
+import calendarNotice from "@/assets/common/calendarNotice.svg"
 
 import {
   pad2,
@@ -20,8 +20,6 @@ type CalendarProps = {
   selectedDates: string[];
   onChangeSelectedDates: (next: string[]) => void;
   onMonthChange?: (year: number, month: number) => void;
-
-  // 공연 있는 날짜들 (YYYY-MM-DD), 없으면 null
   datesWithConcerts?: string[] | null;
 };
 
@@ -39,6 +37,9 @@ export default function SimpleCalendar({
                                          onMonthChange,
                                          datesWithConcerts = null,
                                        }: CalendarProps) {
+
+
+
   const [current, setCurrent] = useState(new Date());
 
   useEffect(() => {
@@ -50,20 +51,21 @@ export default function SimpleCalendar({
 
   const selectedSet = useMemo(() => new Set(selectedDates), [selectedDates]);
 
-  // 공연 날짜
-
   const concertSet = useMemo(
     () => new Set(datesWithConcerts ?? []),
     [datesWithConcerts]
   );
 
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const gridRef = useRef<HTMLDivElement | null>(null);
 
   const pointerDownRef = useRef(false);
   const didDragRef = useRef(false);
 
   const startKeyRef = useRef<string | null>(null);
   const lastKeyRef = useRef<string | null>(null);
+
+  const [halfGap, setHalfGap] = useState(7.415);
 
   const firstDowSun0 = new Date(year, month, 1).getDay();
   const firstDowMon0 = (firstDowSun0 + 6) % 7;
@@ -157,142 +159,227 @@ export default function SimpleCalendar({
     };
   }, []);
 
-  const HALF_GAP = 5.415;
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
 
-  // 월 hover 시 안내
-  const [isMonthHover, setIsMonthHover] = useState(false);
+    const measure = () => {
+      const nodes = el.querySelectorAll<HTMLElement>('[data-cell="day"]');
+      if (nodes.length < 2) return;
+
+      let a: HTMLElement | null = null;
+      let b: HTMLElement | null = null;
+
+      for (let i = 0; i < nodes.length - 1; i++) {
+        const r1 = nodes[i].getBoundingClientRect();
+        const r2 = nodes[i + 1].getBoundingClientRect();
+        if (Math.abs(r1.top - r2.top) < 2) {
+          a = nodes[i];
+          b = nodes[i + 1];
+          break;
+        }
+      }
+
+      if (!a || !b) return;
+
+      const r1 = a.getBoundingClientRect();
+      const r2 = b.getBoundingClientRect();
+
+      const gap = r2.left - r1.right;
+      if (!Number.isFinite(gap) || gap <= 0) {
+        setHalfGap(0);
+        return;
+      }
+
+      setHalfGap(gap / 2);
+    };
+
+    measure();
+
+    const ro = new ResizeObserver(() => measure());
+    ro.observe(el);
+
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [cells.length, year, month]);
+
+  const [isNoticeOpen, setIsNoticeOpen] = useState(false);
+
+  const noticeWrapRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!isNoticeOpen) return;
+
+    const onDown = (e: MouseEvent) => {
+      const wrap = noticeWrapRef.current;
+      if (!wrap) return;
+
+      // 버튼+팝업 영역 밖 클릭이면 닫기
+      if (!wrap.contains(e.target as Node)) {
+        setIsNoticeOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [isNoticeOpen]);
 
   return (
-    <div
-      ref={wrapperRef}
-      className="flex flex-col items-center w-[335px] bg-gray-900 border-gray-800 border-[1px] py-[16px] touch-none"
-      onPointerMove={(e) => {
-        if (!pointerDownRef.current) return;
+    <div className={"w-full px-5"}>
+      <div
+        ref={wrapperRef}
+        className="flex flex-col items-center w-full bg-gray-900 border-gray-800 border-[1px] px-2 py-4 rounded-[4px] touch-none"
+        onPointerMove={(e) => {
+          if (!pointerDownRef.current) return;
 
-        const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-        const cellEl = el?.closest?.("[data-key]") as HTMLElement | null;
-        const key = cellEl?.dataset?.key;
-        if (key) updateWhileDown(key);
-      }}
-    >
-      {/* 헤더 */}
-      <div className="flex w-[295px] ml-[10px] gap-[75px]">
-        <button
-          onClick={() => setCurrent(new Date(year, month - 1, 1))}
-          className="cursor-pointer"
-          type="button"
-        >
-          <Image src={prevBtn} alt="prev" width={24} height={24} />
-        </button>
-
-        {/* 연/월, hover 안내 */}
-        <div
-          className="relative"
-          onMouseEnter={() => setIsMonthHover(true)}
-          onMouseLeave={() => setIsMonthHover(false)}
-        >
+          const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+          const cellEl = el?.closest?.("[data-key]") as HTMLElement | null;
+          const key = cellEl?.dataset?.key;
+          if (key) updateWhileDown(key);
+        }}
+      >
+        <div className="flex w-full gap-[75px] px-4">
           <div
-            className="text-white text-[20px] font-semibold cursor-pointer"
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={() => onChangeSelectedDates([])}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") onChangeSelectedDates([]);
-            }}
+            ref={noticeWrapRef}
+            className="flex relative"
           >
-            {year}. {pad2(month + 1)}
+            <div
+              className="text-white text-[20px] font-semibold cursor-pointer"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => onChangeSelectedDates([])}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") onChangeSelectedDates([]);
+              }}
+            >
+              {year}. {pad2(month + 1)}
+            </div>
+
+            <button
+              className="ml-[2px] cursor-pointer"
+              type="button"
+              onMouseEnter={() => setIsNoticeOpen(true)}
+              onMouseLeave={() => setIsNoticeOpen(false)}
+            >
+              <Image src={questionBtn} alt="notice" width={24} height={24} />
+            </button>
+
+            {isNoticeOpen && (
+              <div className="absolute left-19 mt-8 mt-2 z-50 w-[210px]">
+                <Image
+                  src={calendarNotice}
+                  alt="notice"
+                  className="w-full h-auto"
+                />
+              </div>
+            )}
           </div>
 
-          {isMonthHover && (
-            <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 mt-2 z-50">
-              <CalendarNotice />
-            </div>
-          )}
+          <div className={"flex ml-auto gap-[13px]"}>
+            <button
+              onClick={() => setCurrent(new Date(year, month - 1, 1))}
+              className="cursor-pointer"
+              type="button"
+            >
+              <Image src={prevBtn} alt="prev" width={24} height={24} />
+            </button>
+
+            <button
+              onClick={() => setCurrent(new Date(year, month + 1, 1))}
+              className="cursor-pointer"
+              type="button"
+            >
+              <Image src={nextBtn} alt="next" width={24} height={24} />
+            </button>
+          </div>
         </div>
 
-        <button
-          onClick={() => setCurrent(new Date(year, month + 1, 1))}
-          className="cursor-pointer"
-          type="button"
+        <div
+          className="
+            w-full
+            grid grid-cols-7
+            justify-items-center
+            justify-between
+            text-center text-[12px] font-medium mt-4
+          "
         >
-          <Image src={nextBtn} alt="next" width={24} height={24} />
-        </button>
-      </div>
-
-      {/* 요일 */}
-      <div className="grid grid-cols-7 text-center gap-[6.5px] text-[12px] font-medium mt-[16px]">
-        {["m", "t", "w", "t", "f", "s", "s"].map((d, idx) => (
-          <div key={idx} className="w-[34px] h-[35px] pt-[7px] text-gray-100">
-            {d}
-          </div>
-        ))}
-      </div>
-
-      {/* 날짜 */}
-      <div className="grid grid-cols-7 gap-x-[10.83px]">
-        {cells.map((cell, i) => {
-          const isSelected = selectedSet.has(cell.key);
-          const isGray = !cell.inMonth;
-
-          const prevKey = addDaysKey(cell.key, -1);
-          const nextKey = addDaysKey(cell.key, 1);
-
-          const canHavePrev = i % 7 !== 0;
-          const canHaveNext = i % 7 !== 6;
-
-          const hasPrevGlobal = isSelected && selectedSet.has(prevKey);
-          const hasNextGlobal = isSelected && selectedSet.has(nextKey);
-
-          const isEdge = isSelected && (!hasPrevGlobal || !hasNextGlobal);
-
-          const hasPrevInRow = hasPrevGlobal && canHavePrev;
-          const hasNextInRow = hasNextGlobal && canHaveNext;
-
-          //  공연 없는 날 회색 처리
-          const hasConcertInfo = datesWithConcerts !== null;
-          const hasConcert = concertSet.has(cell.key);
-          const graySelectedText = hasConcertInfo && isSelected && !hasConcert;
-
-          return (
-            <div
-              key={`${cell.key}-${i}`}
-              data-key={cell.key}
-              onPointerDown={(e) => {
-                e.preventDefault();
-                (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-                beginPointer(cell);
-              }}
-              className={[
-                "relative overflow-visible",
-                "w-[30px] h-[35px] flex items-center justify-center cursor-pointer select-none",
-                "font-medium text-[12px]",
-                isGray ? "text-gray-600" : "text-white",
-              ].join(" ")}
-            >
-              {isSelected && (
-                <div
-                  className="pointer-events-none absolute inset-y-0 z-0 bg-[#5E0D0E]"
-                  style={{
-                    left: hasPrevInRow ? `-${HALF_GAP}px` : 0,
-                    right: hasNextInRow ? `-${HALF_GAP}px` : 0,
-                  }}
-                />
-              )}
-
-              {isSelected && isEdge && (
-                <div className="pointer-events-none absolute inset-0 z-10 rounded-[4px] bg-[#880405] border-[#C31C20] border-[0.5px]" />
-              )}
-
-              <span
-                className="relative z-20"
-                style={graySelectedText ? { color: "#736F6F" } : undefined}
-              >
-                {pad2(cell.d)}
-              </span>
+          {["m", "t", "w", "t", "f", "s", "s"].map((d, idx) => (
+            <div key={idx} className="w-[34px] h-[35px] pt-[7px] text-gray-100">
+              {d}
             </div>
-          );
-        })}
+          ))}
+        </div>
+
+        <div
+          ref={gridRef}
+          className="w-full grid grid-cols-7 justify-items-center justify-between"
+        >
+          {cells.map((cell, i) => {
+            const isSelected = selectedSet.has(cell.key);
+            const isGray = !cell.inMonth;
+
+            const prevKey = addDaysKey(cell.key, -1);
+            const nextKey = addDaysKey(cell.key, 1);
+
+            const canHavePrev = i % 7 !== 0;
+            const canHaveNext = i % 7 !== 6;
+
+            const hasPrevGlobal = isSelected && selectedSet.has(prevKey);
+            const hasNextGlobal = isSelected && selectedSet.has(nextKey);
+
+            const isEdge = isSelected && (!hasPrevGlobal || !hasNextGlobal);
+
+            const hasPrevInRow = hasPrevGlobal && canHavePrev;
+            const hasNextInRow = hasNextGlobal && canHaveNext;
+
+            const hasConcertInfo = datesWithConcerts !== null;
+            const hasConcert = concertSet.has(cell.key);
+            const graySelectedText = hasConcertInfo && isSelected && !hasConcert;
+
+            return (
+              <div
+                key={`${cell.key}-${i}`}
+                data-key={cell.key}
+                data-cell="day"
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+                  beginPointer(cell);
+                }}
+                className={[
+                  "relative overflow-visible",
+                  "w-[30px] h-[35px] flex items-center justify-center cursor-pointer select-none",
+                  "font-medium text-[12px]",
+                  isGray ? "text-[#736F6F]" : "text-white",
+                ].join(" ")}
+              >
+                {isSelected && (
+                  <div
+                    className="pointer-events-none absolute inset-y-0 z-0 bg-[#5E0D0E]"
+                    style={{
+                      left: hasPrevInRow ? `-${halfGap}px` : 0,
+                      right: hasNextInRow ? `-${halfGap}px` : 0,
+                    }}
+                  />
+                )}
+
+                {isSelected && isEdge && (
+                  <div className="pointer-events-none absolute inset-0 z-10 rounded-[4px] bg-[#880405] border-[#C31C20] border-[0.5px]" />
+                )}
+
+                <span
+                  className="relative z-20"
+                  style={graySelectedText ? { color: "#736F6F" } : undefined}
+                >
+                  {pad2(cell.d)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ function mapMarketListToMarkets(payload: MarketListPayload): MarketArticle[] {
     timeAgo: m.timeAgo,
     views: m.views,
     scrapCount: m.scrapCount,
-    thumbnail: m.thumbnail,
+    thumbnailUrl: m.thumbnailUrl,
   }));
 }
 

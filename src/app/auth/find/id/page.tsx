@@ -5,7 +5,7 @@ import FindID from '@/components/auth/FindID';
 
 export default function FindIDPage() {
   return (
-    <div className="text-white flex flex-col h-screen bg-black">
+    <div className="text-white flex flex-col min-h-dvh bg-black">
       <AuthFindHeader title={'아이디 찾기'} />
       <FindID />
     </div>

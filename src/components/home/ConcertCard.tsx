@@ -17,7 +17,7 @@ export default function ConcertCard({ concert }: Props) {
 
   return (
     <div
-      className="flex flex-col flex-none w-[160px] bg-[#1F1D1D] rounded-b-[4px] cursor-pointer"
+      className="flex flex-col flex-none w-full bg-[#1F1D1D] rounded-b-[4px] cursor-pointer"
       onClick={() => router.push(`/concert/${concert.concertId}`)}
     >
       <div
@@ -32,8 +32,8 @@ export default function ConcertCard({ concert }: Props) {
         />
 
         {!ended ? (
-          <div className="absolute left-0 right-0 z-10 mt-[134px] mx-2 flex min-w-0 flex-col text-sm">
-            <span className="flex w-[41px] h-[17px] bg-[#FF3637] items-center justify-center rounded-xs">
+          <div className="w-full flex flex-col px-2 absolute bottom-3">
+            <span className="flex w-[41px] h-[17px] text-[12px] font-medium bg-[#FF3637] items-center justify-center rounded-xs">
               {dDay}
             </span>
 
@@ -44,7 +44,9 @@ export default function ConcertCard({ concert }: Props) {
 
             {/* 라인업 */}
             <span className="block w-full min-w-0 truncate text-[14px]">
-              {Array.isArray(concert.lineUp) ? concert.lineUp.join(", ") : ""}
+              {Array.isArray(concert.lineUp) && concert.lineUp.length > 0
+                ? concert.lineUp.join(", ")
+                : "라인업 정보 없음"}
             </span>
 
             {/* 기간 */}

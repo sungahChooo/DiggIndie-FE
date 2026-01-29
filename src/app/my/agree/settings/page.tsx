@@ -33,16 +33,16 @@ export default function MyAgreeSettingPage() {
       <div className="mt-5">
         <p className="px-5 py-4 flex  justify-between border-b border-gray-850">
           <span className="flex items-center">
-            <span>이메일 수신</span>
+            <span>이메일 및 SMS 수신</span>
           </span>
           <ToggleSwitch checked={agree} onChange={handleAgreeToggle} />
         </p>
-        <p className="px-5 py-4 flex  justify-between border-b border-gray-850">
+        {/* <p className="px-5 py-4 flex  justify-between border-b border-gray-850">
           <span className="flex items-center">
             <span>SMS 수신</span>
           </span>
           <ToggleSwitch checked={agree} onChange={handleAgreeToggle} />
-        </p>
+        </p> */}
       </div>
     </div>
   );

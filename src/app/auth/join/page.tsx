@@ -3,7 +3,7 @@ import InputSection from '@/components/auth/InputSection';
 import LinkButton from '@/components/common/LinkButton';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { joinSchema } from '@/lib/auth';
+import { joinSchema, emailSchema, idSchema } from '@/lib/auth';
 import { authService } from '@/services/authService';
 import JoinHeader from '@/components/auth/JoinHeader';
 
@@ -39,21 +39,64 @@ export default function JoinPage() {
     email?: string;
     emailConfirm?: string;
   }>({});
+  const handleCheckId = async () => {
+    // 1️.아이디 형식 검사
+    const result = idSchema.safeParse(form.id);
 
-  // 1. 이메일 중복 체크 및 인증번호 전송
-  const handleEmailCheck = async () => {
+    if (!result.success) {
+      setErrors((prev) => ({
+        ...prev,
+        id: result.error.issues[0].message,
+      }));
+      return;
+    }
+
+    // 2️. 중복 확인 API
     try {
-      // API: 이메일 중복 체크 및 전송 (서버에서 중복이면 에러를 던진다고 가정)
+      const isAvailable = await authService.checkId(form.id);
+      setIsIdChecked(true);
+
+      if (isAvailable) {
+        setIsIdValid(true);
+        setErrors((prev) => ({ ...prev, id: '사용 가능한 아이디입니다.' }));
+      } else {
+        setIsIdValid(false);
+        setErrors((prev) => ({ ...prev, id: '이미 사용 중인 아이디입니다.' }));
+      }
+    } catch {
+      setErrors((prev) => ({ ...prev, id: '서버 오류가 발생했습니다.' }));
+    }
+  };
+  const handleEmailCheck = async () => {
+    // 1️. 이메일 형식 검사
+    const result = emailSchema.safeParse(form.email);
+
+    if (!result.success) {
+      setErrors((prev) => ({
+        ...prev,
+        email: result.error.issues[0].message,
+      }));
+      return;
+    }
+
+    // 2️. 이메일 중복 체크 + 전송
+    try {
       await authService.checkEmail(form.email, 'SIGNUP');
       setIsEmailSent(true);
       setErrors((prev) => ({ ...prev, email: '인증번호가 전송되었습니다.' }));
-    } catch (error) {
+    } catch {
       setErrors((prev) => ({ ...prev, email: '이미 가입된 이메일입니다.' }));
     }
   };
-
   // 2. 인증번호 확인
   const handleVerifyCode = async () => {
+    if (!form.emailConfirm.trim()) {
+      setErrors((prev) => ({
+        ...prev,
+        emailConfirm: '인증번호를 입력해주세요.',
+      }));
+      return;
+    }
     try {
       const isValid = await authService.verifyCode(form.email, form.emailConfirm, 'SIGNUP');
       if (isValid) {
@@ -62,8 +105,17 @@ export default function JoinPage() {
       } else {
         setErrors((prev) => ({ ...prev, emailConfirm: '인증번호가 일치하지 않습니다.' }));
       }
-    } catch (error) {
-      setErrors((prev) => ({ ...prev, emailConfirm: '인증 확인 중 오류가 발생했습니다.' }));
+    } catch (error: any) {
+      // 3. 서버 에러 처리 (409 에러 등)
+      setIsEmailSent(false);
+
+      if (error.response?.status === 409) {
+        // 서버가 보내준 "이미 존재하는 이메일입니다." 메시지 사용
+        const serverMsg = error.response?.data?.message || '이미 가입된 이메일입니다.';
+        setErrors((prev) => ({ ...prev, email: serverMsg }));
+      } else {
+        setErrors((prev) => ({ ...prev, email: '인증번호 전송 중 오류가 발생했습니다.' }));
+      }
     }
   };
 
@@ -100,27 +152,25 @@ export default function JoinPage() {
     router.push('/auth/agree');
   };
 
-  //id 중복 체크 api 호출 함수
-  const handleCheckId = async () => {
-    try {
-      const isAvailable = await authService.checkId(form.id);
-      setIsIdChecked(true);
-
-      if (isAvailable) {
-        setIsIdValid(true);
-        setErrors((prev) => ({ ...prev, id: '사용 가능한 아이디입니다.' }));
-      } else {
-        setIsIdValid(false);
-        setErrors((prev) => ({ ...prev, id: '이미 사용 중인 아이디입니다.' }));
-      }
-    } catch (error) {
-      console.log('로그인 중복 검사 오류', error);
-      setErrors((prev) => ({ ...prev, id: '서버 통신 중 오류가 발생했습니다.' }));
-    }
-  };
-
+  const isJoinEnabled =
+    // 필수값 입력 여부
+    form.id.trim() !== '' &&
+    form.password.trim() !== '' &&
+    form.confirmPassword.trim() !== '' &&
+    form.phoneNumber1.trim() !== '' &&
+    form.phoneNumber2.trim() !== '' &&
+    form.phoneNumber3.trim() !== '' &&
+    form.email.trim() !== '' &&
+    form.emailConfirm.trim() !== '' &&
+    // 아이디 중복 확인
+    isIdChecked &&
+    isIdValid &&
+    // 이메일 인증 완료
+    isEmailVerified &&
+    // 비밀번호 일치
+    form.password === form.confirmPassword;
   return (
-    <div className="text-white flex flex-col min-h-screen items-center gap-6 pb-32 ">
+    <div className="text-white flex flex-col min-h-screen items-center gap-5 pb-32 ">
       <JoinHeader />
       {/* 아이디 입력 섹션 */}
       <section className="flex flex-col gap-2 w-full px-5">
@@ -133,8 +183,8 @@ export default function JoinPage() {
             onChange={(e) => {
               setIsIdChecked(false);
               setIsIdValid(false);
+              setErrors((prev) => ({ ...prev, id: undefined }));
               setForm({ ...form, id: e.target.value });
-              //if (errors.id) setErrors({});
             }}
           />
           <button
@@ -236,7 +286,7 @@ export default function JoinPage() {
       {/* 이메일 입력 섹션 */}
       <section className="flex flex-col gap-2 px-5 w-full">
         <span className="text-xs font-medium  text-gray-300">이메일</span>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <InputSection
             placeholder="이메일"
             width="w-[237px] h-11"
@@ -256,8 +306,8 @@ export default function JoinPage() {
             {isEmailSent ? '재전송 ' : '인증번호 전송'}
           </button>
         </div>
-        {errors.email && <p className="text-red-400 text-xs px-3">{errors.email}</p>}
-        <div className="flex gap-3">
+        {errors.email && <p className="text-red-400 text-xs px-3 mb-1">{errors.email}</p>}
+        <div className="flex gap-2">
           <InputSection
             placeholder="인증번호"
             width="w-[237px] h-11"
@@ -284,7 +334,7 @@ export default function JoinPage() {
         {errors.emailConfirm && <p className="text-red-400 text-xs px-3">{errors.emailConfirm}</p>}
       </section>
       <div className="w-[375px] px-5 fixed bottom-5">
-        <LinkButton onClick={handleJoin} disabled={false}>
+        <LinkButton onClick={handleJoin} disabled={!isJoinEnabled}>
           가입하기
         </LinkButton>
       </div>

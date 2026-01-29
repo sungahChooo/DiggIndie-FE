@@ -2,25 +2,20 @@
 @import './theme.css';
 
 /* Font */
-@font-face {
+/* @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
   src: url('/fonts/Pretendard-Medium.woff2') format('woff2');
-}
+} */
+
 @font-face {
   font-family: 'Pretendard';
-  font-weight: 600; /* SemiBold*/
+  font-weight: 45 920;
+  font-style: normal;
   font-display: swap;
-  src: url('/fonts/Pretendard-SemiBold.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Pretendard';
-  font-style: bold;
-  font-weight: 700; /* bold */
-  font-display: swap;
-  src: url('/fonts/Pretendard-Bold.woff2') format('woff2');
+  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
 }
 
 :root {
@@ -33,6 +28,23 @@ body {
   font-family: 'Pretendard', sans-serif;
 }
 
-::-webkit-scrollbar {
-  display: none;
+/* @layer utilities {
+  .scrollbar-hide {
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+} */
+/* 모든 스크롤바 숨김 (스크롤은 됨) */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }

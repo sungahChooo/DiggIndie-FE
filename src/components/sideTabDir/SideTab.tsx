@@ -1,5 +1,5 @@
 import homeIcon from '@/assets/sideTab/Home 2.svg';
-import concertIcon from '@/assets/common/Calendar.svg';
+import concertIcon from '@/assets/sideTab/Ticket Star.svg';
 import artistIcon from '@/assets/common/Voice 3.svg';
 import communityIcon from '@/assets/sideTab/Chat 2.svg';
 import indieIcon from '@/assets/sideTab/Document.svg';
@@ -31,7 +31,7 @@ export default function SideTab({ onClose }: SideTabProps) {
   };
 
   return (
-    <section className="bg-black flex flex-col h-screen w-[307px] gap-5 absolute top-0 z-500 right-0 min-h-screen">
+    <section className="absolute top-0 right-0 z-50 min-h-screen w-[307px] bg-black flex flex-col gap-5 overflow-y-auto ">
       <div className="px-8 py-3 cursor-pointer mt-7" onClick={onClose}>
         <Image src={xIcon} alt="닫기" />
       </div>

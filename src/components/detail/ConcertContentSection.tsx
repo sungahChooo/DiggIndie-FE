@@ -68,10 +68,6 @@ export default function ConcertContentSection({
             {formatConcertDate(concert.startDate, concert.endDate)}
           </span>
         </span>
-        {/* <span className="flex gap-2">
-          <Image src={Calendar} alt="calendar" width={24} height={24} />
-          <span className="text-white text-xl font-medium">{concert.endDate}</span>
-        </span> */}
       </p>
       <p className="flex gap-2 items-center py-3 pb-4 border-b border-gray-850 mb-3 items-start">
         <Image src={location} alt="location" width={24} height={24} />
@@ -83,7 +79,7 @@ export default function ConcertContentSection({
       <div className="flex gap-2 items-start">
         <Image src={ticket} alt="ticket" width={24} height={24} />
         <div>
-          <p className="flex gap-1 items-end">
+          <p className="flex gap-1 items-center">
             <span
               className={`font-normal text-base ${concert.onsitePrice != null ? 'text-white text-gray-200' : 'text-gray-400'}`}
             >
@@ -91,7 +87,7 @@ export default function ConcertContentSection({
             </span>
             <span className="text-gray-600 text-xs">현장예매</span>
           </p>
-          <p className="flex gap-1 items-end">
+          <p className="flex gap-1 items-center">
             <span
               className={`font-normal text-base ${concert.preorderPrice != null ? 'text-white' : 'text-gray-400'}`}
             >

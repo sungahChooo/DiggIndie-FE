@@ -32,7 +32,7 @@ export default function EndedConcertSection({ artist }: EndedConcertSectionProps
             </div>
           ))
         ) : (
-          <span className="text-gray-400 text-sm font-bold">종료된 공연이 없습니다.</span>
+          <span className="text-gray-400 text-sm font-medium">종료된 공연이 없습니다.</span>
         )}
       </div>
     </section>

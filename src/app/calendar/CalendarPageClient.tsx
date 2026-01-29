@@ -123,9 +123,6 @@ export default function CalendarPageClient() {
         isCalendarOpen={showCalendar}
         onToggleCalendar={() => setShowCalendar((prev) => !prev)}
       />
-      <div className={"bg-black text-[#BEBABA] text-[12px] font-medium w-full text-center mt-5 mb-4"}>
-        날짜를 드래그해서 기간을 선택할 수 있어요
-      </div>
       {showCalendar && (
         <Calendar
           selectedDates={selectedDates}

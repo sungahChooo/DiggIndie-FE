@@ -13,46 +13,17 @@ export default function ConcertGrid({ concerts }: Props) {
     return [...concerts].sort((a, b) => {
       const aEnded = a.dDay === "공연 종료";
       const bEnded = b.dDay === "공연 종료";
-
       if (aEnded && !bEnded) return 1;
       if (!aEnded && bEnded) return -1;
       return 0;
     });
   }, [concerts]);
 
-  const leftColumn = useMemo(
-    () => sortedConcerts.filter((_, idx) => idx % 2 === 0),
-    [sortedConcerts]
-  );
-
-  const rightColumn = useMemo(
-    () => sortedConcerts.filter((_, idx) => idx % 2 === 1),
-    [sortedConcerts]
-  );
-
-  const isSingle = sortedConcerts.length === 1;
-
   return (
-    <div className={`flex justify-start gap-[16px] ${isSingle ? "w-full" : "w-fit"}`}>
-      {isSingle ? (
-        <div className="flex flex-col gap-[20px]">
-          <ConcertCard key={sortedConcerts[0].concertId} concert={sortedConcerts[0]} />
-        </div>
-      ) : (
-        <>
-          <div className="flex flex-col gap-[20px]">
-            {leftColumn.map((concert) => (
-              <ConcertCard key={concert.concertId} concert={concert} />
-            ))}
-          </div>
-
-          <div className="flex flex-col gap-[20px]">
-            {rightColumn.map((concert) => (
-              <ConcertCard key={concert.concertId} concert={concert} />
-            ))}
-          </div>
-        </>
-      )}
+    <div className="mt-[16px] grid w-full grid-cols-2 gap-x-[15px] gap-y-[16px]">
+      {sortedConcerts.map((concert) => (
+        <ConcertCard key={concert.concertId} concert={concert} />
+      ))}
     </div>
   );
 }

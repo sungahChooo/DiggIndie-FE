@@ -9,9 +9,14 @@ interface TextAreaProps {
   onChangeContent: (value: string) => void;
 }
 
-const MAX_HEIGHT = 150;
+const MAX_HEIGHT = 240;
 
-export default function TextArea({ title, content, onChangeTitle, onChangeContent }: TextAreaProps) {
+export default function TextArea({
+  title,
+  content,
+  onChangeTitle,
+  onChangeContent,
+}: TextAreaProps) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const resize = () => {
@@ -48,7 +53,6 @@ export default function TextArea({ title, content, onChangeTitle, onChangeConten
       <textarea
         ref={textareaRef}
         value={content}
-        rows={6}
         placeholder="내용을 입력해주세요."
         onChange={(e) => onChangeContent(e.target.value)}
         className={[
@@ -59,6 +63,7 @@ export default function TextArea({ title, content, onChangeTitle, onChangeConten
           'bg-transparent',
           'resize-none',
           'overflow-y-auto', // 내부 스크롤 허용
+          'min-h-[54px]',
         ].join(' ')}
       />
     </div>

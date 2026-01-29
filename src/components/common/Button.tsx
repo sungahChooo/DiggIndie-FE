@@ -15,7 +15,7 @@ export default function Button({ disabled = false, href, isFinished, children }:
   return (
     <Link
       href={isDisabled ? '#' : href}
-      className={`block p-4 h-13 w-full font-semibold text-center rounded-sm ${
+      className={`flex items-center justify-center p-4 h-13 w-full font-semibold text-center rounded-sm ${
         isDisabled ? 'bg-gray-600 cursor-not-allowed' : 'bg-red cursor-pointer'
       }`}
       target={isDisabled ? undefined : '_blank'}

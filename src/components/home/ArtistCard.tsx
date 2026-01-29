@@ -22,11 +22,11 @@ export default function ArtistCard({ artist }: Props) {
 
   return (
     <div
-      className="flex flex-col flex-none w-[160px] bg-[#1F1D1D] rounded-b-[4px]"
+      className="flex flex-col flex-none w-full bg-[#1F1D1D] rounded-b-[4px]"
       onClick={() => router.push(`/artist/${artist.artistId}`)}
     >
-    <div className="flex flex-col flex-none w-[160px] bg-[#1F1D1D] rounded-b-[4px] cursor-pointer">
-      <div className="relative flex flex-col">
+    <div className="flex w-full flex-col flex-none bg-[#1F1D1D] rounded-b-[4px] cursor-pointer">
+      <div className="relative w-full flex flex-col">
         <ImageTile
           src={img}
           alt={artist.artistName}
@@ -36,13 +36,15 @@ export default function ArtistCard({ artist }: Props) {
         />
 
         {/* 아티스트명 */}
-        <div className="absolute text-white z-5 items-center justify-center mt-[130px] mx-[12px] max-w-[136px] truncate">
+        <div
+          className="absolute left-3 right-3 bottom-2 z-10 truncate text-white text-[16px] font-medium"
+        >
           {artist.artistName}
         </div>
       </div>
 
-      <div className="flex flex-col w-[160px] h-[57px] mx-[8px]">
-        <div className="flex items-center w-[144px] h-[20px] mt-[8px]">
+      <div className="flex flex-col h-[57px] mx-2">
+        <div className="flex items-center w-full h-5 mt-2">
           <Image src={playBtn} alt="Play" width={20} height={20} />
 
           {/* 대표곡 제목 */}
@@ -54,7 +56,7 @@ export default function ArtistCard({ artist }: Props) {
               className="ml-[3px] max-w-[118px] truncate text-[14px] font-normal flex items-center text-white"
             >
               {artist.topTrack.title}
-            </a> //마이 아티스트 대비용
+            </a>
           ) : artist.mainMusic?.trim() ? (
             <span className="ml-[3px] max-w-[118px] truncate text-[14px] font-normal flex items-center text-white">
               {artist.mainMusic}

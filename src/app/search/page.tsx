@@ -52,10 +52,7 @@ export default function HomeSearch() {
     enabled: true,
   });
 
-  const {
-    magazines,
-    isLoading: isMagazineFetching,
-  } = useMagazines({
+  const { magazines, isLoading: isMagazineFetching } = useMagazines({
     order: 'recent',
     query: debouncedTerm.trim() ? debouncedTerm.trim() : undefined,
     size: 20,
@@ -132,7 +129,7 @@ export default function HomeSearch() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black">
+    <div className="min-h-dvh w-full bg-black">
       <div className="px-5 py-3 w-full flex gap-1">
         <Image
           src={back}
@@ -191,10 +188,13 @@ export default function HomeSearch() {
 
                 <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
                   {artists.map((artist) => (
-                    <ArtistCard key={artist.artistId} artist={artist} />
+                    <div key={artist.artistId} className="flex-none w-[160px]">
+                      <ArtistCard artist={artist} />
+                    </div>
                   ))}
                 </div>
               </section>
+
 
               <section className="mb-9">
                 <div className="flex gap-1 mb-4 px-5">
@@ -207,7 +207,9 @@ export default function HomeSearch() {
 
                 <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">
                   {concerts.map((concert) => (
-                    <ConcertCard key={concert.concertId} concert={concert} />
+                    <div key={concert.concertId} className="flex-none w-[160px]">
+                      <ConcertCard concert={concert} />
+                    </div>
                   ))}
                 </div>
               </section>
@@ -216,7 +218,9 @@ export default function HomeSearch() {
                 <div className="flex gap-1 mb-4 px-5">
                   <Image src={documentIcon} alt="문서" />
                   <span className="text-xl font-semibold text-white">매거진</span>
-                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">{magazineCount}개</span>
+                  <span className="font-medium text-sm text-white px-2 py-1 ml-2">
+                    {magazineCount}개
+                  </span>
                 </div>
 
                 <div className="flex gap-3 overflow-x-auto scrollbar-hide px-5">

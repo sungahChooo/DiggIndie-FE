@@ -19,7 +19,7 @@ export default function LineupSection({ concert }: LineupSectionProps) {
         {concert.lineUp.map((artist) => (
           <span
             key={artist.bandId}
-            className="font-medium text-sm mr-4 cursor-pointer hover:text-gray-400"
+            className="font-medium text-sm mr-4 cursor-pointer bg-gray-900 selection:bg-gray-500 text-gray-500 rounded-sm min-w-18 px-3 py-2"
             onClick={() => router.push(`/artist/${artist.bandId}`)}
           >
             {artist.bandName}

@@ -58,7 +58,7 @@ export default function LoginPage() {
     // API 요청 보내기
     try {
       await authService.login(form.id, form.password);
-      router.push('/');
+      router.push('/home');
     } catch (err) {
       setErrors({
         password: '아이디 또는 비밀번호가 잘못 되었습니다.',
@@ -70,9 +70,9 @@ export default function LoginPage() {
     window.location.href = authUrl;
   };
   return (
-    <div className="text-white flex flex-col h-screen items-center relative">
+    <div className="text-white flex flex-col h-[100dvh] items-center relative">
       <MyHeader title="로그인" backUrl="/" />
-      <Image src={diggindie} alt="diggindie icon" width={235} className="mt-35" />
+      <Image src={diggindie} alt="diggindie icon" width={235} className="mt-30" />
       <form className="flex flex-col gap-3 mt-17" onSubmit={handleLogin}>
         <InputSection
           placeholder="아이디를 입력해주세요."

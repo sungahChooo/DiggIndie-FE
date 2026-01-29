@@ -12,7 +12,7 @@ export interface FreeBoardDetail {
   comments: Comment[];
   isAnonymous: boolean;
   isMine: boolean;
-  imageUrls?: string[] | undefined;
+  imageUrls?: string[] ;
 }
 export interface Comment {
   commentId: number;
@@ -59,3 +59,9 @@ export interface TradeBoardDetail {
     },
   ];
 }
+export type HotArticle = {
+  id: string;
+  category: string;
+  title: string;
+  views: number;
+};

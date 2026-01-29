@@ -69,7 +69,7 @@ export default function HomeCalendar() {
 
       <div className={'mt-4 text-4 font-medium text-gray-500'}>{yearMonth}</div>
 
-      <div className={'flex justify-between w-full'}>
+      <div className={'flex justify-between w-full h-[86px] py-3 border-b-[1px] border-[#332F2F]'}>
         <button
           disabled={isThisWeek}
           onClick={() => setWeekOffset((prev) => Math.max(0, prev - 1))}
@@ -78,7 +78,7 @@ export default function HomeCalendar() {
           <Image src={!isThisWeek ? prevBtn : prevDisabledBtn} alt="prevBtn" />
         </button>
 
-        <div className="flex items-center justify-center w-full h-[62px]">
+        <div className="flex items-center justify-center w-full ">
           {weekdays.map((day, i) => {
             const isSelected = selectedIndex === i;
             return (
@@ -110,8 +110,6 @@ export default function HomeCalendar() {
           <Image src={!isNextWeek ? nextBtn : nextDisabledBtn} alt="nextBtn" />
         </button>
       </div>
-
-      <span className={'w-full mt-3 border-b-[1px] border-[#332F2F]'} />
 
       {/* 더보기 : 위클리에서 선택된 날짜로 전체 캘린더 진입 */}
       <Link

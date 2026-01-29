@@ -123,9 +123,8 @@ export default function FreeArticleDetailPage() {
     setReplyTarget(null);
   };
 
-
   return (
-    <div className="min-h-screen bg-black text-white max-w-[375px] relative bottom-0 pb-20">
+    <div className="min-h-screen bg-black text-white min-w-[375px] relative pb-20">
       <ArticleHeader
         title="자유 라운지"
         isMine={board?.isMine}
@@ -163,14 +162,12 @@ export default function FreeArticleDetailPage() {
             />
           </div>
 
-          <div className="flex justify-center">
-            <ReplyInputSection
-              addReply={addReply}
-              disabled={isCommentSubmitting}
-              replyTarget={replyTarget}
-              onCancelReply={() => setReplyTarget(null)}
-            />
-          </div>
+          <ReplyInputSection
+            addReply={addReply}
+            disabled={isCommentSubmitting}
+            replyTarget={replyTarget}
+            onCancelReply={() => setReplyTarget(null)}
+          />
         </>
       )}
     </div>

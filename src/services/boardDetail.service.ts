@@ -1,4 +1,5 @@
 import { communityDetailAPI } from '@/api/communityDetail';
+import { getPopularArticle } from '@/api/freeBoard';
 
 export const boardDetailService = {
   async getFreeBoardDetail(boardId: number) {
@@ -14,6 +15,14 @@ export const boardDetailService = {
     try {
       const res = await communityDetailAPI.fetchTradeBoardDetail(boardId);
       console.log('거래/양도 게시판 상세게시글 데이터', res.payload);
+      return res.payload;
+    } catch (err) {
+      throw err;
+    }
+  },
+  async getHotArticle() {
+    try {
+      const res = await getPopularArticle();
       return res.payload;
     } catch (err) {
       throw err;

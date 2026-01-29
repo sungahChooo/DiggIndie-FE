@@ -1,3 +1,4 @@
+'use client';
 import Lottie from 'react-lottie-player';
 import loadingAnimation from '@/assets/auth/spinner.json';
 
@@ -9,12 +10,12 @@ export default function Loading() {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '65vh',
+        height: '100vh',
       }}
     >
-      <Lottie loop animationData={loadingAnimation} play style={{ width: 200, height: 200 }} />
-      <p style={{ fontSize: '1.25rem', textAlign: 'center', marginTop: '1rem' }}>
-        로그인 중입니다...
+      <Lottie loop animationData={loadingAnimation} play style={{ width: 32, height: 32 }} />
+      <p style={{ fontSize: '1.25rem', textAlign: 'center', marginTop: '1rem', color: '#666' }}>
+        로딩 중...
       </p>
     </div>
   );

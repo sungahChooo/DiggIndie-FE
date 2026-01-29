@@ -3,8 +3,9 @@
 import { Checkbox } from '@mui/material';
 import Image from 'next/image';
 import sendIcon from '@/assets/community/Send.svg';
-import sendRed from '@/assets/community/SendRed.svg'
+import sendRed from '@/assets/community/SendRed.svg';
 import { useEffect, useRef, useState } from 'react';
+import CustomCheckbox from './Checkbox';
 
 interface Props {
   addReply: (content: string, isAnonymous: boolean) => void;
@@ -13,7 +14,12 @@ interface Props {
   onCancelReply?: () => void;
 }
 
-export default function ReplyInputSection({ addReply, disabled, replyTarget, onCancelReply }: Props) {
+export default function ReplyInputSection({
+  addReply,
+  disabled,
+  replyTarget,
+  onCancelReply,
+}: Props) {
   const [input, setInput] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -59,35 +65,10 @@ export default function ReplyInputSection({ addReply, disabled, replyTarget, onC
   };
 
   return (
-    <section className="fixed bottom-0 py-5 z-30">
-      <div className="flex items-center bg-gray-800 px-4 py-4 rounded-sm">
-        <div className="flex items-center min-w-0">
-          <Checkbox
-            checked={isChecked}
-            onChange={(e) => setIsChecked(e.target.checked)}
-            disableRipple
-            sx={{
-              width: 16,
-              height: 16,
-              padding: 0,
-              borderRadius: '4px',
-              border: '1px solid #8C8888',
-              backgroundColor: isChecked ? '#ef4444' : '#8C8888',
-              '&.Mui-checked': { backgroundColor: '#ef4444', borderColor: '#dc2626' },
-              '&.Mui-checked::after': {
-                content: '"✔"',
-                color: '#fff',
-                fontSize: 12,
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
-              '&:hover': { backgroundColor: isChecked ? '#ef4444' : '#8C8888' },
-              '& .MuiSvgIcon-root': { display: 'none' },
-            }}
-          />
+    <section className="fixed bottom-0 p-5 min-w-[375px] z-30">
+      <div className="flex bg-gray-800 px-4 py-4 rounded-sm justify-between">
+        <div className="flex items-center justify-between">
+          <CustomCheckbox checked={isChecked} onChange={setIsChecked} size="sm" />
 
           <span
             onClick={() => setIsChecked((v) => !v)}
@@ -109,14 +90,8 @@ export default function ReplyInputSection({ addReply, disabled, replyTarget, onC
             className="flex-1 min-w-0 bg-transparent text-white text-sm placeholder-gray-600 focus:outline-none"
           />
         </div>
-
         {/* send */}
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={handleSend}
-          className="ml-3 shrink-0"
-        >
+        <button type="button" disabled={disabled} onClick={handleSend} className="ml-3 shrink-0">
           <Image
             src={input.trim().length > 0 ? sendRed : sendIcon}
             alt="send"

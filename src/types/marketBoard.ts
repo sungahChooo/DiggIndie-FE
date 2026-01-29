@@ -39,7 +39,7 @@ export type MarketArticle = {
   timeAgo: string;
   views: number;
   scrapCount: number;
-  thumbnail: string;
+  thumbnailUrl: string;
 }
 
 export type MarketListPayload = {

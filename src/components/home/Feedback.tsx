@@ -54,12 +54,24 @@ export default function Feedback({ isLoggedIn }: Props) {
           className="flex px-4 py-2 gap-3 justify-center items-center border-gray-800 border-1
             bg-[#1F1D1D] border-[#413D3D] border-0.25 rounded-[20px] h-[40px] shrink-0"
         >
-          <button type="button" onClick={onClickUp} className="flex items-center justify-center">
-            <Image src={getUpIcon()} alt="thumbs up" width={24} height={24} />
+          <button type="button" onClick={onClickUp} className="flex items-center justify-center ">
+            <Image
+              src={getUpIcon()}
+              alt="thumbs up"
+              width={24}
+              height={24}
+              className="cursor-pointer"
+            />
           </button>
 
           <button type="button" onClick={onClickDown} className="flex items-center justify-center">
-            <Image src={getDownIcon()} alt="thumbs down" width={24} height={24} />
+            <Image
+              src={getDownIcon()}
+              alt="thumbs down"
+              width={24}
+              height={24}
+              className="cursor-pointer"
+            />
           </button>
         </div>
       </div>

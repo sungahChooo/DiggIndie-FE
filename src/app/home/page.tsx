@@ -13,21 +13,44 @@ import { useEffect, useState } from 'react';
 import SideTab from '@/components/sideTabDir/SideTab';
 import { useAuthStore } from '@/stores/authStore';
 import Feedback from '@/components/home/Feedback';
+import { authService } from '@/services/authService';
+import { boardDetailService } from '@/services/boardDetail.service';
+import { HotArticle } from '@/types/board';
 
 export default function HomePage() {
   const { isAuthed } = useAuthStore();
-
+  const userId = useAuthStore((s) => s.userId);
   const [isSideTabOpen, setIsSideTabOpen] = useState(false);
-
+  const [hotContent, setHotContent] = useState<HotArticle[]>([]);
   useEffect(() => {
     document.body.style.overflow = isSideTabOpen ? 'hidden' : 'auto';
   }, [isSideTabOpen]);
 
+  useEffect(() => {
+    const fetchIdIfNeeded = async () => {
+      // 로그인은 되어 있는데 스토어에 userId가 없다면 (새로고침 상황 등)
+      if (isAuthed && !userId) {
+        try {
+          await authService.getUserId();
+        } catch (error) {
+          console.error('사용자 정보를 가져오는 데 실패했습니다.');
+        }
+      }
+    };
+    fetchIdIfNeeded();
+  });
+  useEffect(() => {
+    const fetchHotArticle = async () => {
+      const content = await boardDetailService.getHotArticle();
+      setHotContent(content);
+    };
+    fetchHotArticle();
+  }, []);
   return (
-    <div className="text-white min-h-screen bg-black relative">
-      <div className="flex flex-col">
-        <main className="flex flex-col items-center bg-black pb-20">
-          <HomeHeader onHamburgerClick={() => setIsSideTabOpen(true)} />
+    <div className="text-white bg-black relative">
+      <div className="relative mx-auto w-full max-w-[375px] min-h-screen bg-black">
+        <HomeHeader onHamburgerClick={() => setIsSideTabOpen(true)} userId={userId} />
+        <main className="mx-auto flex w-full flex-col items-center bg-black pb-20 pt-13">
           <IndieStoryRec />
           <div className="px-5 w-full">
             <LoginBanner isLoggedIn={isAuthed} />
@@ -37,10 +60,19 @@ export default function HomePage() {
           <ResetPreference isLoggedIn={isAuthed} />
           <Feedback isLoggedIn={isAuthed} />
           <HomeCalendar />
-          <Popular />
+          <Popular content={hotContent} />
         </main>
       </div>
-      {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}
+      {/* 사이드탭은 viewport 기준이지만 위치는 앱 기준 */}
+      {isSideTabOpen && (
+        <div className="fixed inset-0 z-[999] flex justify-center">
+          <div className="relative w-full max-w-[375px] h-full">
+            {/* 오버레이 */}
+            <div className="absolute inset-0 bg-black/40" onClick={() => setIsSideTabOpen(false)} />
+            <SideTab onClose={() => setIsSideTabOpen(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

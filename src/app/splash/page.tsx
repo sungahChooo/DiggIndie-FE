@@ -36,7 +36,7 @@ export default function SplashPage() {
   }, [router]);
 
   return (
-    <div className="flex justify-center h-screen bg-gradient-to-b from-[#140B0B] to-[#330301]">
+    <div className="flex justify-center h-[100dvh] bg-gradient-to-b from-[#140B0B] to-[#330301] fixed inset-0">
       <div
         className={`flex flex-col justify-center items-center text-center gap-4 px-6 transition-opacity duration-300 ${
           fade ? 'opacity-100' : 'opacity-0'

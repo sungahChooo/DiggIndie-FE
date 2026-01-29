@@ -76,10 +76,11 @@ export default function SearchConcert() {
   const showSkeleton = isTypingLoading || (isFetching && pageInfo.page === 0);
 
   return (
-    <section className="relative w-full flex flex-col items-center mt-[12px] px-3">
+    <section className="relative w-full flex flex-col items-center mt-[12px] px-5">
 
       {/* 검색 input */}
       <div className={"w-full relative flex h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white"}>
+        <Image src={query ? searchGrayBtn : searchBtn} alt="Search" className="absolute left-2 mt-[2px]" />
         {/* 검색 지우기 */}
         {query ? (
           <button
@@ -90,14 +91,14 @@ export default function SearchConcert() {
               setIsTypingLoading(false);
             }}
             aria-label="clear search"
-            className="absolute right-[40px] top-1/2 -translate-y-1/2 cursor-pointer"
+            className="absolute right-[12px] top-1/2 -translate-y-1/2 cursor-pointer"
           >
             <Image src={deleteBtn} alt="삭제" />
           </button>
         ) : null
         }
 
-        <Image src={query ? searchGrayBtn : searchBtn} alt="Search" className="absolute right-2 mt-[2px]" />
+
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -108,7 +109,7 @@ export default function SearchConcert() {
             }
           }}
           placeholder="검색어를 입력하세요"
-          className="placeholder:text-[#A6A6A6] font-regular outline-none bg-transparent w-full"
+          className="ml-7 placeholder:text-[#A6A6A6] font-regular outline-none bg-transparent w-full"
         />
       </div>
 
@@ -127,7 +128,7 @@ export default function SearchConcert() {
           <div
             className="absolute left-0 mt-[8px] w-[100px] h-[108px] rounded-[4px]
                        border border-[#736F6F] flex flex-col items-start
-                       py-[8px] gap-[4px] bg-black shadow-lg z-50"
+                       py-2 bg-black justify-between shadow-lg z-50"
           >
             {(["recent", "view", "scrap"] as SortKey[]).map((key) => (
               <button
@@ -136,12 +137,21 @@ export default function SearchConcert() {
                   setSortKey(key);
                   setIsOpen(false);
                 }}
-                className={`w-full h-[28px] px-2 text-left text-[14px] ${
-                  sortKey === key ? "bg-[#332F2F] text-white" : "text-[#8C8888]"
-                }`}
+                className="w-full h-[28px] px-2 text-left text-[14px]"
               >
-                {key === "recent" ? "업데이트순" : key === "view" ? "조회수순" : "스크랩순"}
+                <div
+                  className={`px-2 h-[28px] rounded-[4px] pt-[3px] 
+                   transition-colors
+                    hover:bg-[#332F2F] hover:text-white
+                    ${
+                    
+                    sortKey === key ? "bg-[#332F2F] text-white" : "text-[#8C8888]"
+                  }`}
+                >
+                  {key === "recent" ? "업데이트순" : key === "view" ? "조회수순" : "스크랩순"}
+                </div>
               </button>
+
             ))}
           </div>
         )}
@@ -151,7 +161,7 @@ export default function SearchConcert() {
       {error ? <div className="mt-4 text-[#FF6B6B] text-[14px] break-words">{error}</div> : null}
 
       {/* 결과 */}
-      <div className="flex mt-4 justify-center">
+      <div className="flex w-full mt-4 justify-center">
         {showSkeleton ? <SearchCardSkeleton /> : <ConcertGrid concerts={concerts} />}
       </div>
       <div ref={sentinelRef} className="h-[1px]" />

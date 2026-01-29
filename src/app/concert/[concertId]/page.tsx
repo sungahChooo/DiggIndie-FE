@@ -54,7 +54,7 @@ export default function ConcertDetailPage() {
     }
   }, [isLoading]);
   return (
-    <div className="text-white flex flex-col min-h-screen bg-black relative pb-20 relative">
+    <div className="text-white flex flex-col bg-black relative pb-20 relative min-h-screen">
       {isLoading ? (
         <DetailSkeleton />
       ) : !concert ? (
@@ -75,7 +75,7 @@ export default function ConcertDetailPage() {
           <ConcertStorySection concert={concert} />
           <div className="px-5 pb-5 fixed bottom-0 w-full max-w-94">
             <Button href={concert.bookUrl} isFinished={concert.isFinished}>
-              <span>
+              <span className="font-semibold text-base">
                 {concert.isFinished
                   ? '공연이 종료되었습니다'
                   : concert.bookUrl

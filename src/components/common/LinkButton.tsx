@@ -23,7 +23,7 @@ export default function LinkButton({ disabled, children, onClick, href }: LinkBu
   return (
     <a
       href={href}
-      className={`block p-4 h-13 w-full font-semibold text-center rounded-sm ${
+      className={`flex items-center justify-center p-4 h-13 w-full font-semibold rounded-sm ${
         disabled ? 'bg-gray-600 cursor-not-allowed' : 'bg-red cursor-pointer'
       }`}
       aria-disabled={disabled}

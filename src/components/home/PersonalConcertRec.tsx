@@ -82,9 +82,13 @@ export default function PersonalConcertRec({ isLoggedIn }: Props) {
               {!isLoading &&
                 !error &&
                 visibleConcerts.map((concert) => (
-                  <ConcertCard key={concert.concertId} concert={concert} />
+                  <div
+                    key={concert.concertId}
+                    className="flex-none w-40"
+                  >
+                    <ConcertCard key={concert.concertId} concert={concert} />
+                  </div>
                 ))}
-
             </>
           )}
         </div>

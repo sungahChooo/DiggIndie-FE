@@ -91,7 +91,7 @@ export default function TradeArticleDetailPage() {
   };
 
   //key를 url로 가공
-  const S3_BASE = "https://diggindie-imgs.s3.ap-northeast-2.amazonaws.com";
+  const S3_BASE = 'https://diggindie-imgs.s3.ap-northeast-2.amazonaws.com';
 
   function toS3ImageUrl(raw?: string | null): string | null {
     if (!raw) return null;
@@ -100,7 +100,7 @@ export default function TradeArticleDetailPage() {
     if (!v) return null;
 
     // 이미 URL이면 그대로
-    if (v.startsWith("http://") || v.startsWith("https://")) {
+    if (v.startsWith('http://') || v.startsWith('https://')) {
       return v;
     }
 
@@ -143,7 +143,7 @@ export default function TradeArticleDetailPage() {
   const safeChatUrl = getSafeUrl(board?.chatUrl);
 
   return (
-    <div className="h-dvh bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-black text-white flex flex-col relative">
       <ArticleHeader
         title="거래/양도"
         isMine={board?.isMine}
@@ -153,7 +153,9 @@ export default function TradeArticleDetailPage() {
 
       {!isAuthed ? (
         <div className="flex-1 flex items-center justify-center">
-          <span className="text-base font-normal text-[#A6A6A6]">로그인 후 가능한 페이지입니다</span>
+          <span className="text-base font-normal text-[#A6A6A6]">
+            로그인 후 가능한 페이지입니다
+          </span>
         </div>
       ) : isLoading ? (
         <TradeDetailSkeleton />
@@ -206,16 +208,16 @@ export default function TradeArticleDetailPage() {
                 <span className="shrink-0 font-semibold text-xl">[{board.type}]</span>
                 <span className="min-w-0 flex-1 font-semibold text-xl truncate">{board.title}</span>
                 <span className="shrink-0 flex items-center gap-[3px]">
-                <BookmarkIcon
-                  isActive={board.isScraped}
-                  isMine={board.isMine}
-                  onClick={!board.isMine ? handleToggleScrap : undefined}
-                  className={`w-6 h-6 transition-colors ${
-                    board.isScraped ? 'text-white scale-110' : 'text-gray-600'
-                  } ${board.isMine ? '' : 'cursor-pointer'}`}
-                />
-                <span className="text-gray-300 font-normal text-sm">{board.scrapCount}</span>
-              </span>
+                  <BookmarkIcon
+                    isActive={board.isScraped}
+                    isMine={board.isMine}
+                    onClick={!board.isMine ? handleToggleScrap : undefined}
+                    className={`w-6 h-6 transition-colors ${
+                      board.isScraped ? 'text-white scale-110' : 'text-gray-600'
+                    } ${board.isMine ? '' : 'cursor-pointer'}`}
+                  />
+                  <span className="text-gray-300 font-normal text-sm">{board.scrapCount}</span>
+                </span>
               </div>
             </div>
 

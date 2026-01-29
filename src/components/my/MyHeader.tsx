@@ -11,7 +11,7 @@ type props = {
 export default function MyHeader({ title, backUrl }: props) {
   const router = useRouter();
   return (
-    <div className="bg-black w-full flex items-center px-5 py-3 justify-center absolute top-0 z-50 h-14">
+    <section className="flex px-5 py-3 w-full justify-center sticky top-0 z-50 bg-black">
       <Image
         src={backIcon}
         alt="이전"
@@ -25,6 +25,6 @@ export default function MyHeader({ title, backUrl }: props) {
         className="cursor-pointer absolute left-5"
       />
       <span className="text-base font-semibold">{title}</span>
-    </div>
+    </section>
   );
 }

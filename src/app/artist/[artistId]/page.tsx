@@ -72,7 +72,7 @@ export default function ArtistDetailPage() {
       : default_artist_image;
 
   return (
-    <div className="text-white flex flex-col relative overflow-y-auto">
+    <div className="text-white flex flex-col relative overflow-y-auto min-h-dvh">
       {isLoading ? (
         <DetailSkeleton />
       ) : !artist ? (

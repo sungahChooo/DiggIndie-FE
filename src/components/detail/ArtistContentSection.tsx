@@ -86,7 +86,7 @@ export default function ArtistContentSection({
               </span>
             ))
           ) : (
-            <span className="font-bold text-sm text-gray-400 text-sm">
+            <span className="font-medium text-sm text-gray-400 text-sm">
               정보가 존재하지 않습니다.
             </span>
           )}
@@ -116,9 +116,7 @@ export default function ArtistContentSection({
             <Image src={voice} alt="voice" width={24} height={24} />
             <span className="text-white font-medium text-base">아티스트</span>
           </p>
-          <p
-            className={`text-sm text-gray-400  ${artist.description ? 'font-medium' : 'font-bold '}`}
-          >
+          <p className="text-sm text-gray-400 font-medium">
             {artist.description && artist.description.trim() !== ''
               ? artist.description
               : '없는 정보입니다.'}
@@ -159,7 +157,7 @@ export default function ArtistContentSection({
                 );
               })
             ) : (
-              <span className="font-bold text-sm text-gray-400">앨범이 없습니다.</span>
+              <span className="font-medium text-sm text-gray-400">앨범이 없습니다.</span>
             )}
           </section>
         </div>

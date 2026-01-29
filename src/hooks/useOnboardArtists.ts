@@ -1,12 +1,10 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { OnboardArtist, PageInfo } from '@/types/artists';
 import { getArtistsPage } from '@/services/artistsService';
 
-export type SortKey = 'updated' | 'korean';
-
-//페이지당 12개의 아티스트 로드useOn
+//페이지당 12개의 아티스트 로드
 export function useOnboardArtists(pageSize: number = 12) {
   const [artists, setArtists] = useState<OnboardArtist[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
@@ -14,9 +12,6 @@ export function useOnboardArtists(pageSize: number = 12) {
   const [isFetching, setIsFetching] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-
-  // 정렬옵션
-  const [sortKey, setSortKey] = useState<SortKey>('updated');
 
   // fetch 중복방지
   const isFetchingRef = useRef(false);
@@ -27,11 +22,6 @@ export function useOnboardArtists(pageSize: number = 12) {
   //자동검색 debounce 타이머
   const debounceTimerRef = useRef<number | null>(null);
   const debounceMs = 250;
-
-  const sortArtistsIfNeeded = (list: OnboardArtist[]) => {
-    if (sortKey !== 'korean') return list;
-    return [...list].sort((a, b) => a.bandName.localeCompare(b.bandName, 'ko'));
-  };
 
   const loadFirstPage = async (query?: string) => {
     isFetchingRef.current = true;
@@ -45,10 +35,9 @@ export function useOnboardArtists(pageSize: number = 12) {
         query,
       });
 
-      // 최신 요청만 반영
       if (seq !== requestSeqRef.current) return;
 
-      setArtists(sortArtistsIfNeeded(artists));
+      setArtists(artists);
       setPageInfo(pageInfo);
       setPage(0);
     } catch (e) {
@@ -58,7 +47,6 @@ export function useOnboardArtists(pageSize: number = 12) {
       setPageInfo(null);
       setPage(0);
     } finally {
-      // 최신 요청만 fetch 끝났다고 처리
       if (seq === requestSeqRef.current) {
         isFetchingRef.current = false;
         setIsFetching(false);
@@ -95,8 +83,7 @@ export function useOnboardArtists(pageSize: number = 12) {
             merged.push(a);
           }
         }
-        // 가나다순이면 병합 후 정렬
-        return sortArtistsIfNeeded(merged);
+        return merged;
       });
 
       setPageInfo(nextPageInfo);
@@ -118,8 +105,8 @@ export function useOnboardArtists(pageSize: number = 12) {
 
     debounceTimerRef.current = window.setTimeout(async () => {
       const q = rawValue.trim();
-
       if (q === '') return;
+
       setAppliedQuery(q);
       await loadFirstPage(q);
     }, debounceMs);
@@ -129,9 +116,7 @@ export function useOnboardArtists(pageSize: number = 12) {
   const onChangeSearch = async (value: string) => {
     setSearchTerm(value);
 
-    // input이 완전히 비면 초기 리스트로
     if (value === '') {
-      // 대기 중인 자동검색 취소
       if (debounceTimerRef.current) window.clearTimeout(debounceTimerRef.current);
 
       setAppliedQuery('');
@@ -139,12 +124,10 @@ export function useOnboardArtists(pageSize: number = 12) {
       return;
     }
 
-    // 한 글자 쳐도 바로 검색 실행
     scheduleAutoSearch(value);
   };
 
   const onSubmitSearch = async () => {
-    // 엔터시 대기 중인 자동검색 취소
     if (debounceTimerRef.current) window.clearTimeout(debounceTimerRef.current);
 
     const q = searchTerm.trim();
@@ -159,13 +142,8 @@ export function useOnboardArtists(pageSize: number = 12) {
     await loadFirstPage(undefined);
   };
 
-  // sortKey 바뀌면 현재 들고있는 artists만 즉시 정렬
-  const sortedArtists = useMemo(() => {
-    return sortArtistsIfNeeded(artists);
-  }, [artists, sortKey]);
-
   return {
-    artists: sortedArtists,
+    artists,
     pageInfo,
     searchTerm,
     onChangeSearch,
@@ -174,7 +152,5 @@ export function useOnboardArtists(pageSize: number = 12) {
     loadFirstPage,
     loadNextPage,
     isFetching,
-    sortKey,
-    setSortKey,
   };
 }

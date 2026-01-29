@@ -13,14 +13,14 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "diggindie-images.s3.ap-northeast-2.amazonaws.com",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'diggindie-images.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "diggindie-imgs.s3.ap-northeast-2.amazonaws.com",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'diggindie-imgs.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
@@ -33,9 +33,9 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "i.scdn.co",
-        pathname: "/image/**",
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+        pathname: '/image/**',
       },
       {
         protocol: 'https',
@@ -43,14 +43,19 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "cdn.indistreet.app",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'cdn.indistreet.app',
+        pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "diggindie-images.s3.ap-northeast-2.amazonaws.com",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'diggindie-images.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
@@ -66,6 +71,12 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn.indistreet.app',
         pathname: '/**', // 모든 경로 허용
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },

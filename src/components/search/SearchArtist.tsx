@@ -3,22 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import downBtn from "@/assets/icons/down.svg";
-import searchBtn from "@/assets/icons/artistSearch.svg";
-import searchBack from "@/assets/icons/searchBack.svg";
+import searchBtn from "@/assets/icons/artistSearch.svg"
 import searchGrayBtn from "@/assets/icons/searchGray.svg";
 import deleteBtn from '@/assets/community/delete.svg';
 
 import ArtistGrid from "@/components/my/ArtistGrid";
 import SearchCardSkeleton from "@/components/search/SearchCardSkeleton";
 import { useArtistSearch } from "@/hooks/useArtistSearch";
-import { useRouter } from 'next/navigation';
 
 type SortKey = "updated" | "korean" | "scrap";
 
 export default function MyArtistsWithSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const router = useRouter()
 
   // debounce, loading
   const [debouncedTerm, setDebouncedTerm] = useState("");
@@ -99,10 +96,15 @@ export default function MyArtistsWithSearch() {
         : "스크랩순";
 
   return (
-    <section className="relative w-full flex flex-col items-center mt-[12px] px-3">
+    <section className="relative w-full flex flex-col items-center mt-[12px] px-5">
 
       {/* 검색 input */}
       <div className={"relative flex w-full h-[44px] mb-[12px] px-3 py-2 rounded-[4px] bg-[#4A4747] text-white"}>
+        <Image
+          src={searchTerm ? searchGrayBtn : searchBtn}
+          alt="Search"
+          className="absolute left-2 mt-[2px]"
+        />
         {/* 검색 지우기 */}
         {searchTerm ? (
           <button
@@ -112,17 +114,13 @@ export default function MyArtistsWithSearch() {
               onClearSearch().finally(() => setIsLoading(false));
             }}
             aria-label="clear search"
-            className="absolute right-[40px] top-1/2 -translate-y-1/2 cursor-pointer"
+            className="absolute right-[12px] top-1/2 -translate-y-1/2 cursor-pointer"
           >
             <Image src={deleteBtn} alt="삭제" />
           </button>
         ) : null
         }
-        <Image
-          src={searchTerm ? searchGrayBtn : searchBtn}
-          alt="Search"
-          className="absolute right-[8px] mt-[2px]"
-        />
+
         <input
           value={searchTerm}
           onChange={(e) => onChangeSearch(e.target.value)}
@@ -132,7 +130,7 @@ export default function MyArtistsWithSearch() {
             }
           }}
           placeholder="검색어를 입력하세요"
-          className="placeholder:text-[#A6A6A6] font-regular outline-none bg-transparent w-full"
+          className="ml-7 placeholder:text-[#A6A6A6] font-regular outline-none bg-transparent w-full"
         />
       </div>
 
@@ -164,13 +162,20 @@ export default function MyArtistsWithSearch() {
                   setSortKey(key);
                   setIsOpen(false);
                 }}
-                className={`w-full h-[28px] px-2 text-left text-[14px] ${
-                  sortKey === key ? "bg-[#332F2F] text-white" : "text-[#8C8888]"
-                }`}
+                className="w-full h-[28px] px-2 text-left text-[14px]"
               >
-                {key === "updated" ? "업데이트순" : key === "korean" ? "가나다순" : "스크랩순"}
+                <div
+                  className={`px-2 h-[28px] rounded-[4px] pt-[3px]
+                    transition-colors
+                    hover:bg-[#332F2F] hover:text-white
+                    ${sortKey === key ? "bg-[#332F2F] text-white" : "text-[#8C8888]"}
+                  `}
+                >
+                  {key === "updated" ? "업데이트순" : key === "korean" ? "가나다순" : "스크랩순"}
+                </div>
               </button>
-              ))}
+
+            ))}
           </div>
         )}
       </div>

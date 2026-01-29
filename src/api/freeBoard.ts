@@ -1,15 +1,24 @@
-import { fetchClient } from "@/api/client";
+import { fetchClient } from '@/api/client';
+import { HotArticle } from '@/types/board';
 
 import {
-  FreePayload, GetFreeListParams, PostFreeParams, FreeListPayload, EditFreeParams, LikeFreeParams,
-  LikeFreePayload, CommentFreeParams, CommentFreePayload, LikeCommentFreeParams, LikeCommentFreePayload
-}
-  from '@/types/freeBoard';
+  FreePayload,
+  GetFreeListParams,
+  PostFreeParams,
+  FreeListPayload,
+  EditFreeParams,
+  LikeFreeParams,
+  LikeFreePayload,
+  CommentFreeParams,
+  CommentFreePayload,
+  LikeCommentFreeParams,
+  LikeCommentFreePayload,
+} from '@/types/freeBoard';
 
 //게시글 작성
 export async function postFree(params: PostFreeParams) {
-  return fetchClient<FreePayload>("/boards", {
-    method: "POST",
+  return fetchClient<FreePayload>('/boards', {
+    method: 'POST',
     auth: true,
     body: JSON.stringify(params),
   });
@@ -57,7 +66,7 @@ export async function likeFree(params: LikeFreeParams) {
   const { boardId } = params;
   return fetchClient<LikeFreePayload>(`/boards/${boardId}/like`, {
     method: 'PATCH',
-    auth: true
+    auth: true,
   });
 }
 
@@ -67,8 +76,8 @@ export async function commentFree(params: CommentFreeParams) {
   return fetchClient<CommentFreePayload>(`/boards/${boardId}/comments`, {
     method: 'POST',
     auth: true,
-    body: JSON.stringify(body)
-  })
+    body: JSON.stringify(body),
+  });
 }
 
 //댓글 좋아요
@@ -76,6 +85,11 @@ export async function likeCommentFree(params: LikeCommentFreeParams) {
   const { commentId } = params;
   return fetchClient<LikeCommentFreePayload>(`/boards/comments/${commentId}/like`, {
     method: 'PATCH',
-    auth: true
+    auth: true,
   });
+}
+
+//홈 인기게시글 불러오기
+export async function getPopularArticle() {
+  return fetchClient<HotArticle[]>('/boards/hot', { method: 'GET', auth: false });
 }

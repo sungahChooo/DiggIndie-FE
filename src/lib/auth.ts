@@ -15,7 +15,7 @@ export const loginSchema = z.object({
 });
 
 //회원가입스키마
-const idSchema = z
+export const idSchema = z
   .string()
   .min(4, '아이디는 4자 이상이어야 합니다')
   .max(12, '아이디는 12자 이하여야 합니다')
@@ -40,7 +40,7 @@ const passwordSchema = z
     }
   );
 const phoneNumberSchema = z.string().min(1, '전화번호를 입력해주세요');
-const emailSchema = z
+export const emailSchema = z
   .string()
   .min(1, '이메일을 입력해주세요')
   .email('올바른 이메일 형식이 아닙니다');
