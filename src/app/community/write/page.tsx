@@ -328,17 +328,6 @@ export default function Write() {
             일반
           </span>
           <span
-            onClick={() => handleBoardTypeChange("general")}
-            className={`border font-medium text-sm px-3 py-1 rounded-xs cursor-pointer ${boardLockClass}
-            ${
-              boardType === "general"
-                ? "border-main-red-1 bg-main-red-4 text-white"
-                : "border-gray-600 text-gray-600"
-            }`}
-          >
-            일반
-          </span>
-          <span
             onClick={() => handleBoardTypeChange("trade")}
             className={`border font-medium text-sm px-3 py-1 rounded-xs cursor-pointer ${boardLockClass}
             ${

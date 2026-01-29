@@ -112,3 +112,26 @@ export type LikeCommentFreePayload = {
   isLiked: boolean;
   likeCount : number;
 }
+
+//내가 쓸 게시글
+export type MyFreeItem = {
+  boardId: number;
+  category: FreeCategory;
+  title: string;
+  views: number;
+  imageCount: number;
+  createdAt: string;
+}
+
+export type MyFreePayload = {
+  statusCode: number;
+  isSuccess: boolean;
+  message: string;
+  pageInfo: PageInfo;
+  payload: MyFreeItem[];
+};
+
+export type GetMyFreeParams = {
+  page?: number;
+  size?: number;
+};

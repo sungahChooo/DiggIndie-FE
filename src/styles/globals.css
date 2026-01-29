@@ -1,6 +1,15 @@
 @import 'tailwindcss';
 @import './theme.css';
 
+/* globals.css 최상단 */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+}
 /* Font */
 /* @font-face {
   font-family: 'Pretendard';
@@ -27,24 +36,16 @@ body {
   color: var(--foreground);
   font-family: 'Pretendard', sans-serif;
 }
-
-/* @layer utilities {
-  .scrollbar-hide {
-    overflow: auto;
-    scrollbar-width: none;
+@layer utilities {
+  /* IE and Edge */
+  .no-scrollbar {
     -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
   }
 
-  .scrollbar-hide::-webkit-scrollbar {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-} */
-/* 모든 스크롤바 숨김 (스크롤은 됨) */
-* {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE, Edge */
-}
-
-*::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
 }

@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import deleteBtn from '@/assets/community/delete.svg';
 import CommunityTab from '@/components/community/CommunityTab';
 import CommunityHeaderFilter from '@/components/community/CommunityHeaderFilter';
+import SearchMarketSkeleton from './SearchMarketSkeleton';
 
 const headerOptions = ['전체', '판매', '구매'] as const;
 type UiHeader = (typeof headerOptions)[number];
@@ -24,12 +25,11 @@ const headerToCategory: Record<UiHeader, MarketCategory> = {
   구매: '구매',
 };
 
-
 export default function SearchMarket() {
   const [header, setHeader] = useState<UiHeader>('전체');
   const [draft, setDraft] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const { markets, isLoading, error, setQuery, setCategory, loadMore, params } = useMarketList({
     type: '전체' as MarketCategory,
@@ -90,7 +90,7 @@ export default function SearchMarket() {
 
   return (
     <section className="relative w-full flex flex-col items-center mt-[12px]">
-      <div className={"flex w-full justify-between px-5 gap-1"}>
+      <div className={'flex w-full justify-between px-5 gap-1'}>
         {/* 검색 */}
         <div className="relative flex h-[44px] px-3 py-2 rounded-[4px] w-full bg-[#4A4747] text-white">
           {draft ? (
@@ -100,11 +100,9 @@ export default function SearchMarket() {
               aria-label="clear search"
               className="absolute right-[40px] top-1/2 -translate-y-1/2 cursor-pointer"
             >
-
               <Image src={deleteBtn} alt="삭제" />
             </button>
-          ) : null
-          }
+          ) : null}
 
           <button
             type="button"
@@ -127,23 +125,40 @@ export default function SearchMarket() {
         </div>
       </div>
 
-
       <div className="w-full flex justify-between shrink-0 px-5 mt-4 items-center mb-3">
         <CommunityTab />
-        <CommunityHeaderFilter headers={headerOptions} value={header} onChangeAction={handleHeaderChange} />
+        <CommunityHeaderFilter
+          headers={headerOptions}
+          value={header}
+          onChangeAction={handleHeaderChange}
+        />
       </div>
 
       {/* 리스트만 스크롤 */}
       <main className="flex-1 min-h-0 w-full overflow-y-auto scrollbar flex flex-col bg-black">
-        {isLoading && isFirstPage && <div className="px-5 py-4 text-gray-500">로딩중...</div>}
-        {!isLoading && error && <div className="px-5 py-4 text-gray-500">{error}</div>}
+        {/* 1. 첫 로딩 혹은 검색 필터 변경 중일 때 스켈레톤 표시 */}
+        {(isLoading || isSearching) && isFirstPage ? (
+          <SearchMarketSkeleton />
+        ) : error ? (
+          <div className="px-5 py-20 text-center text-gray-500">{error}</div>
+        ) : (
+          <>
+            {/* 2. 데이터가 없을 때 */}
+            {!isLoading && markets.length === 0 ? (
+              <div className="px-5 py-20 text-center text-gray-500">등록된 매물이 없습니다.</div>
+            ) : (
+              <ArticleList articles={markets} basePath="/community/trade" variant="trade" />
+            )}
 
-        {!error && <ArticleList articles={markets} basePath="/community/trade" variant="trade" />}
+            {/* 3. 하단 무한 스크롤 감지 및 추가 로딩 처리 */}
+            <div ref={sentinelRef} className="h-[20px] w-full" />
 
-        <div ref={sentinelRef} className="h-[1px]" />
-
-        {(isLoading || isSearching) && !isFirstPage && (
-          <div className="px-5 py-4 text-gray-500">로딩중...</div>
+            {(isLoading || isSearching) && !isFirstPage && (
+              <div className="py-6 flex justify-center">
+                <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              </div>
+            )}
+          </>
         )}
       </main>
       {/* 무한스크롤 */}

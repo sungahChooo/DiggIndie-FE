@@ -7,8 +7,8 @@ interface MyPageHeaderProps {
 }
 export default function MyPageHeader({ onOpenSideTab }: MyPageHeaderProps) {
   return (
-    <header className="fixed top-0 left-0 z-50 w-full bg-transparent ">
-      <div className="mx-auto flex h-13 py-3 w-full max-w-[375px] items-center justify-between px-5 bg-black">
+    <header className="sticky top-0 z-50 bg-black shrink-0">
+      <div className="mx-auto flex h-13 py-3 w-full items-center justify-between px-5 bg-black">
         <Image src={logo} alt="Logo" width={100} height={50} />
         <div className="flex gap-2">
           <Image

@@ -1,6 +1,6 @@
 'use client';
 
-import ArticleHeader from '@/components/community/ArticleHeader';
+import TradeArticleHeader from '@/components/community/TradeArticleHeader';
 import BookmarkIcon from '@/components/detail/BookmarkIcon';
 import DetailImgSection from '@/components/detail/DetailImgSection';
 import Image from 'next/image';
@@ -19,7 +19,20 @@ export default function TradeArticleDetailPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isScraped, setIsScrapped] = useState(false);
+  //스켈레톤 로딩 이후 높이 계산 문제로 스크롤 안되는 버그 해결
+  useEffect(() => {
+    if (!isLoading) {
+      // 1. body와 html의 overflow 설정을 명시적으로 초기화
+      // 스크롤바를 숨겨놨기 때문에 브라우저가 간혹 스크롤 가능 상태를 놓칩니다.
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
 
+      // 2. 브라우저가 레이아웃을 재계산하도록 아주 미세하게 스크롤 이동
+      // 0에서 1px만 움직여도 브라우저는 스크롤 가능 여부를 다시 체크합니다.
+      window.scrollTo(0, 1);
+      window.scrollTo(0, 0);
+    }
+  }, [isLoading]);
   const params = useParams();
   const boardId = Number(params.id);
 
@@ -144,7 +157,7 @@ export default function TradeArticleDetailPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col relative">
-      <ArticleHeader
+      <TradeArticleHeader
         title="거래/양도"
         isMine={board?.isMine}
         onEdit={handleEdit}

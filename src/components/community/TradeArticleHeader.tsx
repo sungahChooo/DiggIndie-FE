@@ -14,18 +14,28 @@ interface ArticleHeaderProps {
   onDelete?: () => void;
 }
 
-export default function ArticleHeader({ title, isMine, onEdit, onDelete }: ArticleHeaderProps) {
+export default function TradeArticleHeader({
+  title,
+  isMine,
+  onEdit,
+  onDelete,
+}: ArticleHeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   //현재 url에 따라 자유게시판으로 갈지 거래개시판으로 갈지
   const handleBack = () => {
-    router.back();
+    if (pathname.includes('/community/free')) {
+      router.push('/community/free');
+    } else {
+      router.push('/community/trade');
+    }
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-black shrink-0">
-      <div className="mx-auto flex h-13 py-3 w-full items-center justify-between px-5 bg-black">
+    <header className="sticky top-0 z-50 shrink-0">
+      <section className="w-full flex px-5 py-[10px] text-white bg-transparent mx-auto justify-between absolute">
         <Image
           src={backBtn}
           alt="back"
@@ -47,7 +57,7 @@ export default function ArticleHeader({ title, isMine, onEdit, onDelete }: Artic
         ) : (
           <div className="w-6 h-6" />
         )}
-      </div>
+      </section>
 
       {isMine && isDropdownOpen && (
         <HeaderDrowDown onEdit={onEdit ?? (() => {})} onDelete={onDelete ?? (() => {})} />

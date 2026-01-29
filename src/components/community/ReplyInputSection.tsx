@@ -65,7 +65,7 @@ export default function ReplyInputSection({
   };
 
   return (
-    <section className="fixed bottom-0 p-5 min-w-[375px] z-30">
+    <section className="fixed w-full bottom-0 p-5 min-w-[375px] z-30">
       <div className="flex bg-gray-800 px-4 py-4 rounded-sm justify-between">
         <div className="flex items-center justify-between">
           <CustomCheckbox checked={isChecked} onChange={setIsChecked} size="sm" />

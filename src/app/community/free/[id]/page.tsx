@@ -20,7 +20,20 @@ export default function FreeArticleDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const boardId = Number(params.id);
   const [board, setBoard] = useState<FreeBoardDetail | null>(null);
+  //스켈레톤 로딩 이후 높이 계산 문제로 스크롤 안되는 버그 해결
+  useEffect(() => {
+    if (!isLoading) {
+      // 1. body와 html의 overflow 설정을 명시적으로 초기화
+      // 스크롤바를 숨겨놨기 때문에 브라우저가 간혹 스크롤 가능 상태를 놓칩니다.
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
 
+      // 2. 브라우저가 레이아웃을 재계산하도록 아주 미세하게 스크롤 이동
+      // 0에서 1px만 움직여도 브라우저는 스크롤 가능 여부를 다시 체크합니다.
+      window.scrollTo(0, 1);
+      window.scrollTo(0, 0);
+    }
+  }, [isLoading]);
   const [replyTarget, setReplyTarget] = useState<{
     parentCommentId: number;
     nickname: string;
@@ -124,52 +137,51 @@ export default function FreeArticleDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white min-w-[375px] relative pb-20">
+    <div className="min-h-screen bg-black text-white flex flex-col relative">
+      {/* 1. 상단 헤더: sticky가 있으므로 이 자리에 가만히 고정됩니다. */}
       <ArticleHeader
         title="자유 라운지"
         isMine={board?.isMine}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
-
-      {!isAuthed ? (
-        <div className="flex flex-1 items-center justify-center min-h-[calc(100vh-56px)]">
-          <span className="text-base font-normal text-[#A6A6A6]">
-            로그인 후 가능한 페이지입니다
-          </span>
-        </div>
-      ) : isLoading ? (
-        <FreeDetailSkeleton />
-      ) : !board ? (
-        <div className="h-screen flex items-center justify-center">
-          <span className="text-gray-300 font-normal text-base">없는 게시글입니다</span>
-        </div>
-      ) : (
-        <>
-          {/* 스크롤 영역 */}
-          <div className="flex-1 overflow-y-auto pb-20">
+      {/* 2. 본문 영역: 헤더 아래부터 댓글창 위까지 스크롤되는 구간 */}
+      <main className="flex-1 overflow-y-auto">
+        {!isAuthed ? (
+          <div className="flex items-center justify-center min-h-[calc(100vh-120px)]">
+            <span className="text-[#A6A6A6]">로그인 후 가능한 페이지입니다</span>
+          </div>
+        ) : isLoading ? (
+          <FreeDetailSkeleton />
+        ) : !board ? (
+          <div className="flex items-center justify-center min-h-[calc(100vh-120px)]">
+            <span className="text-gray-300">없는 게시글입니다</span>
+          </div>
+        ) : (
+          <div className="pb-32">
+            {' '}
+            {/* 하단 입력창에 가려지지 않게 여백 추가 */}
             <ArticleBody content={board} onToggleLike={handleToggleLike} />
-
             <CommentCard
               comments={board.comments}
-              onToggleLike={(commentId) => {
-                if (isCommentLiking) return;
-                toggleCommentLike(commentId);
-              }}
-              onReplyClick={(parentCommentId, nickname, depth) =>
-                setReplyTarget({ parentCommentId, nickname, depth })
+              onToggleLike={toggleCommentLike}
+              onReplyClick={(id, nick, d) =>
+                setReplyTarget({ parentCommentId: id, nickname: nick, depth: d })
               }
             />
           </div>
-
-          <ReplyInputSection
-            addReply={addReply}
-            disabled={isCommentSubmitting}
-            replyTarget={replyTarget}
-            onCancelReply={() => setReplyTarget(null)}
-          />
-        </>
-      )}
+        )}
+      </main>
+      {/* 3. 하단 입력창: fixed 속성이므로 화면 맨 아래에 붙어 있습니다. */}
+      <div className={'flex justify-center'}>
+        <ReplyInputSection
+          addReply={addReply}
+          disabled={isCommentSubmitting}
+          replyTarget={replyTarget}
+          onCancelReply={() => setReplyTarget(null)}
+        />
+      </div>
+      랴
     </div>
   );
 }

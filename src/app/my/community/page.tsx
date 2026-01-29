@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function MyCommunityPage() {
   const router = useRouter();
   return (
-    <div className="text-white flex flex-col h-screen bg-black relative py-10">
+    <div className="text-white flex flex-col h-screen bg-black relative">
       <MyHeader title={'MY 커뮤니티 활동'} backUrl={'/my'}/>
       <div className="py-2 flex flex-col gap-3">
         <MyCommunityMenu

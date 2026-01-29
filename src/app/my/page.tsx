@@ -75,10 +75,10 @@ export default function MyPage() {
     };
   }, [isSideTabOpen]);
   return (
-    <div className="text-white flex flex-col bg-black relative min-h-screen">
-      <div className="relative mx-auto w-full max-w-[375px] bg-black min-h-screen">
+    <div className="flex text-white bg-black relative">
+      <div className="relative mx-auto w-full min-h-screen bg-black">
         <MyPageHeader onOpenSideTab={() => setIsSideTabOpen(true)} />
-        <div className="flex flex-col pb-6 bg-black mt-13">
+        <div className="flex flex-col pb-6 bg-black">
           <ProfileSection userId={userId} />
 
           {/* 스크랩한 공연 */}
@@ -153,7 +153,16 @@ export default function MyPage() {
           <span className="text-sm font-normal text-gray-500 px-3 cursor-pointer">회원탈퇴</span>
         </p>
       </div>
-      {isSideTabOpen && <SideTab onClose={() => setIsSideTabOpen(false)} />}
+      {/* 사이드탭은 viewport 기준이지만 위치는 앱 기준 */}
+      {isSideTabOpen && (
+        <div className="fixed inset-0 z-[999] flex justify-center">
+          <div className="relative w-full max-w-[375px] h-full">
+            {/* 오버레이 */}
+            <div className="absolute inset-0 bg-black/40" onClick={() => setIsSideTabOpen(false)} />
+            <SideTab onClose={() => setIsSideTabOpen(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

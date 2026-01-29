@@ -13,6 +13,9 @@ import {
   CommentFreePayload,
   LikeCommentFreeParams,
   LikeCommentFreePayload,
+  MyFreePayload,
+  GetMyFreeParams,
+  MyFreeItem,
 } from '@/types/freeBoard';
 
 //게시글 작성
@@ -92,4 +95,47 @@ export async function likeCommentFree(params: LikeCommentFreeParams) {
 //홈 인기게시글 불러오기
 export async function getPopularArticle() {
   return fetchClient<HotArticle[]>('/boards/hot', { method: 'GET', auth: false });
+}
+
+// 내가 쓸 게시글
+export async function getMyFreeList(params: GetMyFreeParams = {}) {
+  const { page = 0, size = 20 } = params;
+
+  const qs = new URLSearchParams();
+  qs.set("page", String(page));
+  qs.set("size", String(size));
+
+  return fetchClient<MyFreeItem[]>(`/my/posts/board?${qs.toString()}`, {
+    method: "GET",
+    auth: true,
+  });
+}
+
+//내가 쓴 댓글이 있는 게시글
+export async function GetMyFreeComments(params: GetMyFreeParams = {}) {
+  const { page = 0, size = 10 } = params;
+
+  const qs = new URLSearchParams();
+  qs.set("page", String(page));
+  qs.set("size", String(size));
+
+  return fetchClient<MyFreeItem[]>(`/my/comments?${qs.toString()}`, {
+    method: "GET",
+    auth: true,
+  });
+}
+
+//내가 좋아요한 게시글
+
+export async function GetMyFreeLiked(params: GetMyFreeParams = {}) {
+  const { page = 0, size = 10 } = params;
+
+  const qs = new URLSearchParams();
+  qs.set("page", String(page));
+  qs.set("size", String(size));
+
+  return fetchClient<MyFreeItem[]>(`/my/likes?${qs.toString()}`, {
+    method: "GET",
+    auth: true,
+  });
 }

@@ -12,7 +12,6 @@ interface DetailImgSectionProps {
 
 type ImageSrc = string | StaticImageData;
 
-
 export default function DetailImgSection({
   imageSrc,
   alt = 'detail image',
@@ -32,7 +31,7 @@ export default function DetailImgSection({
         alt={alt}
         fill
         className="object-cover"
-        priority
+        unoptimized
         onError={() => {
           if (!hasError) setHasError(true); // 실패 시 디폴트로 교체
         }}

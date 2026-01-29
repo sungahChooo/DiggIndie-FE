@@ -2,10 +2,9 @@ import { fetchClient } from "@/api/client";
 
 import type {
   GetMarketListParams, MarketListPayload, MarketPayload, PostMarketParams, EditMarketParams,
-  ScrapMarketParams, ScrapMarketPayload
+  ScrapMarketParams, ScrapMarketPayload, MyMarketParams, MyMarketItem
 }
   from '@/types/marketBoard';
-import { ApiResponse } from '@/types/api';
 
 export async function postMarket(params: PostMarketParams) {
   return fetchClient<MarketPayload>("/markets", {
@@ -65,3 +64,30 @@ export async function scrapMarket(params: ScrapMarketParams) {
   });
 }
 
+//내가 쓴 게시글
+export async function GetMyMarketList(params: MyMarketParams = {}) {
+  const { page = 0, size = 20 } = params;
+
+  const qs = new URLSearchParams();
+  qs.set("page", String(page));
+  qs.set("size", String(size));
+
+  return fetchClient<MyMarketItem[]>(`/my/posts/market?${qs.toString()}`, {
+    method: "GET",
+    auth: true,
+  });
+}
+
+//내가 스크랩한 게시글
+export async function GetMyMarketScraps(params: MyMarketParams = {}) {
+  const { page = 0, size = 10 } = params;
+
+  const qs = new URLSearchParams();
+  qs.set("page", String(page));
+  qs.set("size", String(size));
+
+  return fetchClient<MyMarketItem[]>(`/my/scraps?${qs.toString()}`, {
+    method: "GET",
+    auth: true,
+  });
+}

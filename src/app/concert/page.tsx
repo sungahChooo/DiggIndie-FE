@@ -13,14 +13,15 @@ export default function ConcertPage() {
   }, [isSideTabOpen]);
   return (
     <div className="text-white bg-black relative">
-      <div className="relative mx-auto w-full max-w-[375px] min-h-screen bg-black">
+      <div className="relative mx-auto w-full  min-h-screen bg-black">
         <SearchHeader title="공연" onHamburgerClick={() => setIsSideTabOpen(true)} />
 
-        <main className="pt-13">
+        <main className="">
           <SearchConcert />
         </main>
       </div>
 
+      {/* 사이드탭은 viewport 기준이지만 위치는 앱 기준 */}
       {isSideTabOpen && (
         <div className="fixed inset-0 z-[999] flex justify-center">
           <div className="relative w-full max-w-[375px] h-full">

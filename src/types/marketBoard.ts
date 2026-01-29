@@ -80,3 +80,23 @@ export type ScrapMarketPayload = {
   scrapCount: number;
 }
 
+//내가 쓴 게시글
+export type MyMarketItem = {
+  marketId: number;
+  category: string;
+  title: string;
+  price: number;
+  thumbnailUrl: string;
+  scrapCount: number;
+  createdAt: string;
+};
+
+export type MyMarketPayload = {
+  pageInfo: PageInfo;
+  payload: MyMarketItem[];
+};
+
+export type MyMarketParams = {
+  page?: number;
+  size?: number;
+};

@@ -22,8 +22,10 @@ export default function HomePage() {
   const userId = useAuthStore((s) => s.userId);
   const [isSideTabOpen, setIsSideTabOpen] = useState(false);
   const [hotContent, setHotContent] = useState<HotArticle[]>([]);
+
   useEffect(() => {
-    document.body.style.overflow = isSideTabOpen ? 'hidden' : 'auto';
+    document.body.style.overflowY = isSideTabOpen ? 'hidden' : 'auto';
+    document.body.style.overflowX = 'hidden';
   }, [isSideTabOpen]);
 
   useEffect(() => {
@@ -47,10 +49,10 @@ export default function HomePage() {
     fetchHotArticle();
   }, []);
   return (
-    <div className="text-white bg-black relative">
-      <div className="relative mx-auto w-full max-w-[375px] min-h-screen bg-black">
+    <div className="text-white bg-black relative w-full overflow-x-hidden">
+      <div className="relative mx-auto w-full min-h-screen bg-black">
         <HomeHeader onHamburgerClick={() => setIsSideTabOpen(true)} userId={userId} />
-        <main className="mx-auto flex w-full flex-col items-center bg-black pb-20 pt-13">
+        <main className="mx-auto flex w-full flex-col items-center bg-black pb-20">
           <IndieStoryRec />
           <div className="px-5 w-full">
             <LoginBanner isLoggedIn={isAuthed} />

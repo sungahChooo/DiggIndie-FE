@@ -13,6 +13,7 @@ import ArticleList from '@/components/community/ArticleList';
 
 import { useFreeList } from '@/hooks/useFreeList';
 import type { FreeCategory } from '@/types/freeBoard';
+import SearchFreeSkeleton from './SearchFreeSkeleton';
 
 const headerOptions = ['전체', '정보', '공연 후기', '추천', '신보', '음악 뉴스', '동행'] as const;
 type UiHeader = (typeof headerOptions)[number];
@@ -32,15 +33,7 @@ export default function SearchFree() {
   const [draft, setDraft] = useState('');
   const [isSearching, setIsSearching] = useState(false);
 
-  const {
-    articles,
-    isLoading,
-    setCategory,
-    error,
-    setQuery,
-    loadMore,
-    params,
-  } = useFreeList({
+  const { articles, isLoading, setCategory, error, setQuery, loadMore, params } = useFreeList({
     category: 'none' as FreeCategory,
     query: '',
     page: 0,
@@ -135,20 +128,36 @@ export default function SearchFree() {
 
       <div className="w-full flex justify-between shrink-0 px-5 mt-4 items-center">
         <CommunityTab />
-        <CommunityHeaderFilter headers={headerOptions} value={header} onChangeAction={handleHeaderChange} />
+        <CommunityHeaderFilter
+          headers={headerOptions}
+          value={header}
+          onChangeAction={handleHeaderChange}
+        />
       </div>
 
       {/* 리스트만 스크롤 */}
       <main className="flex-1 min-h-0 w-full overflow-y-auto scrollbar flex flex-col bg-black">
-        {isLoading && isFirstPage && <div className="px-5 py-4 text-gray-500">로딩중...</div>}
-        {!isLoading && error && <div className="px-5 py-4 text-gray-500">{error}</div>}
-
-        {!error && <ArticleList articles={articles} basePath="/community/free" variant="free" />}
-
-        <div ref={sentinelRef} className="h-[1px]" />
-
-        {(isLoading || isSearching) && !isFirstPage && (
-          <div className="px-5 py-4 text-gray-500">로딩중...</div>
+        {/* 1. 첫 페이지 로딩이거나 검색 중일 때 스켈레톤 노출 */}
+        {(isLoading || isSearching) && isFirstPage ? (
+          <SearchFreeSkeleton />
+        ) : error ? (
+          <div className="px-5 py-20 text-center text-gray-500">{error}</div>
+        ) : (
+          <>
+            {/* 2. 결과가 없을 때 처리 (추가하면 좋음) */}
+            {!isLoading && articles.length === 0 ? (
+              <div className="px-5 py-20 text-center text-gray-500">검색 결과가 없습니다.</div>
+            ) : (
+              <ArticleList articles={articles} basePath="/community/free" variant="free" />
+            )}
+            <div ref={sentinelRef} className="h-[20px]" /> {/* 높이를 조금 주면 인식이 더 잘됨 */}
+            {/* 3. 다음 페이지 추가 로딩 시 (하단 스켈레톤 혹은 인디케이터) */}
+            {(isLoading || isSearching) && !isFirstPage && (
+              <div className="py-4 flex justify-center">
+                <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              </div>
+            )}
+          </>
         )}
       </main>
     </section>
