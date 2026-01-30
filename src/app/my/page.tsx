@@ -155,11 +155,16 @@ export default function MyPage() {
       </div>
       {/* 사이드탭은 viewport 기준이지만 위치는 앱 기준 */}
       {isSideTabOpen && (
-        <div className="fixed inset-0 z-[999] flex justify-center">
-          <div className="relative w-full max-w-[375px] h-full">
-            {/* 오버레이 */}
-            <div className="absolute inset-0 bg-black/40" onClick={() => setIsSideTabOpen(false)} />
-            <SideTab onClose={() => setIsSideTabOpen(false)} />
+        <div className="fixed inset-0 z-[999]">
+          {/* 1. 배경 오버레이: 화면 전체를 덮음 */}
+          <div className="absolute inset-0 bg-black/40" onClick={() => setIsSideTabOpen(false)} />
+
+          {/* 2. 사이드탭 컨테이너: 메인 UI와 같은 너비와 중앙 정렬을 가짐 */}
+          <div className="relative mx-auto w-full w-[inherit] inset-0 h-full pointer-events-none">
+            {/* 3. 실제 사이드탭: 부모(375px)의 오른쪽 끝에 위치 */}
+            <div className="absolute right-0 top-0 h-full w-[80%] pointer-events-auto">
+              <SideTab onClose={() => setIsSideTabOpen(false)} />
+            </div>
           </div>
         </div>
       )}

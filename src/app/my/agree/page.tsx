@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function MyAgreePage() {
   const router = useRouter();
   return (
-    <div className="text-white flex flex-col h-screen bg-black relative py-10">
+    <div className="text-white flex flex-col h-screen bg-black relative pb-10">
       <MyHeader title={'약관 및 수신 동의'} />
       <div className="py-2 px-5 ">
         <p className="flex py-2 gap-2 items-center">

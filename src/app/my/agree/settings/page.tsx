@@ -28,7 +28,7 @@ export default function MyAgreeSettingPage() {
     }
   };
   return (
-    <div className="text-white flex flex-col h-screen bg-black relative py-10">
+    <div className="text-white flex flex-col h-screen bg-black relative pb-10">
       <MyHeader title={'마케팅 수신 동의 '} />
       <div className="mt-5">
         <p className="px-5 py-4 flex  justify-between border-b border-gray-850">
