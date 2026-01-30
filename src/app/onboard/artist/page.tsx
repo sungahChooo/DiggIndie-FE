@@ -105,7 +105,7 @@ export default function OnboardArtistPage() {
   };
 
   const handleComplete = async () => {
-    if (selectedIds.length < 2) return;
+    if (selectedIds.length < 5) return;
     await saveSelectedArtists(selectedIds);
     router.push("/onboard/genre");
   };
@@ -140,7 +140,7 @@ export default function OnboardArtistPage() {
               <br /> 아티스트를 알려주세요
             </>
           }
-          min="최소 2팀"
+          min="최소 5팀"
           minClassName="text-main-red-4 text-xs font-medium"
         />
 
@@ -182,7 +182,7 @@ export default function OnboardArtistPage() {
       </div>
 
       <div className="px-5 pb-5 flex gap-2">
-        <LinkButton disabled={selectedIds.length < 2} onClick={handleComplete}>
+        <LinkButton disabled={selectedIds.length < 5} onClick={handleComplete}>
           선택완료
         </LinkButton>
 
