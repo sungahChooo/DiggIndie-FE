@@ -36,8 +36,8 @@ export default function AgreePage() {
     }
   };
   return (
-    <div className="text-white flex flex-col h-screen min-w-[375px]">
-      <section className="ml-5 font-bold text-2xl mt-55 mb-11">
+    <div className=" text-white flex flex-col h-screen min-w-[375px]">
+      <section className="ml-5 font-bold text-2xl mt-75 mb-11 ">
         서비스 이용을 위해
         <br /> 이용약관 동의가 필요합니다.
       </section>

@@ -1,4 +1,4 @@
-// src/hooks/useArtistSearch.ts
+
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -9,14 +9,14 @@ type SortKey = "updated" | "korean" | "scrap";
 
 function mapSortKeyToOrder(sortKey: SortKey): ArtistOrder {
   if (sortKey === "korean") return "alphabet";
-  if (sortKey === "scrap") return "scrap";
-  return "recent";
+  if (sortKey === "updated") return "recent";
+  return "scrap";
 }
 
 function mergeUniqueById(prev: ArtistItem[], next: ArtistItem[]) {
   const map = new Map<number, ArtistItem>();
-  prev.forEach((a) => map.set(a.artistId, a));
-  next.forEach((a) => map.set(a.artistId, a));
+  for (const a of prev) map.set(a.artistId, a);
+  for (const a of next) map.set(a.artistId, a);
   return Array.from(map.values());
 }
 
@@ -24,8 +24,8 @@ export function useArtistSearch(defaultSize = 20) {
   const size = defaultSize;
 
   const [artists, setArtists] = useState<ArtistItem[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("updated");
+  const [searchTerm, setSearchTerm] = useState(""); // 입력값(raw)은 절대 trim하지 않음
+  const [sortKey, setSortKey] = useState<SortKey>("scrap");
 
   const [pageInfo, setPageInfo] = useState({
     page: 0,
@@ -40,6 +40,7 @@ export function useArtistSearch(defaultSize = 20) {
 
   const order = useMemo(() => mapSortKeyToOrder(sortKey), [sortKey]);
 
+  // API에 실제로 쓴 query/order를 기록 (trim된 query 기준)
   const lastQueryRef = useRef<string>("");
   const lastOrderRef = useRef<ArtistOrder>(order);
 
@@ -47,16 +48,14 @@ export function useArtistSearch(defaultSize = 20) {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const fetchPage = useCallback(
-    async (nextPage: number, mode: "replace" | "append") => {
-      const q = searchTerm.trim();
-
+    async (nextPage: number, mode: "replace" | "append", queryForApi: string, orderForApi: ArtistOrder) => {
       if (mode === "append") setIsFetchingMore(true);
       else setIsFetching(true);
 
       try {
         const payload: ArtistPayload = await getArtists({
-          order,
-          query: q,
+          order: orderForApi,
+          query: queryForApi,
           page: nextPage,
           size,
         });
@@ -69,67 +68,57 @@ export function useArtistSearch(defaultSize = 20) {
           setArtists((prev) => mergeUniqueById(prev, payload.artists ?? []));
         }
 
-        lastQueryRef.current = q;
-        lastOrderRef.current = order;
+        lastQueryRef.current = queryForApi;
+        lastOrderRef.current = orderForApi;
       } finally {
         if (mode === "append") setIsFetchingMore(false);
         else setIsFetching(false);
       }
     },
-    [order, searchTerm, size]
+    [size]
   );
 
   const loadFirstPage = useCallback(
     async (override?: { query?: string; sortKey?: SortKey }) => {
-      if (override?.query !== undefined) setSearchTerm(override.query);
+      if (override?.query !== undefined) setSearchTerm(override.query); // raw 그대로 저장
       if (override?.sortKey !== undefined) setSortKey(override.sortKey);
 
-      const nextQuery = (override?.query ?? searchTerm).trim();
-      const nextOrder = mapSortKeyToOrder(override?.sortKey ?? sortKey);
+      const rawQuery = override?.query ?? searchTerm;
+      const queryForApi = rawQuery.trim(); // API에만 trim
+      const orderForApi = mapSortKeyToOrder(override?.sortKey ?? sortKey);
 
-      setIsFetching(true);
-      try {
-        const payload = await getArtists({
-          order: nextOrder,
-          query: nextQuery,
-          page: 0,
-          size,
-        });
-
-        setArtists(payload.artists ?? []);
-        setPageInfo(payload.pageInfo);
-
-        lastQueryRef.current = nextQuery;
-        lastOrderRef.current = nextOrder;
-      } finally {
-        setIsFetching(false);
-      }
+      await fetchPage(0, "replace", queryForApi, orderForApi);
     },
-    [searchTerm, sortKey, size]
+    [fetchPage, searchTerm, sortKey]
   );
 
   const loadNextPage = useCallback(async () => {
     if (isFetching || isFetchingMore) return;
     if (!pageInfo.hasNext) return;
 
-    const expectedQuery = searchTerm.trim();
-    const expectedOrder = order;
+    const expectedQueryForApi = searchTerm.trim();
+    const expectedOrderForApi = order;
 
-    if (lastQueryRef.current !== expectedQuery || lastOrderRef.current !== expectedOrder) {
-      await loadFirstPage({ query: expectedQuery, sortKey });
+    if (lastQueryRef.current !== expectedQueryForApi || lastOrderRef.current !== expectedOrderForApi) {
+      await loadFirstPage({ query: searchTerm, sortKey });
       return;
     }
 
-    await fetchPage(pageInfo.page + 1, "append");
+    await fetchPage(pageInfo.page + 1, "append", expectedQueryForApi, expectedOrderForApi);
   }, [fetchPage, isFetching, isFetchingMore, pageInfo, searchTerm, order, loadFirstPage, sortKey]);
 
-  const onChangeSearch = useCallback(async (next: string) => {
-    setSearchTerm(next);
+  const onChangeSearch = useCallback((next: string) => {
+    setSearchTerm(next); // 입력값 그대로 (공백 유지)
   }, []);
 
-  const onSubmitSearch = useCallback(async () => {
-    await loadFirstPage({ query: searchTerm.trim(), sortKey });
-  }, [loadFirstPage, searchTerm, sortKey]);
+  //state 내에서 타이핑 문제 해결하여 띄어쓰기 없어짐 해결
+  const onSubmitSearch = useCallback(
+    async (queryOverride?: string) => {
+      const raw = queryOverride ?? searchTerm;
+      await loadFirstPage({ query: raw, sortKey });
+    },
+    [loadFirstPage, searchTerm, sortKey]
+  );
 
   const onClearSearch = useCallback(async () => {
     setSearchTerm("");
@@ -161,8 +150,8 @@ export function useArtistSearch(defaultSize = 20) {
   // 정렬 변경 시 1페이지부터 다시 로드
   useEffect(() => {
     if (lastOrderRef.current === order) return;
-    loadFirstPage({ query: searchTerm.trim(), sortKey });
-  }, [order]);
+    loadFirstPage({ query: searchTerm, sortKey });
+  }, [order, loadFirstPage, searchTerm, sortKey]);
 
   return {
     artists,

@@ -52,8 +52,8 @@ export default function FindId() {
   return (
     <div className="w-full bg-black flex flex-col items-center px-5 py-6 gap-3">
       {/* 이메일 입력, 인증정보 */}
-      <div className="flex flex-col gap-2">
-        <div className="w-[335px] flex items-end gap-[10px]">
+      <div className="flex w-full flex-col gap-2">
+        <div className="w-full flex items-end gap-[10px]">
           <div className="flex-1">
             <input
               type="email"
@@ -83,8 +83,8 @@ export default function FindId() {
         {errors.email && <p className="text-red-400 text-xs px-3">{errors.email}</p>}
       </div>
       {/* 인증번호 입력 */}
-      <div className="flex flex-col gap-2">
-        <div className="w-[335px] flex items-end gap-3">
+      <div className="flex w-full flex-col gap-2">
+        <div className="w-full flex items-end gap-3">
           <div className="flex-1">
             <input
               type="text"
@@ -112,9 +112,11 @@ export default function FindId() {
         {errors.emailConfirm && <p className="text-red-400 text-xs px-3">{errors.emailConfirm}</p>}
       </div>
       {/* 아이디 찾기 빨간 버튼 */}
-      <Link href="/auth/find/id/result">
+
+      <Link href="/auth/find/id/result" className={'flex w-full'}>
         <button
-          className={`${!isEmailVerified ? 'cursor-not allowed bg-gray-600' : 'bg-main-red-2 cursor-pointer'} w-[335px] h-13 mt-5 rounded-sm  text-white font-semibold `}
+          className={`${!isEmailVerified ? 'cursor-not allowed bg-gray-600' : 'bg-main-red-2 cursor-pointer'}
+           w-full h-13 mt-5 rounded-sm  text-white font-semibold `}
           disabled={!isEmailVerified}
         >
           아이디 찾기

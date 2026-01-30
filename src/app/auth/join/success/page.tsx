@@ -11,7 +11,7 @@ export default function JoinSuccessPage() {
           alt="diggindie 로고"
           width={235}
           height={50}
-          className="mt-60 mb-5"
+          className="mt-75 mb-5"
         />
         <span className="block text-2xl font-bold mb-2 text-white text-left leading-[var(--line-height-title)]">
           가입 완료

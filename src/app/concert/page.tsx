@@ -24,7 +24,7 @@ export default function ConcertPage() {
       {/* 사이드탭은 viewport 기준이지만 위치는 앱 기준 */}
       {isSideTabOpen && (
         <div className="fixed inset-0 z-[999] flex justify-center">
-          <div className="relative w-full max-w-[375px] h-full">
+          <div className="relative w-full max-w-full h-full">
             {/* 오버레이 */}
             <div className="absolute inset-0 bg-black/40" onClick={() => setIsSideTabOpen(false)} />
             <SideTab onClose={() => setIsSideTabOpen(false)} />

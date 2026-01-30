@@ -54,9 +54,17 @@ export default function MyTradeArticlePage() {
         <BoardTab />
       </div>
 
-      <main className="flex-1 min-h-0 overflow-y-auto scrollbar flex flex-col bg-black">
-          <ArticleList articles={articles} basePath={"/community/trade"} variant={"trade"} />
-      </main>
+      {!isLoading && articles.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center text-[#8C8888] text-sm">
+          작성한 글이 없습니다
+        </div>
+      ) : (
+        <ArticleList
+          articles={articles}
+          basePath="/community/trade"
+          variant="trade"
+        />
+      )}
     </div>
   );
 }

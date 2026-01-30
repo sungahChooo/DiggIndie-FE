@@ -35,7 +35,17 @@ export default function MyFreeArticlePage() {
       </header>
 
       <main className="flex-1 min-h-0 overflow-y-auto scrollbar flex flex-col bg-black">
-          <ArticleList articles={articles} basePath={'/community/free'} variant={'free'} />
+        {!isLoading && articles.length === 0 ? (
+          <div className="flex-1 flex items-center justify-center text-[#8C8888] text-sm">
+            좋아요를 누른 글이 없습니다
+          </div>
+        ) : (
+          <ArticleList
+            articles={articles}
+            basePath="/community/free"
+            variant="free"
+          />
+        )}
       </main>
     </div>
   );

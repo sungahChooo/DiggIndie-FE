@@ -120,7 +120,6 @@ export default function Write() {
   const router = useRouter();
   const sp = useSearchParams();
 
-  const [isChecked, setIsChecked] = useState(false);
   const mode = (sp.get("mode") as Mode) ?? "create";
   const board = (sp.get("board") as Board) ?? "free";
   const id = Number(sp.get("id") ?? "0");
@@ -138,7 +137,7 @@ export default function Write() {
   const [selectedTag, setSelectedTag] = useState<UiGeneralTag | UiTradeTag>("없음");
   const tags = boardType === "general" ? generalTag : tradeTag;
 
-  const [annonymous, setAnonymous] = useState(false);
+  const [anonymous, setAnonymous] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -163,7 +162,7 @@ export default function Write() {
           setBoardType("general");
           setTitle(detail.title ?? "");
           setContent(detail.content ?? "");
-          setAnonymous(detail.isAnonymous ?? false);
+          setAnonymous(detail.writerNickname === '작성자');
           setSelectedTag(mapFreeCategoryToUi(detail.category));
 
           setPrice(null);
@@ -230,12 +229,12 @@ export default function Write() {
             boardId: id,
             title,
             content,
-            isAnonymous: annonymous,
+            isAnonymous: anonymous,
             category: mapFreeCategory(selectedTag as UiGeneralTag),
             imageUrls,
           });
 
-          if (res.isSuccess) router.replace(`/community/free/${id}`);
+          if (res.isSuccess) router.replace(`/community/free/${id}?from=write`);
           else alert(res.message || "게시글 수정에 실패했습니다.");
           return;
         }
@@ -250,7 +249,7 @@ export default function Write() {
           imageUrls,
         });
 
-        if (res.isSuccess) router.replace(`/community/trade/${id}`);
+        if (res.isSuccess) router.replace(`/community/trade/${id}?from=write`);
         else alert(res.message || "게시글 수정에 실패했습니다.");
         return;
       }
@@ -259,12 +258,12 @@ export default function Write() {
         const res = await postFree({
           title,
           content,
-          isAnonymous: annonymous,
+          isAnonymous: anonymous,
           category: mapFreeCategory(selectedTag as UiGeneralTag),
           imageUrls,
         });
 
-        if (res.isSuccess) router.push(`/community/free/${res.payload.boardId}`);
+        if (res.isSuccess) router.push(`/community/free/${res.payload.boardId}?from=write`);
         else alert(res.message || "게시글 작성에 실패했습니다.");
         return;
       }
@@ -278,7 +277,7 @@ export default function Write() {
         imageUrls,
       });
 
-      if (res.isSuccess) router.push(`/community/trade/${res.payload.marketId}`);
+      if (res.isSuccess) router.push(`/community/trade/${res.payload.marketId}?from=write`);
       else alert(res.message || "게시글 작성에 실패했습니다.");
     } catch (err) {
       console.error(err);
@@ -309,10 +308,10 @@ export default function Write() {
       >
         <div className="flex justify-between mb-3 px-5 ">
           <span className="font-medium text-base text-white">게시판 선택</span>
-          <span className="flex gap-2" onClick={() => setAnonymous(!annonymous)}>
-            <CustomCheckbox checked={isChecked} onChange={setIsChecked} size="sm" />
+          <span className="flex gap-2" onClick={() => setAnonymous(!anonymous)}>
+            <CustomCheckbox checked={anonymous} onChange={setAnonymous} size="sm" />
             <span
-              className={`text-sm font-medium ${annonymous ? 'text-main-red-2' : 'text-gray-500'}`}
+              className={`text-sm font-medium ${anonymous ? 'text-main-red-2' : 'text-gray-500'}`}
             >
               익명
             </span>

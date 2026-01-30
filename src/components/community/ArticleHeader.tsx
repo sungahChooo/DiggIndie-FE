@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import backBtn from '@/assets/common/back.svg';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import communityMore from '@/assets/community/Menu Kebab Vertical.svg';
 import { useState } from 'react';
 import HeaderDrowDown from './HeaderDropDown';
@@ -16,10 +16,27 @@ interface ArticleHeaderProps {
 
 export default function ArticleHeader({ title, isMine, onEdit, onDelete }: ArticleHeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  //현재 url에 따라 자유게시판으로 갈지 거래개시판으로 갈지
   const handleBack = () => {
+    const from = searchParams.get('from');
+
+    if (from === 'write') {
+      if (pathname.startsWith('/community/free/')) {
+        router.push('/community/free');
+        return;
+      }
+      if (pathname.startsWith('/community/trade/')) {
+        router.push('/community/trade');
+        return;
+      }
+      router.push('/community');
+      return;
+    }
+
     router.back();
   };
 

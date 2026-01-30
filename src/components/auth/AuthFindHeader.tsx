@@ -10,7 +10,7 @@ export default function AuthFindHeader({ title }: props) {
   const router = useRouter();
 
   return (
-    <div className="w-full h-14 flex items-center justify-between bg-black px-5 py-3">
+    <div className="w-full h-14 flex items-center justify-between bg-black px-5 py-3 sticky">
       <Image
         src={back}
         alt="logo"

@@ -5,6 +5,9 @@ import withPWA from 'next-pwa';
 const nextConfig: NextConfig = {
   turbopack: {},
   images: {
+    unoptimized: true,
+    minimumCacheTTL: 2678400,
+
     domains: ['diggindie-images.s3.ap-northeast-2.amazonaws.com', 'i.scdn.co'],
     remotePatterns: [
       {

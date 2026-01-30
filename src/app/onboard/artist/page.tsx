@@ -7,7 +7,7 @@ import ProgressBar from "@/components/onBoard/ProgressBar";
 import OnboardArtistItem from "@/components/onBoard/OnboardArtistItem";
 import NoResult from "@/components/onBoard/NoResult";
 import LinkButton from "@/components/common/LinkButton";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import type { OnboardArtist } from "@/types/artists";
 import { saveSelectedArtists } from "@/services/artistsService";
@@ -110,6 +110,20 @@ export default function OnboardArtistPage() {
     router.push("/onboard/genre");
   };
 
+
+  const uniqueArtists = useMemo(() => {
+    const seen = new Set<number>();
+    const out: OnboardArtist[] = [];
+
+    for (const a of artists) {
+      if (seen.has(a.bandId)) continue;
+      seen.add(a.bandId);
+      out.push(a);
+    }
+
+    return out;
+  }, [artists]);
+
   return (
     <div className="text-white flex flex-col h-screen">
       <Header />
@@ -149,7 +163,7 @@ export default function OnboardArtistPage() {
           </div>
         ) : artists.length > 0 ? (
           <div className="flex-1 overflow-y-scroll scroll-hidden grid grid-cols-3 gap-4 px-5" ref={scrollRef}>
-            {artists.map((artist: OnboardArtist) => (
+            {uniqueArtists.map((artist: OnboardArtist) => (
               <OnboardArtistItem
                 key={artist.bandId}
                 artist={artist}

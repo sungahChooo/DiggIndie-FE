@@ -13,6 +13,7 @@ import { deleteFree, likeFree } from '@/api/freeBoard';
 import { useCommentFree } from '@/hooks/useCommentFree';
 import FreeDetailSkeleton from '@/components/community/FreeDetailSkeleton';
 
+
 export default function FreeArticleDetailPage() {
   const { isAuthed } = useAuthStore();
   const params = useParams();
@@ -20,6 +21,8 @@ export default function FreeArticleDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const boardId = Number(params.id);
   const [board, setBoard] = useState<FreeBoardDetail | null>(null);
+
+
   //스켈레톤 로딩 이후 높이 계산 문제로 스크롤 안되는 버그 해결
   useEffect(() => {
     if (!isLoading) {
@@ -173,15 +176,16 @@ export default function FreeArticleDetailPage() {
         )}
       </main>
       {/* 3. 하단 입력창: fixed 속성이므로 화면 맨 아래에 붙어 있습니다. */}
+
       <div className={'flex justify-center'}>
+        {isAuthed &&
         <ReplyInputSection
           addReply={addReply}
           disabled={isCommentSubmitting}
           replyTarget={replyTarget}
           onCancelReply={() => setReplyTarget(null)}
-        />
+        />}
       </div>
-      랴
     </div>
   );
 }
