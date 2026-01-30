@@ -78,24 +78,10 @@ export default function PersonalArtistRec({ isLoggedIn }: Props) {
               </div>
             )}
 
-            {/* 로딩 끝 + 온보딩 전 */}
+            {/* 로딩 끝 + 온보딩 전*/}
             {!isLoading && isNotOnboarded && (
-              <div className="flex flex-col items-center justify-center text-center py-4 bg-[#121212] rounded-[12px] border border-[#2A2A2A]">
-                <h3 className="text-white font-bold text-[17px] mb-1">
-                  나만의 아티스트를 찾아볼까요?
-                </h3>
-                <p className="text-[#8C8787] text-[13px] mb-5 leading-relaxed">
-                  취향 설정을 완료하면 리스너님께 꼭 맞는 <br />
-                  아티스트 라인업을 바로 확인하실 수 있어요.
-                </p>
-                <Link href="/onboard/artist">
-                  <button className="h-[44px] px-8 bg-[#FF3637] text-white text-[14px] font-bold rounded-[4px] hover:bg-[#D32F2F] transition-colors">
-                    취향 설정하러 가기
-                  </button>
-                </Link>
-              </div>
+              <div className="flex flex-col items-center justify-center text-center py-4 bg-[#121212] rounded-[12px] border border-[#2A2A2A]"></div>
             )}
-
             {/* 로딩 끝 + 데이터 있음 */}
             {!isLoading && !isNotOnboarded && (
               <div className="flex w-full overflow-x-auto gap-4 scrollbar-hide">
@@ -103,10 +89,7 @@ export default function PersonalArtistRec({ isLoggedIn }: Props) {
 
                 {!error &&
                   visibleBands.map((band) => (
-                    <div
-                      key={band.bandId}
-                      className="flex-none w-40"
-                    >
+                    <div key={band.bandId} className="flex-none w-40">
                       <ArtistCard
                         artist={{
                           artistId: Number(band.bandId),
