@@ -8,7 +8,7 @@ import playBtn from '@/assets/common/play.svg';
 
 import { useUpdateRecBands } from '@/hooks/useRecArtists';
 import type { RecArtistItem } from '@/types/artists';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   isLoggedIn: boolean;
@@ -45,6 +45,8 @@ function GuestArtistCard({ firstImage }: GuestProps): ReactElement {
 }
 
 export default function PersonalArtistRec({ isLoggedIn }: Props) {
+  const router = useRouter();
+
   const { bands, isLoading, error } = useUpdateRecBands({
     enabled: isLoggedIn,
   });
@@ -80,7 +82,17 @@ export default function PersonalArtistRec({ isLoggedIn }: Props) {
 
             {/* 로딩 끝 + 온보딩 전*/}
             {!isLoading && isNotOnboarded && (
-              <div className="flex flex-col items-center justify-center text-center py-4 bg-[#121212] rounded-[12px] border border-[#2A2A2A]"></div>
+              <div className="flex flex-col items-center justify-center text-center py-4 bg-[#121212] rounded-[12px] border border-[#2A2A2A] gap-2">
+                <span className="text-gray-400 font-medium">
+                  저장된 취향이 없습니다. 취향 설정을 해주세요.
+                </span>
+                <button
+                  className="rounded-sm bg-main-red-2 p-2 cursor-pointer"
+                  onClick={() => router.push('/onboard/artist')}
+                >
+                  취향 설정하러가기
+                </button>
+              </div>
             )}
             {/* 로딩 끝 + 데이터 있음 */}
             {!isLoading && !isNotOnboarded && (

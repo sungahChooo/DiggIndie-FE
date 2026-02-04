@@ -114,18 +114,8 @@ export async function fetchClient<T>(url: string, options: FetchOptions): Promis
       if (typeof window !== 'undefined') {
         window.location.replace('/');
       }
-      throw err;
     }
   }
 
-  const data: ApiResponse<T> = await res.json();
-
-  // 서버 에러 / 비즈니스 에러 공통 처리
-  if (!res.ok || data.isSuccess === false) {
-    const error: any = new Error(data.message);
-    error.statusCode = data.statusCode;
-    throw error;
-  }
-
-  return data;
+  return res.json();
 }
